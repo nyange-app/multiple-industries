@@ -1,0 +1,56 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CategoryIndex from '../../components/CategoryIndex.astro';
+import ContactColophon from '../../components/ContactColophon.astro';
+import Strata from '../../components/Strata.astro';
+import { categories } from '../../data/categories';
+import { breadcrumbLd } from '../../lib/seo';
+
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Products', path: '/products/' },
+];
+---
+
+<Layout
+  title="Products"
+  description="The Multiple Industries product index: water management, plumbing, bathroom & kitchen, building materials, domestic plasticware and automotive. Kampala, Uganda."
+  jsonLd={[breadcrumbLd(crumbs)]}
+>
+  <section class="wrap head">
+    <Breadcrumbs items={crumbs} />
+    <p class="kicker">The Index · 01–06</p>
+    <h1 class="display-xl">Products, <em class="wonk">department by department.</em></h1>
+    <p class="lede">
+      Six departments covering the entire range of building materials, domestic household products and automotive spare
+      parts.
+    </p>
+  </section>
+  <Strata from="var(--color-parchment)" to="var(--color-clay)" variant={3} />
+  <section class="clay" aria-label="Departments">
+    <div class="wrap list">
+      <CategoryIndex items={categories} headingLevel="h2" />
+    </div>
+  </section>
+  <Strata from="var(--color-clay)" to="var(--color-parchment)" variant={1} bands={['var(--color-murram-bright)', 'var(--color-sand)']} />
+  <ContactColophon />
+</Layout>
+
+<style>
+  .head {
+    padding-top: 0.75rem;
+    padding-bottom: 2rem;
+  }
+  .head h1 {
+    margin: 0.75rem 0 1.25rem;
+    max-width: 16ch;
+  }
+  .clay {
+    background: var(--color-clay);
+    --color-line: #c9ae90;
+  }
+  .list {
+    padding-block: 2rem 3rem;
+  }
+</style>

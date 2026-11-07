@@ -1,0 +1,83 @@
+---
+/** Hand-drawn line glyph for each department. Decorative: aria-hidden. */
+import type { Glyph } from '../data/categories';
+interface Props {
+  name: Glyph;
+  class?: string;
+}
+const { name, class: cls = '' } = Astro.props;
+---
+
+<svg
+  class={cls}
+  viewBox="0 0 48 48"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2.2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {
+    name === 'water' && (
+      <>
+        <path d="M24 6c6 8 11 14 11 21a11 11 0 0 1-22 0c0-7 5-13 11-21Z" />
+        <path d="M18.5 29a5.5 5.5 0 0 0 5.5 5.5" />
+        <path d="M5 42c4-2.5 6-2.5 9.5 0s6 2.5 9.5 0 6-2.5 9.5 0 6 2.5 9.5 0" />
+      </>
+    )
+  }
+  {
+    name === 'plumbing' && (
+      <>
+        <path d="M8 14h14a6 6 0 0 1 6 6v6" />
+        <path d="M8 9v10" />
+        <path d="M22 9h8M26 9v5" />
+        <path d="M24 26h8v4h-8z" />
+        <path d="M28 34v2M28 40v2" />
+        <path d="M40 8v32" />
+        <path d="M36 12h8M36 36h8" />
+      </>
+    )
+  }
+  {
+    name === 'bath' && (
+      <>
+        <path d="M6 24h36v4a10 10 0 0 1-10 10H16A10 10 0 0 1 6 28Z" />
+        <path d="M12 24V12a4 4 0 0 1 8 0" />
+        <path d="M17 16h6" />
+        <path d="M14 38l-2 4M34 38l2 4" />
+      </>
+    )
+  }
+  {
+    name === 'building' && (
+      <>
+        <path d="M4 24 24 8l20 16" />
+        <path d="M10 19v21h28V19" />
+        <path d="M10 24h28M17 24l7-10 7 10M24 14v10" />
+        <path d="M20 40v-8h8v8" />
+      </>
+    )
+  }
+  {
+    name === 'plastic' && (
+      <>
+        <path d="M11 16h26l-3 24H14Z" />
+        <path d="M9 16h30" />
+        <path d="M14 16c0-6 4.5-10 10-10s10 4 10 10" />
+        <path d="M16 26h16" />
+      </>
+    )
+  }
+  {
+    name === 'auto' && (
+      <>
+        <circle cx="24" cy="24" r="17" />
+        <circle cx="24" cy="24" r="6" />
+        <path d="M24 7v6M24 35v6M7 24h6M35 24h6M12 12l4.2 4.2M31.8 31.8 36 36M36 12l-4.2 4.2M16.2 31.8 12 36" />
+      </>
+    )
+  }
+</svg>

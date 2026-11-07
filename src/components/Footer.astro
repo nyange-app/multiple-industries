@@ -1,0 +1,164 @@
+---
+import Strata from './Strata.astro';
+import Wordmark from './Wordmark.astro';
+import { OFFICES, NAV, TAGLINE, LEGAL_NAME } from '../config';
+import { categories } from '../data/categories';
+---
+
+<footer class="foot">
+  <Strata from="transparent" to="var(--color-ink)" variant={3} bands={['var(--color-clay)', 'var(--color-murram)']} />
+  <div class="inner">
+    <div class="wrap">
+      <div class="top">
+        <div class="brand">
+          <Wordmark inverse />
+          <p class="tag">{TAGLINE}.</p>
+        </div>
+        <nav aria-label="Footer: departments" class="col">
+          <h2 class="kicker-ink">The index</h2>
+          <ul>
+            {
+              categories.map((c) => (
+                <li>
+                  <a href={`/products/${c.slug}/`}>
+                    <span class="no">{c.no}</span> {c.name}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <nav aria-label="Footer: company" class="col">
+          <h2 class="kicker-ink">Company</h2>
+          <ul>
+            <li><a href="/">Home</a></li>
+            {NAV.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          </ul>
+        </nav>
+        {
+          OFFICES.map((o) => (
+            <address class="col">
+              <h2 class="kicker-ink">{o.name}</h2>
+              <p>
+                {o.street}
+                <br />
+                {o.po && (
+                  <>
+                    {o.po}
+                    <br />
+                  </>
+                )}
+                {o.city}, Uganda
+              </p>
+              <ul>
+                <li>
+                  <a href={`tel:${o.phones[0].tel}`}>{o.phones[0].label}</a>
+                </li>
+                {o.emails.map((e) => (
+                  <li>
+                    <a href={`mailto:${e}`}>{e}</a>
+                  </li>
+                ))}
+              </ul>
+            </address>
+          ))
+        }
+      </div>
+      <div class="base">
+        <p>© 2026 {LEGAL_NAME}</p>
+        <p>ISO 9001:2015 Quality Management System · Products certified by UNBS</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    margin-top: 4rem;
+  }
+  .inner {
+    background: var(--color-ink);
+    color: var(--color-parchment);
+    padding: 2.5rem 0 1.5rem;
+  }
+  .top {
+    display: grid;
+    gap: 2.25rem;
+  }
+  .tag {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-variation-settings: 'SOFT' 100, 'WONK' 1;
+    font-size: 1.35rem;
+    line-height: 1.25;
+    margin-top: 1.25rem;
+    max-width: 18rem;
+    color: var(--color-sand);
+  }
+  .kicker-ink {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ember);
+    margin-bottom: 0.6rem;
+  }
+  .col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .col p {
+    font-style: normal;
+    color: #d8cfc2;
+    margin-bottom: 0.4rem;
+  }
+  address {
+    font-style: normal;
+  }
+  .col a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    text-decoration: none;
+    overflow-wrap: break-word;
+  }
+  .col a:hover {
+    color: var(--color-ember);
+    text-decoration: underline;
+  }
+  .no {
+    font-family: var(--font-display);
+    color: var(--color-ember);
+    margin-right: 0.5rem;
+  }
+  .base {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #3d3a34;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: #b8afa3;
+  }
+  @media (min-width: 40rem) {
+    .top {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (min-width: 64rem) {
+    .top {
+      grid-template-columns: 1.3fr 1.3fr 0.7fr;
+      gap: 2.5rem 3rem;
+    }
+    .base {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+  :global(.foot :focus-visible) {
+    outline-color: var(--color-ember);
+  }
+</style>
