@@ -1,0 +1,24 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+import type { Crumb } from '../layouts/Layout.astro';
+interface Props {
+  crumbs: Crumb[];
+  eyebrow: string;
+  title: string;
+  lead?: string;
+}
+const { crumbs, eyebrow, title, lead } = Astro.props;
+---
+
+<section class="on-dark grid-blueprint text-paper" aria-labelledby="page-title">
+  <div class="wrap py-8 lg:py-14">
+    <Breadcrumbs items={crumbs} />
+    <p class="label mt-8 flex items-center gap-3 text-signal">
+      <span class="inline-block size-2 bg-signal" aria-hidden="true"></span>{eyebrow}
+    </p>
+    <h1 id="page-title" class="display mt-4 max-w-4xl text-6xl sm:text-7xl lg:text-8xl">{title}</h1>
+    {lead && <p class="mt-5 max-w-2xl text-lg leading-relaxed text-fog">{lead}</p>}
+    <slot />
+  </div>
+</section>
+<div class="hazard" aria-hidden="true"></div>

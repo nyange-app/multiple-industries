@@ -1,0 +1,98 @@
+---
+/** Hand-drawn line icons, 24px grid, stroke = currentColor. Decorative unless `title` is passed. */
+interface Props {
+  name:
+    | 'water' | 'plumbing' | 'kitchen' | 'building' | 'plasticware' | 'automotive'
+    | 'arrow' | 'phone' | 'mail' | 'pin' | 'check' | 'menu' | 'close' | 'shield';
+  class?: string;
+  title?: string;
+}
+const { name, class: cls = 'size-6', title } = Astro.props;
+---
+
+<svg
+  class={cls}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="square"
+  stroke-linejoin="miter"
+  aria-hidden={title ? undefined : 'true'}
+  role={title ? 'img' : undefined}
+>
+  {title && <title>{title}</title>}
+  {name === 'water' && (
+    <>
+      <path d="M2 9h11a4 4 0 0 1 4 4v1" />
+      <path d="M2 14h7a2 2 0 0 1 2 2v0" />
+      <path d="M2 7v9" />
+      <path d="M15 14h4" />
+      <path d="M17 17.5c0 1.4 1.1 2.5 2 2.5s2-1.1 2-2.5c0-1.2-2-3.5-2-3.5s-2 2.3-2 3.5Z" />
+    </>
+  )}
+  {name === 'plumbing' && (
+    <>
+      <path d="M4 4h6v4H4z" />
+      <path d="M7 8v5a3 3 0 0 0 3 3h6" />
+      <path d="M16 13v6h4v-6z" />
+      <path d="M2 6h2M10 6h2" />
+    </>
+  )}
+  {name === 'kitchen' && (
+    <>
+      <path d="M3 13h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5z" />
+      <path d="M12 13V6a2 2 0 0 1 4 0" />
+      <path d="M16 6v2" />
+      <path d="M8 10v3" />
+    </>
+  )}
+  {name === 'building' && (
+    <>
+      <path d="M2 20h20" />
+      <path d="M3 20V9l9-5 9 5v11" />
+      <path d="M7 20v-7h10v7" />
+      <path d="M7 16.5h10M12 13v7" />
+    </>
+  )}
+  {name === 'plasticware' && (
+    <>
+      <path d="M5 8h14l-1.6 11.2a1 1 0 0 1-1 .8H7.6a1 1 0 0 1-1-.8z" />
+      <path d="M4 8h16" />
+      <path d="M8 8a4 4 0 0 1 8 0" />
+      <path d="M7.5 13h9" />
+    </>
+  )}
+  {name === 'automotive' && (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 3v6M12 15v6M3 12h6M15 12h6" />
+    </>
+  )}
+  {name === 'arrow' && <path d="M4 12h15M13 6l6 6-6 6" />}
+  {name === 'phone' && (
+    <path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z" />
+  )}
+  {name === 'mail' && (
+    <>
+      <path d="M3 5h18v14H3z" />
+      <path d="m3 6 9 7 9-7" />
+    </>
+  )}
+  {name === 'pin' && (
+    <>
+      <path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" />
+      <circle cx="12" cy="9" r="2.5" />
+    </>
+  )}
+  {name === 'check' && <path d="m4 12 5 5L20 6" />}
+  {name === 'menu' && <path d="M3 6h18M3 12h18M3 18h18" />}
+  {name === 'close' && <path d="M5 5l14 14M19 5 5 19" />}
+  {name === 'shield' && (
+    <>
+      <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" />
+      <path d="m8.5 12 2.5 2.5 4.5-5" />
+    </>
+  )}
+</svg>

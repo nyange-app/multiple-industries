@@ -1,12 +1,259 @@
-@import '@fontsource-variable/nunito';
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-600.css';
 
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-/* TODO: brand tokens. */
+/*
+ * "Datasheet" design system
+ * Graphite + concrete paper, with the two brand colours lifted from the logo:
+ * signal yellow (#ffc30e) and nameplate plum (#8f177d). Square corners,
+ * hairline rules, condensed uppercase display type, mono spec labels.
+ */
 @theme {
-  --color-brand: #eb1700;
-  --color-ink: #191919;
+  --color-ink: #15171b;        /* graphite — text on paper, dark surfaces */
+  --color-ink-2: #1f2228;      /* raised dark surface */
+  --color-ink-3: #2c3038;      /* dark hairlines */
+  --color-paper: #f3f1ea;      /* concrete off-white page */
+  --color-paper-2: #e9e6dc;    /* recessed panel */
+  --color-line: #cdc8ba;       /* hairline on paper */
+  --color-steel: #535a65;      /* muted text on paper (6.3:1) */
+  --color-fog: #a9b0ba;        /* muted text on ink (8:1) */
+  --color-signal: #ffc30e;     /* brand yellow — fills, never text on paper */
+  --color-signal-2: #ffd654;   /* hover */
+  --color-plum: #8f177d;       /* brand plum — accents/links on paper (7.6:1) */
 
-  --font-sans: 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --container-page: 76rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-stretch: 100%;
+  }
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-plum);
+    outline-offset: 3px;
+  }
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--color-signal);
+  }
+  a {
+    text-underline-offset: 0.2em;
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .wrap { padding-inline: 1.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .wrap { padding-inline: 2rem; }
+  }
+
+  /* Condensed uppercase display face */
+  .display {
+    font-stretch: 70%;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.92;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+  }
+  .display-md {
+    font-stretch: 75%;
+    font-weight: 750;
+    text-transform: uppercase;
+    line-height: 1;
+    text-wrap: balance;
+  }
+
+  /* Mono spec label */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Buttons — square, heavy, 48px tall */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.25rem;
+    font-weight: 700;
+    font-stretch: 85%;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 0.95rem;
+    border: 2px solid transparent;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
+    text-decoration: none;
+  }
+  .btn-signal {
+    background: var(--color-signal);
+    color: var(--color-ink);
+    border-color: var(--color-signal);
+  }
+  .btn-signal:hover {
+    background: var(--color-signal-2);
+    border-color: var(--color-signal-2);
+  }
+  .btn-ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+  .btn-ink:hover {
+    background: var(--color-ink-3);
+  }
+  .btn-line {
+    background: transparent;
+    color: inherit;
+    border-color: currentColor;
+  }
+  .btn-line:hover {
+    background: color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  /* Blueprint grid backdrop */
+  .grid-blueprint {
+    background-color: var(--color-ink);
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+      linear-gradient(to right, rgb(255 255 255 / 0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.025) 1px, transparent 1px);
+    background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+  }
+  .grid-paper {
+    background-image:
+      linear-gradient(to right, rgb(21 23 27 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(21 23 27 / 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Safety-stripe rule */
+  .hazard {
+    height: 10px;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--color-signal) 0 14px,
+      var(--color-ink) 14px 28px
+    );
+  }
+
+  /* Hairline table of catalogue rows */
+  .cat-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--color-line);
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 0.15s;
+  }
+  .cat-row:hover {
+    background: var(--color-signal);
+  }
+  .cat-row:hover .cat-arrow {
+    transform: translateX(4px);
+  }
+  .cat-arrow {
+    transition: transform 0.15s;
+  }
+
+  /* Corner ticks — the "registration marks" motif */
+  .ticks {
+    position: relative;
+  }
+  .ticks::before,
+  .ticks::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: currentColor;
+    border-style: solid;
+    pointer-events: none;
+  }
+  .ticks::before {
+    top: -1px;
+    left: -1px;
+    border-width: 2px 0 0 2px;
+  }
+  .ticks::after {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 2px 2px 0;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 0.5rem;
+    top: -4rem;
+    z-index: 100;
+    background: var(--color-signal);
+    color: var(--color-ink);
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+  }
+  .skip-link:focus {
+    top: 0.5rem;
+  }
+
+  /* <details> mobile menu */
+  .menu > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  .menu > summary::-webkit-details-marker {
+    display: none;
+  }
+  .menu[open] .menu-open-hide {
+    display: none;
+  }
+  .menu:not([open]) .menu-open-show {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

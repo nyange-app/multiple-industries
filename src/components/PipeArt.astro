@@ -1,0 +1,80 @@
+---
+/** Hero illustration: pipe ends seen head-on, drawn like a technical datasheet. Decorative. */
+interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+const mono = "'IBM Plex Mono', ui-monospace, monospace";
+---
+
+<svg class={cls} viewBox="0 0 480 410" fill="none" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="bore" cx="45%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#2c3038" />
+      <stop offset="0.7" stop-color="#15171b" />
+      <stop offset="1" stop-color="#0b0c0e" />
+    </radialGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.35" />
+      <stop offset="0.5" stop-color="#fff" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- UPVC, large -->
+  <g>
+    <circle cx="200" cy="210" r="120" fill="#c9ccd1" />
+    <circle cx="200" cy="210" r="120" fill="url(#sheen)" />
+    <circle cx="200" cy="210" r="98" fill="url(#bore)" />
+    <circle cx="200" cy="210" r="98" stroke="#8a919b" stroke-width="2" />
+    <circle cx="200" cy="210" r="70" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1" />
+    <circle cx="200" cy="210" r="40" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1" />
+  </g>
+
+  <!-- HDPE -->
+  <g>
+    <circle cx="380" cy="118" r="70" fill="#2c3038" />
+    <circle cx="380" cy="118" r="70" stroke="#3a3e46" stroke-width="2" />
+    <circle cx="380" cy="118" r="66" stroke="#ffc30e" stroke-width="3" stroke-dasharray="40 374" transform="rotate(-70 380 118)" />
+    <circle cx="380" cy="118" r="54" fill="url(#bore)" />
+    <circle cx="380" cy="118" r="54" stroke="#4a505a" stroke-width="1.5" />
+  </g>
+
+  <!-- PP-R -->
+  <g>
+    <circle cx="392" cy="292" r="56" fill="#f3f1ea" />
+    <circle cx="392" cy="292" r="56" fill="url(#sheen)" />
+    <circle cx="392" cy="292" r="51" stroke="#8f177d" stroke-width="3" />
+    <circle cx="392" cy="292" r="38" fill="url(#bore)" />
+  </g>
+
+  <!-- small conduits -->
+  <g>
+    <circle cx="60" cy="364" r="30" fill="#ffc30e" />
+    <circle cx="60" cy="364" r="21" fill="url(#bore)" />
+    <circle cx="128" cy="384" r="18" fill="#ffc30e" />
+    <circle cx="128" cy="384" r="12" fill="url(#bore)" />
+    <circle cx="236" cy="26" r="20" fill="#c9ccd1" />
+    <circle cx="236" cy="26" r="13" fill="url(#bore)" />
+  </g>
+
+  <!-- dimension line under UPVC -->
+  <g stroke="#a9b0ba" stroke-width="1.25">
+    <path d="M80 50v40M320 50v28" stroke-dasharray="3 4" stroke-opacity="0.6" />
+    <path d="M80 62h240" />
+    <path d="M80 56v12M320 56v12" />
+  </g>
+  <rect x="140" y="52" width="80" height="20" fill="#15171b" />
+  <text x="180" y="66" fill="#a9b0ba" font-family={mono} font-size="12" text-anchor="middle">Ø D</text>
+
+  <!-- leaders + material labels -->
+  <g stroke="#a9b0ba" stroke-width="1.25">
+    <path d="M112 270 84 298 H10" />
+    <path d="M430 66 456 40 H480" />
+    <path d="M436 330 456 352 H480" />
+  </g>
+  <g font-family={mono} font-size="12" fill="#f3f1ea" font-weight="600" letter-spacing="1.5">
+    <text x="10" y="290">UPVC</text>
+    <text x="480" y="34" text-anchor="end">HDPE</text>
+    <text x="480" y="372" text-anchor="end">PP-R</text>
+  </g>
+</svg>

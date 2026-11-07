@@ -1,0 +1,176 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Icon from '../../components/Icon.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import { categories, type Category } from '../../data/categories';
+import { LEGAL_NAME, SALES_EMAIL, SITE_URL } from '../../config';
+
+export const getStaticPaths = (() =>
+  categories.map((c) => ({ params: { slug: c.slug }, props: { category: c } }))) satisfies GetStaticPaths;
+
+interface Props {
+  category: Category;
+}
+const { category: c } = Astro.props;
+const others = categories.filter((o) => o.slug !== c.slug);
+const crumbs = [
+  { name: 'Products', href: '/products/' },
+  { name: c.name, href: `/products/${c.slug}/` },
+];
+const quote = (item?: string) =>
+  `mailto:${SALES_EMAIL}?subject=${encodeURIComponent(`Quotation: ${item ?? c.name}`)}`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `${c.name} — ${LEGAL_NAME}`,
+    url: `${SITE_URL}/products/${c.slug}/`,
+    about: c.short,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: c.products.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.name })),
+    },
+  },
+];
+---
+
+<Layout
+  title={`${c.name} Products in Kampala, Uganda`}
+  description={`${c.name} from ${LEGAL_NAME}, Kampala: ${c.short} ISO 9001:2015 certified. Call +256 414 236021 for a quotation.`}
+  breadcrumbs={crumbs}
+  jsonLd={jsonLd}
+>
+  <section class="on-dark grid-blueprint relative overflow-hidden text-paper" aria-labelledby="page-title">
+    <span
+      class="display pointer-events-none absolute -right-4 -bottom-10 text-[14rem] leading-none text-transparent [-webkit-text-stroke:1.5px_var(--color-ink-3)] select-none sm:text-[20rem] lg:-bottom-16 lg:text-[26rem]"
+      aria-hidden="true">{c.code}</span
+    >
+    <div class="wrap relative py-8 lg:py-14">
+      <Breadcrumbs items={crumbs} />
+      <div class="mt-8 grid gap-8 lg:grid-cols-12 lg:items-end">
+        <div class="lg:col-span-8">
+          <p class="label flex items-center gap-3 text-signal">
+            <span class="flex size-10 items-center justify-center bg-signal text-ink">
+              <Icon name={c.icon} class="size-6" />
+            </span>
+            Division {c.code} / 06
+          </p>
+          <h1 id="page-title" class="display mt-5 text-6xl sm:text-7xl lg:text-8xl">{c.name}</h1>
+          <p class="mt-5 max-w-2xl text-lg leading-relaxed text-fog">{c.intro}</p>
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href={quote()} class="btn btn-signal">Request a quotation <Icon name="arrow" class="size-5" /></a>
+            <a href="#schedule" class="btn btn-line">View product schedule</a>
+          </div>
+        </div>
+        <dl class="grid grid-cols-2 border border-ink-3 bg-ink/80 lg:col-span-4 lg:grid-cols-1">
+          <div class="border-r border-ink-3 p-4 lg:border-r-0 lg:border-b">
+            <dt class="label text-fog">Lines listed</dt>
+            <dd class="display-md mt-1 text-2xl sm:text-3xl">{String(c.products.length).padStart(2, '0')}</dd>
+          </div>
+          <div class="p-4">
+            <dt class="label text-fog">Standard</dt>
+            <dd class="display-md mt-1 text-2xl sm:text-3xl">ISO 9001:2015</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+  <div class="hazard" aria-hidden="true"></div>
+
+  <div class="wrap grid gap-12 py-14 lg:grid-cols-12 lg:py-20">
+    <section id="schedule" class="lg:col-span-8" aria-labelledby="schedule-title">
+      <div class="flex items-end justify-between gap-4 border-b-2 border-ink pb-3">
+        <h2 id="schedule-title" class="display text-4xl sm:text-5xl">Product schedule</h2>
+        <p class="label hidden text-steel sm:block">Ref. MI-{c.code}</p>
+      </div>
+      <!-- TODO: placeholder list — replace with confirmed products, sizes and pressure classes -->
+      <table class="w-full text-left">
+        <caption class="sr-only">{c.name} product lines</caption>
+        <thead class="label hidden text-steel sm:table-header-group">
+          <tr class="border-b border-line">
+            <th scope="col" class="py-3 pr-3 font-semibold">Ref.</th>
+            <th scope="col" class="py-3 pr-3 font-semibold">Product</th>
+            <th scope="col" class="py-3 pr-3 font-semibold">Material</th>
+            <th scope="col" class="py-3 pr-3 font-semibold">Sizes / range</th>
+            <th scope="col" class="py-3 font-semibold"><span class="sr-only">Action</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            c.products.map((p, i) => (
+              <tr class="grid grid-cols-[auto_1fr] gap-x-4 border-b border-line py-4 sm:table-row sm:py-0">
+                <td class="label row-span-3 pt-1 text-steel sm:py-5 sm:pr-3 sm:align-top">
+                  {c.code}.{String(i + 1).padStart(2, '0')}
+                </td>
+                <th scope="row" class="text-left font-normal sm:py-5 sm:pr-3 sm:align-top">
+                  <span class="block text-lg font-bold">{p.name}</span>
+                  <span class="block text-steel">{p.use}</span>
+                </th>
+                <td class="mt-2 sm:mt-0 sm:py-5 sm:pr-3 sm:align-top">
+                  <span class="label inline-block border border-ink px-2 py-1">{p.material}</span>
+                </td>
+                <td class="col-start-2 mt-2 flex items-center justify-between gap-3 sm:mt-0 sm:table-cell sm:py-5 sm:pr-3 sm:align-top">
+                  <span class="text-steel">{p.range}</span>
+                  <a href={quote(p.name)} class="label inline-flex min-h-11 items-center gap-1 text-plum underline sm:hidden">
+                    Quote <Icon name="arrow" class="size-4" />
+                  </a>
+                </td>
+                <td class="hidden sm:table-cell sm:py-4 sm:text-right sm:align-top">
+                  <a
+                    href={quote(p.name)}
+                    class="inline-flex size-11 items-center justify-center border border-ink hover:bg-signal"
+                    aria-label={`Request a quotation for ${p.name}`}
+                  >
+                    <Icon name="arrow" class="size-5" />
+                  </a>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+      <p class="label mt-4 text-steel">Full size schedules and price lists available from the sales desk.</p>
+
+      <h2 class="display mt-14 text-3xl sm:text-4xl">Typical applications</h2>
+      <ul class="mt-6 grid gap-px border border-line bg-line sm:grid-cols-2">
+        {
+          c.applications.map((a) => (
+            <li class="flex items-center gap-3 bg-paper p-4">
+              <Icon name="check" class="size-5 shrink-0 text-plum" />
+              {a}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <aside class="lg:col-span-4" aria-label="More divisions">
+      <div class="ticks border border-line bg-paper-2 p-6 lg:sticky lg:top-32">
+        <p class="label text-steel">Quality assured</p>
+        <p class="mt-3 flex items-start gap-3 text-lg font-bold">
+          <Icon name="shield" class="size-7 shrink-0 text-plum" />
+          ISO 9001:2015 Quality Management System · UNBS certified products
+        </p>
+        <p class="label mt-8 text-steel">Other divisions</p>
+        <ul class="mt-2">
+          {
+            others.map((o) => (
+              <li class="border-t border-line">
+                <a href={`/products/${o.slug}/`} class="flex min-h-12 items-center gap-3 py-2 hover:text-plum">
+                  <span class="label text-steel">{o.code}</span>
+                  <span class="flex-1 font-semibold">{o.name}</span>
+                  <Icon name="arrow" class="size-4" />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <ContactCTA title={`Pricing for ${c.name.toLowerCase()}`} subject={`Quotation: ${c.name}`} />
+</Layout>
