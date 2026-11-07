@@ -1,0 +1,12 @@
+@import '@fontsource-variable/nunito';
+
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* TODO: brand tokens. */
+@theme {
+  --color-brand: #eb1700;
+  --color-ink: #191919;
+
+  --font-sans: 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
+}
