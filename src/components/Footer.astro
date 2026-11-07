@@ -1,0 +1,33 @@
+---
+import { CONTACT, SITE_LEGAL, NAV } from '../config';
+import { categories } from '../data/categories';
+import CatIcon from './CatIcon.astro';
+---
+<footer class="mt-16 rounded-t-[2.5rem] bg-ink pb-28 pt-12 text-white md:pb-12">
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-4">
+    <div class="md:col-span-1">
+      <p class="text-2xl font-black">Multiple Industries</p>
+      <p class="mt-2 text-white/80">Quality Building Materials You Can Trust Since 1991.</p>
+      <p class="mt-4 inline-flex rounded-full bg-white/10 px-4 py-2 text-sm font-extrabold">ISO 9001:2015 certified</p>
+    </div>
+    <div>
+      <h2 class="text-lg font-black text-building">Products</h2>
+      <ul class="mt-3 grid gap-1">
+        {categories.map((c) => (<li><a class="flex min-h-11 items-center underline-offset-4 hover:underline" href={`/products/${c.slug}`}>{c.name}</a></li>))}
+      </ul>
+    </div>
+    <div>
+      <h2 class="text-lg font-black text-building">Company</h2>
+      <ul class="mt-3 grid gap-1">
+        {NAV.map((n) => (<li><a class="flex min-h-11 items-center underline-offset-4 hover:underline" href={n.href}>{n.label}</a></li>))}
+      </ul>
+    </div>
+    <div>
+      <h2 class="text-lg font-black text-building">Visit or call</h2>
+      <p class="mt-3 text-white/90">{CONTACT.hq.address}</p>
+      <p class="mt-3"><a class="flex min-h-11 items-center gap-2 font-extrabold underline-offset-4 hover:underline" href={CONTACT.callHref}><CatIcon name="phone" class="h-5 w-5" />{CONTACT.hq.phones[0].label}</a></p>
+      <p><a class="flex min-h-11 items-center gap-2 underline-offset-4 hover:underline" href="mailto:sales@multipleindustries.com"><CatIcon name="mail" class="h-5 w-5" />sales@multipleindustries.com</a></p>
+    </div>
+  </div>
+  <p class="mx-auto mt-10 max-w-6xl px-4 text-sm text-white/70 sm:px-6">© 2026 {SITE_LEGAL}</p>
+</footer>

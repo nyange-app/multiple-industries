@@ -1,0 +1,23 @@
+---
+interface Props { name: string; class?: string }
+const { name, class: cls = 'h-10 w-10' } = Astro.props;
+---
+<svg class={cls} viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {name === 'water' && (<><path d="M24 5C17 15 11 21 11 29a13 13 0 0 0 26 0C37 21 31 15 24 5Z" /><path d="M18 30a6 6 0 0 0 6 6" /></>)}
+  {name === 'plumbing' && (<><path d="M6 16h18a12 12 0 0 1 12 12v16" /><path d="M6 10v12M30 44h12M42 38v12" transform="translate(0 -4)" /><path d="M4 10v12" /></>)}
+  {name === 'bathroom' && (<><path d="M6 24h36v4a12 12 0 0 1-12 12H18A12 12 0 0 1 6 28v-4Z" /><path d="M12 24V12a5 5 0 0 1 9-3" /><path d="M14 44l2-4M34 44l-2-4" /></>)}
+  {name === 'building' && (<><path d="M4 42h40" /><path d="M8 42V22L24 8l16 14v20" /><path d="M19 42V30h10v12" /></>)}
+  {name === 'plastic' && (<><path d="M10 14h28l-3 28H13L10 14Z" /><path d="M8 14h32" /><path d="M16 24h16" /></>)}
+  {name === 'auto' && (<><circle cx="24" cy="24" r="18" /><circle cx="24" cy="24" r="6" /><path d="M24 6v12M24 30v12M6 24h12M30 24h12" /></>)}
+  {name === 'phone' && (<path d="M10 6h8l4 10-5 3a24 24 0 0 0 12 12l3-5 10 4v8a4 4 0 0 1-4 4C21 42 6 27 6 10a4 4 0 0 1 4-4Z" />)}
+  {name === 'chat' && (<><path d="M6 10a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H20l-10 8v-8a4 4 0 0 1-4-4V10Z" /><path d="M15 16h18M15 24h11" /></>)}
+  {name === 'pin' && (<><path d="M24 44S9 30 9 19a15 15 0 0 1 30 0c0 11-15 25-15 25Z" /><circle cx="24" cy="19" r="5" /></>)}
+  {name === 'mail' && (<><rect x="5" y="9" width="38" height="30" rx="5" /><path d="m7 13 17 13 17-13" /></>)}
+  {name === 'arrow' && (<path d="M8 24h30M26 11l13 13-13 13" />)}
+  {name === 'check' && (<path d="m10 25 9 9 19-20" />)}
+  {name === 'shield' && (<><path d="M24 4 8 10v12c0 11 7 18 16 22 9-4 16-11 16-22V10L24 4Z" /><path d="m16 24 6 6 11-12" /></>)}
+  {name === 'factory' && (<><path d="M5 42V22l12 7V22l12 7V22l12 7V8h-6v34H5Z" /></>)}
+  {name === 'truck' && (<><path d="M3 12h27v24H3z" /><path d="M30 20h9l6 8v8H30" /><circle cx="14" cy="38" r="4" fill="var(--color-cream)" /><circle cx="37" cy="38" r="4" fill="var(--color-cream)" /></>)}
+  {name === 'menu' && (<path d="M8 14h32M8 24h32M8 34h32" />)}
+  {name === 'close' && (<path d="M12 12l24 24M36 12 12 36" />)}
+</svg>

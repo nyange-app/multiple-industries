@@ -1,25 +1,90 @@
 ---
 import '../styles/global.css';
-import { SITE_NAME } from '../config';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BottomBar from '../components/BottomBar.astro';
+import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '../config';
 
+export interface Crumb { name: string; href: string }
 interface Props {
   title?: string;
   description?: string;
+  crumbs?: Crumb[];
+  home?: boolean;
+  noindex?: boolean;
 }
 
-const { title = SITE_NAME, description = '' } = Astro.props;
+const { title, description = SITE_DESCRIPTION, crumbs = [], home = false, noindex = false } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} | Quality Building Materials & Plastic Pipes, Kampala`;
+const canonical = new URL(Astro.url.pathname, SITE_URL).href.replace(/(?<=.)\/$/, '');
+const ogImage = `${SITE_URL}/og-logo.png`;
+
+const org = {
+  '@type': 'Organization',
+  '@id': `${SITE_URL}/#organization`,
+  name: 'Multiple Industries Limited',
+  url: SITE_URL,
+  logo: ogImage,
+  foundingDate: '1991',
+  description: SITE_DESCRIPTION,
+};
+const local = {
+  '@type': 'LocalBusiness',
+  '@id': `${SITE_URL}/#localbusiness`,
+  name: 'Multiple Industries Limited',
+  url: SITE_URL,
+  image: ogImage,
+  telephone: '+256414236021',
+  email: 'sales@multipleindustries.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Plot 714/715, 8th Street Industrial Area, P.O. Box 20166',
+    addressLocality: 'Kampala',
+    addressCountry: 'UG',
+  },
+  parentOrganization: { '@id': `${SITE_URL}/#organization` },
+};
+const breadcrumb = crumbs.length
+  ? {
+      '@type': 'BreadcrumbList',
+      itemListElement: [{ name: 'Home', href: '/' }, ...crumbs].map((c, i) => ({
+        '@type': 'ListItem', position: i + 1, name: c.name, item: new URL(c.href, SITE_URL).href,
+      })),
+    }
+  : null;
+const graph = { '@context': 'https://schema.org', '@graph': [...(home ? [org, local] : []), ...(breadcrumb ? [breadcrumb] : [])] };
 ---
 
-<html lang="en">
+<!doctype html>
+<html lang="en-UG">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <meta name="theme-color" content="#fffaf2" />
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_UG" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {graph['@graph'].length > 0 && <script type="application/ld+json" set:html={JSON.stringify(graph)} />}
   </head>
-  <body class="min-h-dvh bg-white font-sans text-ink antialiased">
-    <main id="main">
-      <slot />
-    </main>
+  <body class="min-h-dvh bg-cream font-sans text-ink antialiased">
+    <a href="#main" class="sr-only z-[60] rounded-full bg-ink px-5 py-3 font-extrabold text-white focus:not-sr-only focus:fixed focus:left-3 focus:top-3">Skip to content</a>
+    <Header />
+    <main id="main"><slot /></main>
+    <Footer />
+    <BottomBar />
   </body>
 </html>

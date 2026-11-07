@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Blob from '../components/Blob.astro';
+import CatIcon from '../components/CatIcon.astro';
+---
+<Layout
+  title="About Us"
+  description="Since 1991 Multiple Industries has led manufacturing and trading of building materials, plasticware, automotive spare parts and transport in Uganda. ISO 9001:2015 certified."
+  crumbs={[{ name: 'About Us', href: '/about' }]}
+>
+  <section class="relative overflow-hidden bg-water-tint">
+    <Blob variant={2} class="pointer-events-none absolute -right-24 -top-16 h-80 w-80 text-white/60" />
+    <div class="relative mx-auto max-w-4xl px-4 py-12 sm:px-6 md:py-16">
+      <p class="font-black text-water-deep">About Us</p>
+      <h1 class="mt-2 text-4xl font-black leading-tight sm:text-5xl">Building Uganda since 1991</h1>
+      <p class="mt-4 text-lg">Since 1991 we have been leading manufacturers and traders of domestic and industrial building materials, domestic plasticware, automotive spare parts and transport services in Uganda.</p>
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-4xl gap-5 px-4 py-12 sm:px-6">
+    <p class="text-lg leading-relaxed text-ink-soft">Our range runs from plastic pipes to concrete products, indoor and outdoor plumbing, rainwater gutters, Light Gauge Steel Frame roof trusses, kitchen and bathroom solutions, and roofing solutions.</p>
+    <p class="text-lg leading-relaxed text-ink-soft">Our plasticware includes jerry cans, basins, buckets, cups, mugs, plates, wrapped drinking straws, tiffin boxes and trays, all made from food-grade raw materials.</p>
+
+    <ol class="mt-4 grid gap-4 sm:grid-cols-3">
+      <li class="cat-water rounded-[2rem] bg-water p-6 text-white"><p class="text-4xl font-black">1991</p><p class="mt-1 font-extrabold">Multiple Industries is founded in Kampala.</p></li>
+      <li class="cat-auto rounded-[2rem] bg-auto p-6 text-white"><p class="text-4xl font-black">2013</p><p class="mt-1 font-extrabold">Automotive division: Fras-le brake lining and pads, Hanksugi truck tyres, Hengst fuel and air filters.</p></li>
+      <li class="cat-building rounded-[2rem] bg-building p-6 text-ink"><p class="text-4xl font-black">2019</p><p class="mt-1 font-extrabold">Inland Freight Services: transport and logistics across East Africa.</p></li>
+    </ol>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 pb-12 sm:px-6" aria-labelledby="q">
+    <div class="cat-plumbing rounded-[2.5rem] bg-plumbing-tint p-7 sm:p-10">
+      <h2 id="q" class="flex items-center gap-3 text-3xl font-black text-plumbing-deep"><CatIcon name="shield" class="h-9 w-9" /> Quality policy</h2>
+      <p class="mt-4 text-lg leading-relaxed">We manufacture and supply quality UPVC, HDPE, PP-R pipes in all sizes, drinking straws, domestic plastics and quality irrigation systems and building materials as a single stop for building and construction. Through a Quality Management System in accordance with ISO 9001:2015 we position ourselves as market leader in Uganda and the East African Community.</p>
+      <p class="mt-4 font-extrabold">Our products are certified by the Uganda National Bureau of Standards (UNBS).</p>
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-4xl gap-5 px-4 pb-12 sm:px-6 md:grid-cols-2">
+    <article class="rounded-[2rem] bg-bathroom-tint p-7"><h2 class="text-2xl font-black text-bathroom-deep">Mission</h2><p class="mt-3 leading-relaxed">Having a competent, experienced and motivated team, and continual interactions with our customers and other interested parties, we will manufacture and sell top quality plastic products, and supply reliable building materials, selected automotive products, irrigation systems to satisfy and exceed customer requirements and increase shareholder value while maintaining a sustainable environment.</p></article>
+    <article class="rounded-[2rem] bg-building-tint p-7"><h2 class="text-2xl font-black text-building-deep">Vision</h2><p class="mt-3 leading-relaxed">To be the most preferred one stop source for quality building materials, general household items, selected automotive, irrigation and water management systems.</p></article>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-4 pb-4 text-center sm:px-6">
+    <a href="/contact" class="btn btn-primary">Get in touch <CatIcon name="arrow" class="h-5 w-5" /></a>
+  </section>
+</Layout>

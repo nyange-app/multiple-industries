@@ -3,10 +3,82 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-/* TODO: brand tokens. */
 @theme {
-  --color-brand: #eb1700;
-  --color-ink: #191919;
+  --font-sans: 'Nunito Variable', ui-rounded, ui-sans-serif, system-ui, sans-serif;
 
-  --font-sans: 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #1d2233;
+  --color-ink-soft: #4a5068;
+  --color-cream: #fffaf2;
+  --color-sand: #f6eddd;
+  --color-brand: #d51a00; /* logo red, used sparingly */
+
+  /* One colour per category: solid (AA with white text), tint, deep (AA text on tint) */
+  --color-water: #0b63c5;
+  --color-water-tint: #dcecff;
+  --color-water-deep: #08488f;
+  --color-plumbing: #0d7a43;
+  --color-plumbing-tint: #daf5e4;
+  --color-plumbing-deep: #09572f;
+  --color-bathroom: #7a3ccf;
+  --color-bathroom-tint: #ece1fb;
+  --color-bathroom-deep: #55269a;
+  --color-building: #f4a316;
+  --color-building-tint: #fff0cc;
+  --color-building-deep: #7d4a00;
+  --color-plastic: #d4313a;
+  --color-plastic-tint: #ffe1de;
+  --color-plastic-deep: #9a1c24;
+  --color-auto: #343a46;
+  --color-auto-tint: #e6e8ec;
+  --color-auto-deep: #1f242d;
+
+  --radius-blob: 2.5rem;
 }
+
+/* Category colour scopes: components read --c / --c-tint / --c-deep / --c-on */
+.cat-water { --c: var(--color-water); --c-tint: var(--color-water-tint); --c-deep: var(--color-water-deep); --c-on: #fff; }
+.cat-plumbing { --c: var(--color-plumbing); --c-tint: var(--color-plumbing-tint); --c-deep: var(--color-plumbing-deep); --c-on: #fff; }
+.cat-bathroom { --c: var(--color-bathroom); --c-tint: var(--color-bathroom-tint); --c-deep: var(--color-bathroom-deep); --c-on: #fff; }
+.cat-building { --c: var(--color-building); --c-tint: var(--color-building-tint); --c-deep: var(--color-building-deep); --c-on: #1d2233; }
+.cat-plastic { --c: var(--color-plastic); --c-tint: var(--color-plastic-tint); --c-deep: var(--color-plastic-deep); --c-on: #fff; }
+.cat-auto { --c: var(--color-auto); --c-tint: var(--color-auto-tint); --c-deep: var(--color-auto-deep); --c-on: #fff; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+body { background: var(--color-cream); }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+:focus-visible { outline: 4px solid var(--color-ink); outline-offset: 3px; border-radius: 0.5rem; }
+
+/* Buttons: large pills, >=48px tall */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  min-height: 3rem; padding: .75rem 1.5rem; border-radius: 9999px;
+  font-weight: 800; font-size: 1rem; line-height: 1.2; text-align: center;
+  border: 3px solid transparent; transition: transform .15s ease, box-shadow .15s ease;
+  box-shadow: 0 4px 0 rgb(0 0 0 / .18);
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgb(0 0 0 / .18); }
+.btn-primary { background: var(--color-water); color: #fff; }
+.btn-ink { background: var(--color-ink); color: #fff; }
+.btn-light { background: #fff; color: var(--color-ink); }
+.btn-cat { background: var(--c); color: var(--c-on); }
+.btn-ghost { background: transparent; color: var(--color-ink); border-color: var(--color-ink); box-shadow: none; }
+
+.chip {
+  display: inline-flex; align-items: center; min-height: 2.75rem; padding: .5rem 1.1rem;
+  border-radius: 9999px; font-weight: 800; background: var(--c-tint); color: var(--c-deep);
+}
+
+.card-cat {
+  position: relative; overflow: hidden; display: block;
+  background: var(--c-tint); color: var(--c-deep);
+  border-radius: var(--radius-blob); padding: 1.5rem;
+  transition: transform .2s ease;
+}
+.card-cat:hover { transform: translateY(-4px) rotate(-.4deg); }
+
+.prose-friendly p { margin-top: 1rem; }

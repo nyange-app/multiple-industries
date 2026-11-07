@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo-multiple-industries.png';
+import CatIcon from './CatIcon.astro';
+import { NAV, CONTACT } from '../config';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href.split('/').slice(0, 2).join('/')));
+---
+<header class="sticky top-0 z-40 border-b-4 border-sand bg-cream/95 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 sm:px-6">
+    <a href="/" class="flex min-h-11 items-center" aria-label="Multiple Industries, home">
+      <Image src={logo} alt="Multiple Industries logo" width={150} height={37} class="h-9 w-auto sm:h-10" loading="eager" />
+    </a>
+
+    <nav aria-label="Main" class="hidden items-center gap-1 md:flex">
+      {NAV.map((n) => (
+        <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}
+           class={`flex min-h-11 items-center rounded-full px-4 font-extrabold hover:bg-sand aria-[current=page]:bg-water-tint aria-[current=page]:text-water-deep`}>{n.label}</a>
+      ))}
+      <a href={CONTACT.callHref} class="btn btn-primary ml-2 !min-h-11 !py-2">
+        <CatIcon name="phone" class="h-5 w-5" /> Call us
+      </a>
+    </nav>
+
+    <details class="group relative md:hidden">
+      <summary class="flex min-h-12 min-w-12 cursor-pointer list-none items-center justify-center rounded-full bg-ink text-white [&::-webkit-details-marker]:hidden" aria-label="Menu">
+        <CatIcon name="menu" class="h-6 w-6 group-open:hidden" />
+        <CatIcon name="close" class="hidden h-6 w-6 group-open:block" />
+      </summary>
+      <nav aria-label="Mobile" class="absolute right-0 top-14 w-[min(20rem,calc(100vw-2rem))] rounded-3xl border-4 border-sand bg-white p-3 shadow-xl">
+        <ul class="grid gap-1">
+          {NAV.map((n) => (
+            <li><a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}
+                class="flex min-h-12 items-center rounded-2xl px-4 text-lg font-extrabold hover:bg-sand aria-[current=page]:bg-water-tint aria-[current=page]:text-water-deep">{n.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>

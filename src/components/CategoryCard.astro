@@ -1,0 +1,18 @@
+---
+import CatIcon from './CatIcon.astro';
+import Blob from './Blob.astro';
+import type { Category } from '../data/categories';
+interface Props { cat: Category; index?: number }
+const { cat, index = 0 } = Astro.props;
+---
+<a href={`/products/${cat.slug}`} class={`card-cat cat-${cat.key} group`}>
+  <Blob variant={((index % 3) + 1) as 1 | 2 | 3} class="pointer-events-none absolute -bottom-10 -right-10 h-40 w-40 text-[color:var(--c)] opacity-25" />
+  <span class="relative flex h-16 w-16 items-center justify-center rounded-3xl bg-[color:var(--c)] text-[color:var(--c-on)]">
+    <CatIcon name={cat.key} class="h-9 w-9" />
+  </span>
+  <h3 class="relative mt-4 text-2xl font-black leading-tight">{cat.name}</h3>
+  <p class="relative mt-2 text-ink-soft">{cat.short}</p>
+  <span class="relative mt-4 inline-flex min-h-11 items-center gap-2 font-black">
+    See products <CatIcon name="arrow" class="h-5 w-5 transition-transform group-hover:translate-x-1" />
+  </span>
+</a>

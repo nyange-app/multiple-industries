@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CatIcon from '../components/CatIcon.astro';
+import { CONTACT } from '../config';
+const offices = [
+  { o: CONTACT.hq, cls: 'cat-water', icon: 'factory' },
+  { o: CONTACT.showroom, cls: 'cat-building', icon: 'pin' },
+];
+---
+<Layout
+  title="Contact Us"
+  description="Contact Multiple Industries Limited in Kampala: head office and factory, plus sales office and showroom on 8th Street Industrial Area. Call, email or visit."
+  crumbs={[{ name: 'Contact', href: '/contact' }]}
+>
+  <section class="mx-auto max-w-5xl px-4 pb-6 pt-10 sm:px-6">
+    <h1 class="text-4xl font-black sm:text-5xl">Let's talk</h1>
+    <p class="mt-3 max-w-2xl text-lg text-ink-soft">Call, message or drop by. Both of our offices are on 8th Street Industrial Area, Kampala.</p>
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+      <a href={CONTACT.callHref} class="btn btn-primary"><CatIcon name="phone" class="h-5 w-5" /> Call hotline</a>
+      <a href={CONTACT.whatsappHref} class="btn bg-plumbing text-white"><CatIcon name="chat" class="h-5 w-5" /> WhatsApp</a>
+      <a href={CONTACT.mapsHref} class="btn btn-light" target="_blank" rel="noopener"><CatIcon name="pin" class="h-5 w-5" /> Directions</a>
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-5xl gap-5 px-4 py-8 sm:px-6 md:grid-cols-2">
+    {offices.map(({ o, cls, icon }) => (
+      <article class={`${cls} rounded-[2.5rem] bg-[color:var(--c-tint)] p-7 text-[color:var(--c-deep)]`}>
+        <span class="flex h-14 w-14 items-center justify-center rounded-full bg-[color:var(--c)] text-[color:var(--c-on)]"><CatIcon name={icon} class="h-8 w-8" /></span>
+        <h2 class="mt-3 text-2xl font-black">{o.name}</h2>
+        <address class="mt-2 not-italic text-ink">{o.address}</address>
+        <ul class="mt-3 grid">
+          {o.phones.map((p) => (<li><a class="flex min-h-11 items-center gap-2 font-extrabold underline-offset-4 hover:underline" href={`tel:${p.href}`}><CatIcon name="phone" class="h-5 w-5" />{p.label}</a></li>))}
+          {o.emails.map((e) => (<li><a class="flex min-h-11 items-center gap-2 break-all underline-offset-4 hover:underline" href={`mailto:${e}`}><CatIcon name="mail" class="h-5 w-5 shrink-0" />{e}</a></li>))}
+        </ul>
+      </article>
+    ))}
+  </section>
+
+  <section class="mx-auto max-w-5xl px-4 py-8 sm:px-6" aria-labelledby="msg">
+    <div class="rounded-[2.5rem] bg-sand p-7 sm:p-10">
+      <h2 id="msg" class="text-2xl font-black">Send us an email</h2>
+      <p class="mt-1 text-ink-soft">This opens your email app, addressed to our sales team.</p>
+      <form action="mailto:sales@multipleindustries.com" method="get" class="mt-5 grid gap-4 md:max-w-xl">
+        <label class="grid gap-1 font-extrabold">Subject
+          <input name="subject" required value="Enquiry from website" class="min-h-12 rounded-2xl border-2 border-ink/30 bg-white px-4 font-normal" />
+        </label>
+        <label class="grid gap-1 font-extrabold">Your message (include your name and number)
+          <textarea name="body" required rows="5" class="rounded-2xl border-2 border-ink/30 bg-white px-4 py-3 font-normal"></textarea>
+        </label>
+        <button type="submit" class="btn btn-primary w-fit">Open email <CatIcon name="arrow" class="h-5 w-5" /></button>
+      </form>
+    </div>
+  </section>
+</Layout>

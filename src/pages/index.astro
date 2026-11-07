@@ -1,8 +1,150 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
-import { SITE_DESCRIPTION, SITE_NAME } from '../config';
----
+import Blob from '../components/Blob.astro';
+import CatIcon from '../components/CatIcon.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import iso from '../assets/iso.png';
+import { categories, brands } from '../data/categories';
+import { CONTACT } from '../config';
 
-<Layout title={SITE_NAME} description={SITE_DESCRIPTION}>
-  <h1 class="p-8 text-3xl font-bold">{SITE_NAME}</h1>
+const why = [
+  { icon: 'shield', t: 'ISO 9001:2015 certified', d: 'A Quality Management System in accordance with ISO 9001:2015.', cls: 'cat-water' },
+  { icon: 'check', t: 'UNBS certified products', d: 'Products certified by the Uganda National Bureau of Standards.', cls: 'cat-plumbing' },
+  { icon: 'factory', t: 'We make what we sell', d: 'Pipes, straws and household plastics manufactured in Kampala.', cls: 'cat-plastic' },
+  { icon: 'truck', t: 'One stop, delivered', d: 'Building materials, automotive parts and transport services in East Africa.', cls: 'cat-bathroom' },
+];
+const timeline = [
+  { y: '1991', t: 'Founded in Kampala', cls: 'cat-water' },
+  { y: '2013', t: 'Automotive division starts', cls: 'cat-auto' },
+  { y: '2019', t: 'Inland Freight Services', cls: 'cat-building' },
+];
+---
+<Layout home>
+  <!-- HERO -->
+  <section class="relative overflow-hidden">
+    <Blob variant={1} class="pointer-events-none absolute -right-24 -top-16 h-80 w-80 text-building-tint md:h-[34rem] md:w-[34rem]" />
+    <Blob variant={2} class="pointer-events-none absolute -left-24 top-72 h-64 w-64 text-water-tint md:top-40 md:h-96 md:w-96" />
+    <div class="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pb-14 pt-10 sm:px-6 md:grid-cols-2 md:pb-24 md:pt-16">
+      <div>
+        <p class="inline-flex rounded-full bg-plumbing-tint px-4 py-2 text-sm font-black text-plumbing-deep">Made in Kampala, Uganda</p>
+        <h1 class="mt-4 text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
+          Quality building materials you can <span class="text-water">trust</span>, since 1991.
+        </h1>
+        <p class="mt-5 max-w-xl text-lg text-ink-soft">
+          Leading manufacturer of UPVC, HDPE and PP-R plastic pipes, drinking straws and household plastics. Plus building materials, irrigation, automotive parts and transport, all in one place.
+        </p>
+        <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+          <a href="/products/water-management" class="btn btn-primary">Browse products <CatIcon name="arrow" class="h-5 w-5" /></a>
+          <a href={CONTACT.callHref} class="btn btn-light"><CatIcon name="phone" class="h-5 w-5" /> Call {CONTACT.hq.phones[0].label}</a>
+        </div>
+      </div>
+      <ul class="relative grid grid-cols-3 gap-3 sm:gap-4" aria-label="Product categories">
+        {categories.map((c, i) => (
+          <li class={`cat-${c.key}`}>
+            <a href={`/products/${c.slug}`} class={`flex aspect-square flex-col items-center justify-center gap-1 bg-[color:var(--c)] p-2 text-center text-[color:var(--c-on)] shadow-[0_6px_0_rgb(0_0_0/.15)] transition-transform hover:-translate-y-1 ${['rounded-[2rem_2rem_2rem_0.75rem]','rounded-[2rem_0.75rem_2rem_2rem]','rounded-[0.75rem_2rem_2rem_2rem]','rounded-[2rem_2rem_0.75rem_2rem]','rounded-full','rounded-[2rem]'][i]}`}>
+              <CatIcon name={c.key} class="h-9 w-9 sm:h-12 sm:w-12" />
+              <span class="text-[0.7rem] font-black leading-tight sm:text-sm">{c.name.replace(' Solutions','')}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ABOUT TEASER -->
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div class="grid gap-8 rounded-[2.5rem] bg-sand p-6 sm:p-10 md:grid-cols-5">
+      <div class="md:col-span-3">
+        <h2 class="text-3xl font-black sm:text-4xl">A one stop service for East Africa</h2>
+        <p class="mt-4 text-lg text-ink-soft">
+          Multiple Industries has always tried to offer a one stop service with diversified products covering the entire range of building materials, full range of domestic household products, automotive spare parts and transport services in the East African Region.
+        </p>
+        <a href="/about" class="btn btn-ink mt-6">Our story <CatIcon name="arrow" class="h-5 w-5" /></a>
+      </div>
+      <ol class="grid gap-3 md:col-span-2">
+        {timeline.map((t) => (
+          <li class={`${t.cls} flex items-center gap-4 rounded-3xl bg-[color:var(--c)] p-4 text-[color:var(--c-on)]`}>
+            <span class="text-3xl font-black">{t.y}</span><span class="font-extrabold">{t.t}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6" aria-labelledby="cats">
+    <h2 id="cats" class="text-3xl font-black sm:text-4xl">Everything for your project</h2>
+    <p class="mt-2 max-w-2xl text-lg text-ink-soft">Six product ranges, each easy to find. Tap a colour to explore.</p>
+    <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {categories.map((c, i) => <CategoryCard cat={c} index={i} />)}
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6" aria-labelledby="why">
+    <div class="grid items-center gap-8 md:grid-cols-3">
+      <div>
+        <h2 id="why" class="text-3xl font-black sm:text-4xl">Why people choose us</h2>
+        <p class="mt-3 text-lg text-ink-soft">Certified quality, made locally, backed by more than three decades of trading.</p>
+        <div class="mt-5 inline-block rounded-3xl bg-white p-3 shadow-sm">
+          <Image src={iso} alt="ISO 9001:2015 certification badge" width={220} class="h-auto w-44" />
+        </div>
+      </div>
+      <ul class="grid gap-4 sm:grid-cols-2 md:col-span-2">
+        {why.map((w) => (
+          <li class={`${w.cls} rounded-[2rem] bg-[color:var(--c-tint)] p-6 text-[color:var(--c-deep)]`}>
+            <span class="flex h-14 w-14 items-center justify-center rounded-full bg-[color:var(--c)] text-[color:var(--c-on)]"><CatIcon name={w.icon} class="h-8 w-8" /></span>
+            <h3 class="mt-3 text-xl font-black">{w.t}</h3>
+            <p class="mt-1 text-ink-soft">{w.d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- MISSION / VISION -->
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6" aria-labelledby="mv">
+    <h2 id="mv" class="sr-only">Mission and vision</h2>
+    <div class="grid gap-5 md:grid-cols-2">
+      <article class="cat-water relative overflow-hidden rounded-[2.5rem] bg-water p-7 text-white sm:p-9">
+        <Blob variant={3} class="pointer-events-none absolute -right-16 -top-16 h-52 w-52 text-white/10" />
+        <h3 class="relative text-2xl font-black">Our mission</h3>
+        <p class="relative mt-3 text-lg leading-relaxed">Having a competent, experienced and motivated team, and continual interactions with our customers and other interested parties, we will manufacture and sell top quality plastic products, and supply reliable building materials, selected automotive products, irrigation systems to satisfy and exceed customer requirements and increase shareholder value while maintaining a sustainable environment.</p>
+      </article>
+      <article class="relative overflow-hidden rounded-[2.5rem] bg-building p-7 text-ink sm:p-9">
+        <Blob variant={2} class="pointer-events-none absolute -bottom-16 -right-16 h-52 w-52 text-white/30" />
+        <h3 class="relative text-2xl font-black">Our vision</h3>
+        <p class="relative mt-3 text-lg leading-relaxed">To be the most preferred one stop source for quality building materials, general household items, selected automotive, irrigation and water management systems.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- BRANDS -->
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6" aria-labelledby="brands">
+    <h2 id="brands" class="text-3xl font-black sm:text-4xl">Brands we work with</h2>
+    <!-- TODO: confirm brand/partner list and replace text tiles with logos. -->
+    <ul class="mt-6 flex flex-wrap gap-3">
+      {brands.map((b, i) => (
+        <li class={`cat-${categories[i % 6].key} chip !min-h-12 text-lg`}>{b}</li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- CONTACT CTA -->
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6" aria-labelledby="cta">
+    <div class="relative overflow-hidden rounded-[2.5rem] bg-ink p-8 text-white sm:p-12">
+      <Blob variant={1} class="pointer-events-none absolute -right-20 -top-20 h-72 w-72 text-water/60" />
+      <Blob variant={3} class="pointer-events-none absolute -bottom-24 left-1/3 h-60 w-60 text-plastic/40" />
+      <div class="relative max-w-2xl">
+        <h2 id="cta" class="text-3xl font-black sm:text-4xl">Need a quote or advice? Talk to us.</h2>
+        <p class="mt-3 text-lg text-white/85">Visit our showroom on 8th Street Industrial Area, or reach the team by phone or email.</p>
+        <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+          <a href={CONTACT.callHref} class="btn btn-light"><CatIcon name="phone" class="h-5 w-5" /> Call us</a>
+          <a href={CONTACT.whatsappHref} class="btn bg-plumbing text-white"><CatIcon name="chat" class="h-5 w-5" /> WhatsApp</a>
+          <a href="/contact" class="btn btn-ghost !border-white !text-white">Contact page</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </Layout>

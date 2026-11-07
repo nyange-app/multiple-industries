@@ -1,0 +1,68 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Blob from '../../components/Blob.astro';
+import CatIcon from '../../components/CatIcon.astro';
+import { categories } from '../../data/categories';
+import { CONTACT } from '../../config';
+
+export function getStaticPaths() {
+  return categories.map((cat) => ({ params: { slug: cat.slug }, props: { cat } }));
+}
+const { cat } = Astro.props;
+const others = categories.filter((c) => c.slug !== cat.slug);
+---
+<Layout
+  title={`${cat.name} Products in Uganda`}
+  description={`${cat.name} from Multiple Industries Limited, Kampala. ${cat.intro}`}
+  crumbs={[{ name: 'Products', href: '/products/water-management' }, { name: cat.name, href: `/products/${cat.slug}` }]}
+>
+  <div class={`cat-${cat.key}`}>
+    <section class="relative overflow-hidden bg-[color:var(--c-tint)]">
+      <Blob variant={1} class="pointer-events-none absolute -right-20 -top-10 h-72 w-72 text-[color:var(--c)] opacity-25 md:h-96 md:w-96" />
+      <div class="relative mx-auto max-w-6xl px-4 pb-12 pt-6 sm:px-6 md:pb-16">
+        <nav aria-label="Breadcrumb" class="text-sm font-extrabold text-[color:var(--c-deep)]">
+          <ol class="flex flex-wrap items-center gap-1">
+            <li><a class="inline-flex min-h-11 items-center underline-offset-4 hover:underline" href="/">Home</a></li>
+            <li aria-hidden="true">/</li>
+            <li><span>Products</span></li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page">{cat.name}</li>
+          </ol>
+        </nav>
+        <span class="mt-2 flex h-20 w-20 items-center justify-center rounded-[1.75rem] bg-[color:var(--c)] text-[color:var(--c-on)]"><CatIcon name={cat.key} class="h-12 w-12" /></span>
+        <h1 class="mt-4 text-4xl font-black leading-tight text-[color:var(--c-deep)] sm:text-5xl">{cat.name}</h1>
+        <p class="mt-4 max-w-2xl text-lg text-ink">{cat.intro}</p>
+        <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+          <a href={CONTACT.callHref} class="btn btn-cat"><CatIcon name="phone" class="h-5 w-5" /> Ask about {cat.name}</a>
+          <a href="/contact" class="btn btn-light">Visit our showroom</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6" aria-labelledby="range">
+      <h2 id="range" class="text-3xl font-black">What we offer</h2>
+      <!-- TODO: replace placeholder list with real catalogue, specs and photography. -->
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {cat.products.map((p) => (
+          <li class="flex flex-col rounded-[2rem] border-4 border-[color:var(--c-tint)] bg-white p-6">
+            <span class="flex h-24 items-center justify-center rounded-3xl bg-[color:var(--c-tint)] text-[color:var(--c)]" role="img" aria-label="Product photo placeholder">
+              <CatIcon name={cat.key} class="h-14 w-14" />
+            </span>
+            <h3 class="mt-4 text-xl font-black">{p.name}</h3>
+            <p class="mt-1 text-ink-soft">{p.note}</p>
+            <a href="/contact" class="mt-4 inline-flex min-h-11 items-center gap-2 font-black text-[color:var(--c-deep)] underline-offset-4 hover:underline">Enquire <CatIcon name="arrow" class="h-5 w-5" /></a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+
+  <section class="mx-auto max-w-6xl px-4 pb-12 sm:px-6" aria-labelledby="more">
+    <h2 id="more" class="text-2xl font-black">More product ranges</h2>
+    <ul class="mt-4 flex flex-wrap gap-3">
+      {others.map((c) => (
+        <li class={`cat-${c.key}`}><a class="chip" href={`/products/${c.slug}`}><CatIcon name={c.key} class="mr-2 h-5 w-5" />{c.name}</a></li>
+      ))}
+    </ul>
+  </section>
+</Layout>

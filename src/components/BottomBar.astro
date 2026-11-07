@@ -1,0 +1,21 @@
+---
+import CatIcon from './CatIcon.astro';
+import { CONTACT } from '../config';
+const items = [
+  { href: CONTACT.callHref, label: 'Call', icon: 'phone', cls: 'bg-water text-white' },
+  { href: CONTACT.whatsappHref, label: 'WhatsApp', icon: 'chat', cls: 'bg-plumbing text-white', ext: true },
+  { href: CONTACT.mapsHref, label: 'Directions', icon: 'pin', cls: 'bg-building text-ink', ext: true },
+];
+---
+<nav aria-label="Quick actions" class="fixed inset-x-0 bottom-0 z-50 border-t-4 border-sand bg-cream/95 px-3 pb-[max(.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur md:hidden">
+  <ul class="mx-auto grid max-w-md grid-cols-3 gap-2">
+    {items.map((i) => (
+      <li>
+        <a href={i.href} {...(i.ext ? { target: '_blank', rel: 'noopener' } : {})}
+           class={`flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-full text-sm font-black shadow-[0_3px_0_rgb(0_0_0/.2)] active:translate-y-0.5 ${i.cls}`}>
+          <CatIcon name={i.icon} class="h-5 w-5" />{i.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

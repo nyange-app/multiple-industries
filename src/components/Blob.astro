@@ -1,0 +1,13 @@
+---
+// Decorative organic blob; colour comes from currentColor so parents tint it.
+interface Props { variant?: 1 | 2 | 3; class?: string }
+const { variant = 1, class: cls = '' } = Astro.props;
+const paths = {
+  1: 'M421 76c52 55 61 138 29 205s-105 118-180 128-157-24-205-86S9 168 61 112 193 12 270 17s99 4 151 59Z',
+  2: 'M380 60c56 38 82 108 60 170s-92 108-165 135-147 35-198-5S-6 238 30 168 117 33 200 20s124 2 180 40Z',
+  3: 'M404 120c34 66 12 150-48 200s-148 66-212 30S28 245 38 170 106 41 184 28s186 26 220 92Z',
+}
+---
+<svg viewBox="0 0 480 420" class={cls} fill="currentColor" aria-hidden="true" focusable="false">
+  <path d={paths[variant]} />
+</svg>
