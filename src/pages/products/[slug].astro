@@ -1,0 +1,48 @@
+---
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import PageHero from '../../components/PageHero.astro';
+import Layout from '../../layouts/Layout.astro';
+import { categories } from '../../data/categories';
+
+export function getStaticPaths() {
+  return categories.map((c) => ({ params: { slug: c.slug }, props: { cat: c } }));
+}
+const { cat } = Astro.props;
+const others = categories.filter((c) => c.slug !== cat.slug);
+---
+
+<Layout
+  title={cat.name}
+  description={`${cat.name} from Multiple Industries Limited, Kampala. ${cat.intro}`}
+  breadcrumbs={[{ name: 'Products', href: '/products' }, { name: cat.name, href: `/products/${cat.slug}` }]}
+>
+  <PageHero eyebrow="Product category" title={cat.name} lead={cat.intro} />
+
+  <section class="section pt-6 sm:pt-10">
+    <div class="container-x">
+      <h2 class="h2">The range</h2>
+      <ul class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {cat.products.map((p) => (
+          <li class="card">
+            <span class="icon-chip"><Icon name={cat.icon} /></span>
+            <h3 class="mt-5 text-lg font-bold">{p.name}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-muted">{p.note}</p>
+            <a href="/contact" class="mt-5 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-brand-700 hover:underline">Enquire<Icon name="arrow" class="h-4 w-4" /></a>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-6 text-xs text-muted">Product list is placeholder content. TODO: confirm with Multiple Industries.</p>
+    </div>
+  </section>
+
+  <section class="section bg-mist">
+    <div class="container-x">
+      <h2 class="text-2xl font-bold">Other categories</h2>
+      <ul class="mt-6 flex flex-wrap gap-3">
+        {others.map((c) => <li><a href={`/products/${c.slug}`} class="btn btn-ghost"><Icon name={c.icon} class="h-4 w-4" />{c.name}</a></li>)}
+      </ul>
+    </div>
+  </section>
+  <CtaBand />
+</Layout>

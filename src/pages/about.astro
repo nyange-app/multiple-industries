@@ -1,0 +1,40 @@
+---
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import PageHero from '../components/PageHero.astro';
+import Layout from '../layouts/Layout.astro';
+
+const timeline = [
+  ['1991', 'Multiple Industries begins manufacturing and trading building materials in Uganda.'],
+  ['2013', 'Automotive division launched: Fras-le brake lining and pads, Hanksugi truck tyres, Hengst fuel and air filters.'],
+  ['2019', 'Inland Freight Services starts, offering transport and logistics across East Africa.'],
+];
+---
+<Layout title="About Us" description="Since 1991 Multiple Industries Limited has led the manufacturing and trading of building materials, plasticware, automotive spare parts and transport services in Uganda." breadcrumbs={[{ name: 'About Us', href: '/about' }]}>
+  <PageHero eyebrow="About us" title="A one stop service for East Africa" lead="Multiple Industries has always tried to offer a one stop service with diversified products covering the entire range of building materials, full range of domestic household products, automotive spare parts and transport services in the East African Region." />
+
+  <section class="section pt-6">
+    <div class="container-x grid gap-10 lg:grid-cols-2">
+      <div class="space-y-4 text-base leading-relaxed text-muted">
+        <p>Since 1991 we have been leading in the manufacturing and trading of domestic and industrial building materials, domestic plasticware, automotive spare parts and transport services in Uganda.</p>
+        <p>Our range spans plastic pipes to concrete products, indoor and outdoor plumbing, rainwater gutters, Light Gauge Steel Frame roof trusses, kitchen and bathroom solutions, and roofing solutions.</p>
+        <p>Our plasticware includes jerry cans, basins, buckets, cups, mugs, plates, wrapped drinking straws, tiffin boxes and trays, all made from food-grade raw materials.</p>
+        <p>We are ISO 9001:2015 certified and our products are certified by the Uganda National Bureau of Standards (UNBS).</p>
+      </div>
+      <ol class="grid gap-4">
+        {timeline.map(([y, t]) => (
+          <li class="card flex gap-5"><span class="text-2xl font-extrabold text-brand-600">{y}</span><p class="text-sm leading-relaxed text-muted">{t}</p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section bg-mist">
+    <div class="container-x grid gap-5 md:grid-cols-3">
+      <article class="card"><span class="icon-chip"><Icon name="leaf" /></span><h2 class="mt-5 text-xl font-bold">Mission</h2><p class="mt-3 text-sm leading-relaxed text-muted">Having a competent, experienced and motivated team, and continual interactions with our customers and other interested parties, we will manufacture and sell top quality plastic products, and supply reliable building materials, selected automotive products, irrigation systems to satisfy and exceed customer requirements and increase shareholder value while maintaining a sustainable environment.</p></article>
+      <article class="card"><span class="icon-chip bg-teal-50 text-teal-700"><Icon name="layers" /></span><h2 class="mt-5 text-xl font-bold">Vision</h2><p class="mt-3 text-sm leading-relaxed text-muted">To be the most preferred one stop source for quality building materials, general household items, selected automotive, irrigation and water management systems.</p></article>
+      <article class="card"><span class="icon-chip"><Icon name="shield" /></span><h2 class="mt-5 text-xl font-bold">Quality policy</h2><p class="mt-3 text-sm leading-relaxed text-muted">We manufacture and supply quality UPVC, HDPE, PP-R pipes in all sizes, drinking straws, domestic plastics and quality irrigation systems and building materials as a single stop for building and construction, positioning ourselves as market leader in Uganda and the East African Community through a Quality Management System in accordance with ISO 9001:2015.</p></article>
+    </div>
+  </section>
+  <CtaBand />
+</Layout>

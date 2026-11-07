@@ -1,25 +1,135 @@
 ---
 import '../styles/global.css';
-import { SITE_NAME } from '../config';
+import { Image } from 'astro:assets';
+import logo from '../assets/logo-multiple-industries.png';
+import Icon from '../components/Icon.astro';
+import { CONTACT, NAV, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from '../config';
+import { categories } from '../data/categories';
 
+interface Crumb { name: string; href: string }
 interface Props {
   title?: string;
   description?: string;
+  breadcrumbs?: Crumb[];
+  noindex?: boolean;
+  jsonLd?: object[];
 }
-
-const { title = SITE_NAME, description = '' } = Astro.props;
+const { title, description = SITE_DESCRIPTION, breadcrumbs, noindex = false, jsonLd = [] } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} | ${SITE_TAGLINE}`;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonical = new URL(path === '/' ? '/' : path, SITE_URL).href;
+const ogImage = new URL('/og.png', SITE_URL).href;
+const crumbLd = breadcrumbs && {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [{ name: 'Home', href: '/' }, ...breadcrumbs].map((c, i) => ({
+    '@type': 'ListItem', position: i + 1, name: c.name, item: new URL(c.href, SITE_URL).href,
+  })),
+};
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
 
-<html lang="en">
+<!doctype html>
+<html lang="en-UG">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#1d4ed8" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_UG" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {crumbLd && <script type="application/ld+json" set:html={JSON.stringify(crumbLd)} />}
+    {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
   </head>
   <body class="min-h-dvh bg-white font-sans text-ink antialiased">
+    <a href="#main" class="sr-only z-[60] rounded-full bg-brand-600 px-4 py-2 text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Skip to content</a>
+
+    <header class="sticky top-0 z-50 border-b border-line bg-white/90 backdrop-blur">
+      <div class="container-x flex h-16 items-center justify-between gap-4">
+        <a href="/" class="flex min-h-11 items-center" aria-label="Multiple Industries home">
+          <Image src={logo} alt="Multiple Industries Limited" width={150} class="h-auto w-[130px] sm:w-[150px]" loading="eager" />
+        </a>
+        <nav aria-label="Primary" class="hidden items-center gap-1 md:flex">
+          {NAV.map((n) => (
+            <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}
+              class:list={['rounded-full px-4 py-2 text-sm font-medium transition hover:bg-brand-50 hover:text-brand-700', isActive(n.href) ? 'bg-brand-50 text-brand-700' : 'text-muted']}>{n.label}</a>
+          ))}
+          <a href="/contact" class="btn btn-primary ml-2">Request a quote</a>
+        </nav>
+        <details class="group md:hidden">
+          <summary class="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-full border border-line text-ink [&::-webkit-details-marker]:hidden" aria-label="Menu">
+            <Icon name="menu" class="h-5 w-5 group-open:hidden" />
+            <Icon name="close" class="hidden h-5 w-5 group-open:block" />
+          </summary>
+          <nav aria-label="Mobile" class="absolute inset-x-0 top-16 border-b border-line bg-white p-4 shadow-soft">
+            <ul class="grid gap-1">
+              {NAV.map((n) => (
+                <li><a href={n.href} class="flex min-h-12 items-center rounded-xl px-4 text-base font-semibold hover:bg-brand-50" aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a></li>
+              ))}
+            </ul>
+            <a href="/contact" class="btn btn-primary mt-3 w-full">Request a quote</a>
+          </nav>
+        </details>
+      </div>
+    </header>
+
     <main id="main">
+      {breadcrumbs && (
+        <nav aria-label="Breadcrumb" class="border-b border-line bg-mist">
+          <ol class="container-x flex flex-wrap items-center gap-2 py-3 text-sm text-muted">
+            <li><a href="/" class="underline-offset-2 hover:underline">Home</a></li>
+            {breadcrumbs.map((c, i) => (
+              <li class="flex items-center gap-2"><span aria-hidden="true">/</span>
+                {i === breadcrumbs.length - 1 ? <span aria-current="page" class="font-medium text-ink">{c.name}</span> : <a href={c.href} class="underline-offset-2 hover:underline">{c.name}</a>}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
       <slot />
     </main>
+
+    <footer class="border-t border-line bg-mist">
+      <div class="container-x grid gap-10 py-14 md:grid-cols-4">
+        <div class="md:col-span-1">
+          <Image src={logo} alt="Multiple Industries Limited" width={150} class="h-auto w-[140px]" />
+          <p class="mt-4 text-sm leading-relaxed text-muted">{SITE_TAGLINE}. ISO 9001:2015 certified; products certified by UNBS.</p>
+        </div>
+        <div>
+          <h2 class="text-sm font-bold">Products</h2>
+          <ul class="mt-4 grid gap-1 text-sm text-muted">
+            {categories.map((c) => <li><a class="inline-flex min-h-8 items-center hover:text-brand-700 hover:underline" href={`/products/${c.slug}`}>{c.name}</a></li>)}
+          </ul>
+        </div>
+        <div>
+          <h2 class="text-sm font-bold">Company</h2>
+          <ul class="mt-4 grid gap-1 text-sm text-muted">
+            {NAV.slice(1).map((n) => <li><a class="inline-flex min-h-8 items-center hover:text-brand-700 hover:underline" href={n.href}>{n.label}</a></li>)}
+          </ul>
+        </div>
+        <div>
+          <h2 class="text-sm font-bold">{CONTACT.head.label}</h2>
+          <address class="mt-4 text-sm not-italic leading-relaxed text-muted">
+            {CONTACT.head.address}<br />
+            <a class="inline-flex min-h-8 items-center font-semibold text-brand-700 hover:underline" href="tel:+256414236021">+256 414 236021/2</a><br />
+            <a class="inline-flex min-h-8 items-center break-all hover:underline" href="mailto:sales@multipleindustries.com">sales@multipleindustries.com</a>
+          </address>
+        </div>
+      </div>
+      <div class="border-t border-line py-5 text-center text-xs text-muted">© 2026 Multiple Industries Limited</div>
+    </footer>
   </body>
 </html>

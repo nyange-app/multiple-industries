@@ -1,8 +1,152 @@
 ---
+import { Image } from 'astro:assets';
+import iso from '../assets/iso.png';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
 import Layout from '../layouts/Layout.astro';
-import { SITE_DESCRIPTION, SITE_NAME } from '../config';
+import { SITE_DESCRIPTION, SITE_URL } from '../config';
+import { brands, categories } from '../data/categories';
+
+const org = {
+  '@context': 'https://schema.org',
+  '@type': ['Organization', 'LocalBusiness'],
+  name: 'Multiple Industries Limited',
+  url: SITE_URL,
+  logo: `${SITE_URL}/favicon.svg`,
+  description: SITE_DESCRIPTION,
+  foundingDate: '1991',
+  telephone: '+256414236021',
+  email: 'sales@multipleindustries.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Plot 714/715, 8th Street Industrial Area, P.O. Box 20166',
+    addressLocality: 'Kampala',
+    addressCountry: 'UG',
+  },
+  areaServed: 'East Africa',
+};
+const stats = [
+  { v: '1991', l: 'Founded in Uganda' },
+  { v: '6', l: 'Product categories' },
+  { v: '2013', l: 'Automotive division' },
+  { v: '2019', l: 'Inland Freight Services' },
+];
 ---
 
-<Layout title={SITE_NAME} description={SITE_DESCRIPTION}>
-  <h1 class="p-8 text-3xl font-bold">{SITE_NAME}</h1>
+<Layout jsonLd={[org]}>
+  <section class="relative overflow-hidden bg-gradient-to-b from-brand-50 via-white to-white">
+    <div class="pointer-events-none absolute -right-32 -top-32 h-[28rem] w-[28rem] rounded-full bg-brand-100/60 blur-3xl" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -left-24 top-48 h-72 w-72 rounded-full bg-teal-100/60 blur-3xl" aria-hidden="true"></div>
+    <div class="container-x relative grid items-center gap-12 py-16 sm:py-24 lg:grid-cols-[1.15fr_0.85fr]">
+      <div>
+        <span class="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white px-3 py-1.5 text-xs font-semibold text-brand-700 shadow-soft">
+          <span class="h-2 w-2 rounded-full bg-teal-500"></span>ISO 9001:2015 certified · Kampala, Uganda
+        </span>
+        <h1 class="mt-6 text-4xl font-extrabold leading-[1.08] sm:text-5xl lg:text-6xl">
+          Quality building materials you can trust since <span class="text-brand-600">1991</span>
+        </h1>
+        <p class="lead">Leading manufacturer of UPVC, HDPE and PP-R plastic pipes, drinking straws and household plastics, and your one stop source for building materials, automotive parts and irrigation systems in East Africa.</p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href="/products" class="btn btn-primary">Explore products<Icon name="arrow" class="h-4 w-4" /></a>
+          <a href="/contact" class="btn btn-ghost">Contact sales</a>
+        </div>
+      </div>
+      <div class="relative" aria-hidden="true">
+        <div class="grid grid-cols-2 gap-4">
+          {categories.slice(0, 4).map((c, i) => (
+            <div class:list={['card flex aspect-square flex-col justify-between', i % 2 ? 'translate-y-6' : '']}>
+              <span class="icon-chip"><Icon name={c.icon} /></span>
+              <span class="text-sm font-semibold">{c.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Trust" class="border-y border-line bg-white">
+    <div class="container-x grid gap-6 py-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="flex items-center gap-3"><span class="icon-chip"><Icon name="shield" /></span><div><p class="text-sm font-bold">ISO 9001:2015</p><p class="text-xs text-muted">Quality Management System</p></div></div>
+      <div class="flex items-center gap-3"><span class="icon-chip bg-teal-50 text-teal-700"><Icon name="check" /></span><div><p class="text-sm font-bold">UNBS certified</p><p class="text-xs text-muted">Uganda National Bureau of Standards</p></div></div>
+      <div class="flex items-center gap-3"><span class="icon-chip"><Icon name="factory" /></span><div><p class="text-sm font-bold">Made in Kampala</p><p class="text-xs text-muted">Head office &amp; factory</p></div></div>
+      <div class="flex items-center gap-3"><span class="icon-chip bg-teal-50 text-teal-700"><Icon name="truck" /></span><div><p class="text-sm font-bold">East Africa reach</p><p class="text-xs text-muted">Inland Freight Services</p></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container-x grid items-center gap-12 lg:grid-cols-2">
+      <div>
+        <span class="eyebrow">About us</span>
+        <h2 class="h2">One stop service for the entire range of building materials</h2>
+        <p class="lead">Since 1991 we have led the manufacturing and trading of domestic and industrial building materials, domestic plasticware, automotive spare parts and transport services in Uganda, from plastic pipes to concrete products.</p>
+        <a href="/about" class="btn btn-ghost mt-8">Our story<Icon name="arrow" class="h-4 w-4" /></a>
+      </div>
+      <dl class="grid grid-cols-2 gap-4">
+        {stats.map((s) => (
+          <div class="card"><dt class="text-sm text-muted">{s.l}</dt><dd class="mt-2 text-3xl font-extrabold text-brand-600">{s.v}</dd></div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section bg-mist" id="products">
+    <div class="container-x">
+      <span class="eyebrow">Products</span>
+      <h2 class="h2">Six categories, one dependable supplier</h2>
+      <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {categories.map((c) => (
+          <li>
+            <a href={`/products/${c.slug}`} class="card group flex h-full flex-col">
+              <span class="icon-chip"><Icon name={c.icon} /></span>
+              <h3 class="mt-5 text-lg font-bold">{c.name}</h3>
+              <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">{c.short}</p>
+              <span class="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-700">View range<Icon name="arrow" class="h-4 w-4 transition group-hover:translate-x-1" /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container-x grid items-center gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+      <div class="card flex flex-col items-center bg-gradient-to-br from-brand-50 to-teal-50 p-10 text-center">
+        <Image src={iso} alt="ISO 9001:2015 certification badge" width={260} class="h-auto w-56" />
+        <p class="mt-6 text-sm font-semibold text-brand-900">Quality Management System certified to ISO 9001:2015</p>
+      </div>
+      <div>
+        <span class="eyebrow">Why Multiple Industries</span>
+        <h2 class="h2">Quality you can verify</h2>
+        <ul class="mt-8 grid gap-4">
+          {[
+            ['Certified quality', 'ISO 9001:2015 certified, with products certified by the Uganda National Bureau of Standards (UNBS).'],
+            ['Made by us, in Kampala', 'UPVC, HDPE and PP-R pipes in all sizes, manufactured at our own factory.'],
+            ['Food-grade household plastics', 'Jerry cans, basins, cups, plates, straws and more from food-grade raw materials.'],
+            ['Supply and logistics', 'Automotive parts since 2013 and transport across East Africa through Inland Freight Services.'],
+          ].map(([t, d]) => (
+            <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-teal-100 text-teal-700"><Icon name="check" class="h-4 w-4" /></span><div><h3 class="font-bold">{t}</h3><p class="mt-1 text-sm leading-relaxed text-muted">{d}</p></div></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-mist">
+    <div class="container-x grid gap-5 md:grid-cols-2">
+      <article class="card p-8"><span class="icon-chip"><Icon name="leaf" /></span><h2 class="mt-5 text-2xl font-bold">Our mission</h2><p class="mt-3 text-sm leading-relaxed text-muted sm:text-base">Having a competent, experienced and motivated team, and continual interactions with our customers and other interested parties, we will manufacture and sell top quality plastic products, and supply reliable building materials, selected automotive products, irrigation systems to satisfy and exceed customer requirements and increase shareholder value while maintaining a sustainable environment.</p></article>
+      <article class="card p-8"><span class="icon-chip bg-teal-50 text-teal-700"><Icon name="layers" /></span><h2 class="mt-5 text-2xl font-bold">Our vision</h2><p class="mt-3 text-sm leading-relaxed text-muted sm:text-base">To be the most preferred one stop source for quality building materials, general household items, selected automotive, irrigation and water management systems.</p></article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="brands-h">
+    <div class="container-x text-center">
+      <h2 id="brands-h" class="text-sm font-semibold uppercase tracking-[0.14em] text-muted">Brands &amp; partners</h2>
+      <ul class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {brands.map((b) => <li class="flex h-16 items-center justify-center rounded-2xl border border-dashed border-line bg-mist text-sm font-bold text-muted">{b}</li>)}
+      </ul>
+      <p class="mt-4 text-xs text-muted">Placeholder tiles. TODO: confirm brand list and supply logos.</p>
+    </div>
+  </section>
+
+  <CtaBand />
 </Layout>

@@ -1,0 +1,25 @@
+---
+interface Props { name: string; class?: string }
+const { name, class: cls = 'h-6 w-6' } = Astro.props;
+const paths: Record<string, string> = {
+  droplet: 'M12 3s6 6.2 6 10.5A6 6 0 0 1 6 13.5C6 9.2 12 3 12 3Z',
+  wrench: 'M14.7 6.3a4 4 0 0 0-5.4 5.1L3 17.7 6.3 21l6.3-6.3a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6Z',
+  bath: 'M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3ZM6 12V6a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2',
+  building: 'M4 21V8l8-5 8 5v13M9 21v-6h6v6M9 11h.01M15 11h.01',
+  cup: 'M5 4h14l-1.5 15a2 2 0 0 1-2 1.8h-7a2 2 0 0 1-2-1.8L5 4ZM6 9h12',
+  car: 'M3 15v-3l2-5h14l2 5v3M3 15h18M3 15v3h3v-3M18 15v3h3v-3M7 12h.01M17 12h.01',
+  truck: 'M2 6h11v10H2zM13 9h4l4 4v3h-8M6 19a2 2 0 1 0 0-.01M17 19a2 2 0 1 0 0-.01',
+  shield: 'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3ZM8.5 12l2.5 2.5 4.5-5',
+  factory: 'M3 21V10l6 3V10l6 3V6h6v15H3ZM8 17h.01M12 17h.01M16 17h.01',
+  layers: 'M12 3l9 5-9 5-9-5 9-5ZM3 13l9 5 9-5',
+  phone: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z',
+  mail: 'M3 6h18v12H3zM3 7l9 6 9-6',
+  pin: 'M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21ZM12 12a2.5 2.5 0 1 0 0-.01',
+  arrow: 'M5 12h14M13 6l6 6-6 6',
+  check: 'M5 12.5l4.5 4.5L19 7.5',
+  menu: 'M4 7h16M4 12h16M4 17h16',
+  close: 'M6 6l12 12M18 6L6 18',
+  leaf: 'M5 19C5 9 11 4 20 4c0 9-5 15-15 15ZM5 19l8-8',
+};
+---
+<svg class={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d={paths[name] ?? paths.layers} /></svg>
