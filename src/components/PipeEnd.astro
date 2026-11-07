@@ -1,0 +1,11 @@
+---
+/** Decorative pipe cross-section (concentric rings). */
+interface Props { class?: string; accent?: string }
+const { class: cls = '', accent = 'var(--color-signal)' } = Astro.props;
+---
+<svg class={cls} viewBox="0 0 200 200" fill="none" aria-hidden="true" focusable="false">
+  <circle cx="100" cy="100" r="96" stroke="currentColor" stroke-width="8" />
+  <circle cx="100" cy="100" r="76" stroke={accent} stroke-width="14" />
+  <circle cx="100" cy="100" r="54" stroke="currentColor" stroke-width="4" />
+  <circle cx="100" cy="100" r="40" fill="currentColor" fill-opacity="0.12" />
+</svg>

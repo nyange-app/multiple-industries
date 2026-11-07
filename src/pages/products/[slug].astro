@@ -1,0 +1,72 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PipeEnd from '../../components/PipeEnd.astro';
+import CategoryIcon from '../../components/CategoryIcon.astro';
+import { categories } from '../../data/categories';
+
+export function getStaticPaths() {
+  return categories.map((category) => ({ params: { slug: category.slug }, props: { category } }));
+}
+const { category } = Astro.props;
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Products', href: '/products' },
+  { name: category.name, href: `/products/${category.slug}` },
+];
+const others = categories.filter((c) => c.slug !== category.slug);
+---
+<Layout title={category.name} description={`${category.name} from Multiple Industries, Kampala. ${category.intro}`} breadcrumbs={crumbs}>
+  <section class="relative isolate overflow-hidden bg-navy-950 text-white grid-lines">
+    <PipeEnd class="absolute -right-16 top-1/2 -z-10 h-80 w-80 -translate-y-1/2 text-white/15 opacity-25 md:opacity-100 md:right-10 md:h-[460px] md:w-[460px]" />
+    <div class="container-x py-12 md:py-20">
+      <nav aria-label="Breadcrumb" class="text-sm text-white/75">
+        <ol class="flex flex-wrap items-center gap-2">
+          {crumbs.map((c, i) => (
+            <li class="flex items-center gap-2">
+              {i > 0 && <span aria-hidden="true">/</span>}
+              {i < crumbs.length - 1 ? <a class="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-hazard" href={c.href}>{c.name}</a> : <span aria-current="page" class="text-hazard">{c.name}</span>}
+            </li>
+          ))}
+        </ol>
+      </nav>
+      <CategoryIcon slug={category.slug} class="mt-4 h-14 w-14 text-signal" />
+      <h1 class="display mt-4 max-w-3xl text-6xl md:text-9xl">{category.name}</h1>
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-white/85 md:text-xl">{category.intro}</p>
+    </div>
+    <div class="hazard-bar" aria-hidden="true"></div>
+  </section>
+
+  <section class="container-x py-14 md:py-20" aria-labelledby="range-h">
+    <div class="flex items-end justify-between gap-4 border-b-8 border-navy-900 pb-3">
+      <h2 id="range-h" class="display text-4xl text-navy-900 md:text-6xl">The range</h2>
+      <p class="font-display text-xl font-bold text-steel">{category.products.length} lines</p>
+    </div>
+    <!-- TODO: replace placeholder product list with real catalogue data. -->
+    <ul class="mt-2 grid md:grid-cols-2 md:gap-x-10">
+      {category.products.map((p, i) => (
+        <li class="flex gap-5 border-b border-navy-100 py-6">
+          <span class="display w-14 shrink-0 text-5xl text-signal-deep">{String(i + 1).padStart(2, '0')}</span>
+          <div>
+            <h3 class="font-display text-2xl font-bold uppercase text-navy-900">{p.name}</h3>
+            <p class="mt-1 text-steel">{p.note}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-10 flex flex-col items-start gap-4 bg-navy-50 p-6 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-lg font-medium text-navy-900">Need sizes, pricing or a bulk order? Our sales team can help.</p>
+      <a href="/contact" class="btn btn-navy">Request a quote</a>
+    </div>
+  </section>
+
+  <section class="bg-navy-900 text-white" aria-labelledby="more-h">
+    <div class="container-x py-12">
+      <h2 id="more-h" class="eyebrow text-signal">More from Multiple Industries</h2>
+      <ul class="mt-4 grid gap-px bg-white/15 sm:grid-cols-2 lg:grid-cols-5">
+        {others.map((c) => (
+          <li class="bg-navy-800"><a href={`/products/${c.slug}`} class="flex min-h-20 items-center p-4 font-display text-xl font-bold uppercase leading-tight hover:bg-signal hover:text-navy-950">{c.name}</a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Layout>

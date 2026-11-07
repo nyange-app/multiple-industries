@@ -1,25 +1,66 @@
 ---
 import '../styles/global.css';
-import { SITE_NAME } from '../config';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '../config';
 
+interface Crumb { name: string; href: string }
 interface Props {
   title?: string;
   description?: string;
+  breadcrumbs?: Crumb[];
+  jsonLd?: object[];
+  noindex?: boolean;
 }
 
-const { title = SITE_NAME, description = '' } = Astro.props;
----
+const { title = SITE_NAME, description = SITE_DESCRIPTION, breadcrumbs, jsonLd = [], noindex = false } = Astro.props;
+const fullTitle = title === SITE_NAME ? `${SITE_NAME} | Quality Building Materials Since 1991, Uganda` : `${title} | ${SITE_NAME}`;
+const canonical = new URL(Astro.url.pathname.replace(/(.)\/$/, '$1'), SITE_URL).href;
+const ogImage = `${SITE_URL}/og-default.png`;
 
-<html lang="en">
+const crumbLd = breadcrumbs && {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbs.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    item: new URL(c.href, SITE_URL).href,
+  })),
+};
+const graphs = [...jsonLd, ...(crumbLd ? [crumbLd] : [])];
+---
+<!doctype html>
+<html lang="en-UG">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#050f1f" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_UG" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content="Multiple Industries Ltd. logo" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {graphs.map((g) => <script type="application/ld+json" set:html={JSON.stringify(g)} />)}
   </head>
-  <body class="min-h-dvh bg-white font-sans text-ink antialiased">
+  <body class="min-h-dvh">
+    <a href="#main" class="sr-only z-50 bg-hazard px-4 py-3 font-bold text-navy-950 focus:not-sr-only focus:fixed focus:left-2 focus:top-2">Skip to content</a>
+    <Header />
     <main id="main">
       <slot />
     </main>
+    <Footer />
   </body>
 </html>

@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CategoryIcon from '../../components/CategoryIcon.astro';
+import { categories } from '../../data/categories';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Products', href: '/products' }];
+---
+<Layout title="Products" description="Water management, plumbing, bathroom and kitchen, building materials, domestic plasticware and automotive products from Multiple Industries, Kampala." breadcrumbs={crumbs}>
+  <section class="bg-navy-950 text-white grid-lines">
+    <div class="container-x py-14 md:py-20">
+      <h1 class="display text-6xl md:text-9xl">Products</h1>
+      <p class="mt-4 max-w-2xl text-lg text-white/85">Six product ranges, one supplier.</p>
+    </div>
+    <div class="hazard-bar" aria-hidden="true"></div>
+  </section>
+  <section class="container-x py-14 md:py-20">
+    <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {categories.map((c, i) => (
+        <li>
+          <a href={`/products/${c.slug}`} class="group flex h-full flex-col border-2 border-navy-900 p-6 transition-colors hover:bg-navy-900 hover:text-white">
+            <CategoryIcon slug={c.slug} class="h-12 w-12 text-signal-deep group-hover:text-hazard" />
+            <h2 class="display mt-6 text-3xl">0{i + 1} {c.name}</h2>
+            <p class="mt-2 text-steel group-hover:text-white/80">{c.short}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Layout>

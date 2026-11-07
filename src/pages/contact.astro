@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { offices } from '../data/site';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Contact', href: '/contact' }];
+---
+<Layout title="Contact" description="Contact Multiple Industries: head office and factory, and sales office and showroom, 8th Street Industrial Area, Kampala, Uganda. Hotline +256 414 236021/2." breadcrumbs={crumbs}>
+  <section class="bg-navy-950 text-white grid-lines">
+    <div class="container-x py-14 md:py-20">
+      <h1 class="display text-6xl md:text-9xl">Contact</h1>
+      <p class="mt-4 max-w-2xl text-lg text-white/85">Call, email or visit us at 8th Street Industrial Area, Kampala.</p>
+    </div>
+    <div class="hazard-bar" aria-hidden="true"></div>
+  </section>
+  <section class="container-x grid gap-8 py-14 md:grid-cols-2 md:py-20">
+    {offices.map((o) => (
+      <article class="border-2 border-navy-900 p-6 md:p-8">
+        <h2 class="display text-4xl text-navy-900">{o.name}</h2>
+        <address class="mt-4 text-lg not-italic leading-relaxed text-steel">
+          {o.address.map((l) => <div>{l}</div>)}
+        </address>
+        <ul class="mt-5 space-y-1 text-lg">
+          {o.phones.map((p) => <li>{p.label}: <a class="inline-flex min-h-11 items-center font-bold text-navy-900 underline decoration-signal decoration-2 underline-offset-4" href={`tel:${p.href}`}>{p.display}</a></li>)}
+          {o.emails.map((e) => <li><a class="inline-flex min-h-11 items-center break-all font-bold text-navy-900 underline decoration-signal decoration-2 underline-offset-4" href={`mailto:${e}`}>{e}</a></li>)}
+        </ul>
+      </article>
+    ))}
+  </section>
+  <section class="bg-navy-50">
+    <div class="container-x py-14">
+      <h2 class="display text-4xl text-navy-900 md:text-5xl">Send an enquiry</h2>
+      <p class="mt-2 text-steel">Opens your email app. No data is stored on this site.</p>
+      <form action="mailto:sales@multipleindustries.com" method="post" enctype="text/plain" class="mt-6 grid max-w-2xl gap-4">
+        <label class="grid gap-1 font-bold text-navy-900">Name
+          <input name="name" required autocomplete="name" class="min-h-12 border-2 border-navy-900 bg-white px-3 font-normal" /></label>
+        <label class="grid gap-1 font-bold text-navy-900">Phone or email
+          <input name="contact" required class="min-h-12 border-2 border-navy-900 bg-white px-3 font-normal" /></label>
+        <label class="grid gap-1 font-bold text-navy-900">Message
+          <textarea name="message" rows="5" required class="border-2 border-navy-900 bg-white p-3 font-normal"></textarea></label>
+        <button type="submit" class="btn btn-navy w-full sm:w-fit">Send enquiry</button>
+      </form>
+    </div>
+  </section>
+</Layout>

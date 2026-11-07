@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { intro, milestones, mission, vision, qualityPolicy } from '../data/site';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'About us', href: '/about' }];
+---
+<Layout title="About Us" description="Since 1991 Multiple Industries has manufactured and traded building materials, plasticware and automotive spare parts in Uganda. ISO 9001:2015 certified." breadcrumbs={crumbs}>
+  <section class="bg-navy-950 text-white grid-lines">
+    <div class="container-x py-14 md:py-20">
+      <p class="eyebrow text-signal">Since 1991</p>
+      <h1 class="display mt-2 text-6xl md:text-9xl">About us</h1>
+      <p class="mt-6 max-w-3xl text-xl leading-relaxed text-white/85">{intro}</p>
+    </div>
+    <div class="hazard-bar" aria-hidden="true"></div>
+  </section>
+  <section class="container-x grid gap-10 py-14 md:grid-cols-12 md:py-20">
+    <div class="space-y-5 text-lg leading-relaxed text-steel md:col-span-7">
+      <p>Since 1991 Multiple Industries has been a leading manufacturer and trader of domestic and industrial building materials, domestic plasticware, automotive spare parts and transport services in Uganda.</p>
+      <p>Our building materials range from plastic pipes to concrete products, indoor and outdoor plumbing, rainwater gutters, Light Gauge Steel Frame roof trusses, kitchen and bathroom solutions and roofing solutions.</p>
+      <p>Our plasticware range includes jerry cans, basins, buckets, cups, mugs, plates, wrapped drinking straws, tiffin boxes and trays, all made from food-grade raw materials.</p>
+      <p>We are ISO 9001:2015 certified, and our products are certified by the Uganda National Bureau of Standards (UNBS).</p>
+    </div>
+    <ol class="md:col-span-5">
+      {milestones.map((m) => (
+        <li class="border-t-4 border-navy-900 py-5">
+          <p class="display text-7xl text-signal-deep">{m.year}</p>
+          <p class="mt-1 text-lg text-steel">{m.text}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+  <section class="bg-navy-50">
+    <div class="container-x grid gap-px py-14 md:grid-cols-3 md:py-20">
+      {[['Mission', mission], ['Vision', vision], ['Quality policy', qualityPolicy]].map(([t, d]) => (
+        <div class="border-t-8 border-signal bg-white p-6 md:mx-2">
+          <h2 class="display text-4xl text-navy-900">{t}</h2>
+          <p class="mt-3 leading-relaxed text-steel">{d}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>

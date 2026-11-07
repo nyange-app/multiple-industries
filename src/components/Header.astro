@@ -1,0 +1,43 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+import { nav } from '../data/site';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<header class="sticky top-0 z-40 border-b-4 border-signal bg-navy-950 text-white">
+  <div class="container-x flex h-16 items-center justify-between gap-4 md:h-20">
+    <a href="/" class="block shrink-0" aria-label="Multiple Industries Ltd, home">
+      <Image src={logo} alt="Multiple Industries Ltd." width={170} height={42} class="h-9 w-auto md:h-11" loading="eager" />
+    </a>
+    <nav aria-label="Primary" class="hidden md:block">
+      <ul class="flex items-center gap-1">
+        {nav.map((n) => (
+          <li>
+            <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}
+               class:list={['inline-flex min-h-11 items-center px-4 font-display text-lg font-bold uppercase tracking-wide hover:text-hazard', isActive(n.href) ? 'text-hazard shadow-[inset_0_-4px_0_var(--color-hazard)]' : 'text-white']}>
+              {n.label}
+            </a>
+          </li>
+        ))}
+        <li class="ml-3"><a href="/contact" class="btn btn-signal">Get a quote</a></li>
+      </ul>
+    </nav>
+    <details class="group relative md:hidden">
+      <summary class="flex h-12 w-12 cursor-pointer list-none items-center justify-center bg-signal text-navy-950 [&::-webkit-details-marker]:hidden" aria-label="Menu">
+        <svg class="group-open:hidden" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="3"/></svg>
+        <svg class="hidden group-open:block" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3"/></svg>
+      </summary>
+      <nav aria-label="Mobile" class="fixed inset-x-0 top-[68px] border-t border-white/10 bg-navy-950 px-4 pb-6 pt-2 shadow-2xl">
+        <ul>
+          {nav.map((n) => (
+            <li class="border-b border-white/10">
+              <a href={n.href} class:list={['flex min-h-14 items-center font-display text-3xl font-extrabold uppercase', isActive(n.href) ? 'text-hazard' : 'text-white']}>{n.label}</a>
+            </li>
+          ))}
+        </ul>
+        <a href="/contact" class="btn btn-signal mt-5 w-full">Get a quote</a>
+      </nav>
+    </details>
+  </div>
+</header>

@@ -1,12 +1,68 @@
-@import '@fontsource-variable/nunito';
+@import '@fontsource/barlow-condensed/latin-600.css';
+@import '@fontsource/barlow-condensed/latin-700.css';
+@import '@fontsource/barlow-condensed/latin-800.css';
+@import '@fontsource-variable/archivo/wght.css';
 
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-/* TODO: brand tokens. */
+/* Industrial Bold design tokens */
 @theme {
-  --color-brand: #eb1700;
-  --color-ink: #191919;
+  --color-navy-950: #050f1f;
+  --color-navy-900: #0a1c36;
+  --color-navy-800: #102a4d;
+  --color-navy-700: #1b3b66;
+  --color-navy-100: #e6ecf4;
+  --color-navy-50: #f3f6fa;
+  --color-signal: #ff6a13; /* safety orange: use on navy only */
+  --color-signal-deep: #b94700; /* orange for text on light (AA) */
+  --color-hazard: #ffc400; /* safety yellow */
+  --color-ink: #0a1c36;
+  --color-steel: #4a5a70;
 
-  --font-sans: 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', ui-sans-serif, sans-serif;
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --breakpoint-xs: 30rem;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+  body { @apply bg-white font-sans text-ink antialiased; }
+  :focus-visible { outline: 3px solid var(--color-hazard); outline-offset: 3px; }
+  .on-light :focus-visible { outline-color: var(--color-navy-900); }
+}
+
+@layer components {
+  .display {
+    @apply font-display font-extrabold uppercase leading-[0.92] tracking-tight;
+  }
+  .eyebrow {
+    @apply font-display text-base font-bold uppercase tracking-[0.18em];
+  }
+  .container-x { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 px-6 font-display text-lg font-bold uppercase tracking-wide transition-colors;
+  }
+  .btn-signal { @apply bg-signal text-navy-950 hover:bg-hazard; }
+  .btn-outline { @apply border-2 border-white text-white hover:bg-white hover:text-navy-900; }
+  .btn-navy { @apply bg-navy-900 text-white hover:bg-navy-700; }
+  .hazard-bar {
+    height: 14px;
+    background: repeating-linear-gradient(-45deg, var(--color-hazard) 0 14px, var(--color-navy-950) 14px 28px);
+  }
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 2px rgb(255 255 255 / 0.28);
+  }
 }

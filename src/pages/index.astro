@@ -1,8 +1,203 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
-import { SITE_DESCRIPTION, SITE_NAME } from '../config';
----
+import PipeEnd from '../components/PipeEnd.astro';
+import CategoryIcon from '../components/CategoryIcon.astro';
+import isoWhite from '../assets/iso-white.png';
+import { categories } from '../data/categories';
+import { brands, intro, milestones, mission, offices, qualityPolicy, vision } from '../data/site';
+import { SITE_DESCRIPTION, SITE_LEGAL_NAME, SITE_URL } from '../config';
 
-<Layout title={SITE_NAME} description={SITE_DESCRIPTION}>
-  <h1 class="p-8 text-3xl font-bold">{SITE_NAME}</h1>
+const hq = offices[0];
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${SITE_URL}/#organization`,
+  name: SITE_LEGAL_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/og-default.png`,
+  foundingDate: '1991',
+  description: SITE_DESCRIPTION,
+  email: 'response@multipleindustries.com',
+  telephone: '+256414236021',
+};
+const localLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': `${SITE_URL}/#localbusiness`,
+  name: SITE_LEGAL_NAME,
+  url: SITE_URL,
+  image: `${SITE_URL}/og-default.png`,
+  telephone: '+256414236021',
+  email: 'sales@multipleindustries.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Plot 714/715, 8th Street Industrial Area, P.O. Box 20166',
+    addressLocality: 'Kampala',
+    addressCountry: 'UG',
+  },
+  parentOrganization: { '@id': `${SITE_URL}/#organization` },
+};
+const why = [
+  ['Manufacturer', 'We make UPVC, HDPE and PP-R pipes, drinking straws and household plastics at our own factory in Kampala.'],
+  ['One stop', 'Building materials, household products, automotive spares, irrigation and transport from a single supplier.'],
+  ['ISO 9001:2015', 'A Quality Management System certified to ISO 9001:2015.'],
+  ['UNBS certified', 'Products certified by the Uganda National Bureau of Standards.'],
+];
+---
+<Layout jsonLd={[orgLd, localLd]}>
+  <!-- HERO -->
+  <section class="relative isolate overflow-hidden bg-navy-950 text-white grid-lines">
+    <PipeEnd class="absolute -right-24 top-10 -z-10 h-[420px] w-[420px] opacity-25 md:opacity-100 text-white/15 md:-right-10 md:top-1/2 md:h-[640px] md:w-[640px] md:-translate-y-1/2" />
+    <div class="container-x pb-12 pt-12 md:pb-20 md:pt-20">
+      <p class="eyebrow text-signal">Kampala, Uganda &middot; Manufacturer</p>
+      <p class="display outline-text mt-2 text-[5.5rem] leading-none xs:text-[7rem] md:text-[12rem]" aria-hidden="true">Since 1991</p>
+      <h1 class="display -mt-2 max-w-4xl text-5xl xs:text-6xl md:-mt-8 md:text-8xl">
+        Quality building materials <span class="text-hazard">you can trust</span>
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 md:text-xl">
+        Leading manufacturer of UPVC, HDPE and PP-R plastic pipes, drinking straws and household plastics, with building materials, automotive spare parts and irrigation systems under one roof.
+      </p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a href="/products" class="btn btn-signal">Explore products</a>
+        <a href="/contact" class="btn btn-outline">Contact sales</a>
+      </div>
+      <h2 class="eyebrow mt-14 text-white/70">Shop by category</h2>
+      <ul class="mt-4 grid grid-cols-2 gap-px bg-white/15 md:grid-cols-3 lg:grid-cols-6">
+        {categories.map((c, i) => (
+          <li class="bg-navy-900">
+            <a href={`/products/${c.slug}`} class="group flex h-full min-h-32 flex-col justify-between p-4 transition-colors hover:bg-signal hover:text-navy-950">
+              <span class="flex items-start justify-between">
+                <CategoryIcon slug={c.slug} class="h-9 w-9 text-hazard group-hover:text-navy-950" />
+                <span class="font-display text-lg font-bold text-white/60 group-hover:text-navy-950">0{i + 1}</span>
+              </span>
+              <span class="mt-4 font-display text-xl font-bold uppercase leading-tight">{c.name}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="hazard-bar" aria-hidden="true"></div>
+  </section>
+
+  <!-- MILESTONES -->
+  <section class="bg-white" aria-labelledby="milestones-h">
+    <div class="container-x py-16 md:py-24">
+      <h2 id="milestones-h" class="eyebrow text-signal-deep">Three decades of making things</h2>
+      <ol class="mt-8 grid gap-0 border-t-8 border-navy-900 md:grid-cols-3">
+        {milestones.map((m) => (
+          <li class="border-b border-navy-100 py-8 md:border-b-0 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0">
+            <p class="display text-8xl text-navy-900 md:text-9xl">{m.year}</p>
+            <p class="mt-3 max-w-xs text-lg leading-snug text-steel">{m.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ABOUT TEASER -->
+  <section class="bg-navy-50" aria-labelledby="about-h">
+    <div class="container-x grid gap-10 py-16 md:grid-cols-12 md:py-24">
+      <div class="md:col-span-5">
+        <p class="eyebrow text-signal-deep">About us</p>
+        <h2 id="about-h" class="display mt-2 text-5xl text-navy-900 md:text-7xl">One stop for building and construction</h2>
+      </div>
+      <div class="md:col-span-7 md:pt-10">
+        <p class="border-l-8 border-signal pl-5 text-xl leading-relaxed text-navy-900">{intro}</p>
+        <p class="mt-6 text-lg leading-relaxed text-steel">From plastic pipes to concrete products, indoor and outdoor plumbing, rainwater gutters, Light Gauge Steel Frame roof trusses, kitchen and bathroom solutions and roofing, we supply domestic and industrial building materials across Uganda.</p>
+        <a href="/about" class="btn btn-navy mt-8">Our story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="bg-white" aria-labelledby="cats-h">
+    <div class="container-x py-16 md:py-24">
+      <div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div>
+          <p class="eyebrow text-signal-deep">Products</p>
+          <h2 id="cats-h" class="display mt-2 text-5xl text-navy-900 md:text-7xl">Six product ranges</h2>
+        </div>
+        <a href="/products" class="inline-flex min-h-11 items-center font-display text-xl font-bold uppercase text-navy-900 underline decoration-signal decoration-4 underline-offset-8">All products</a>
+      </div>
+      <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {categories.map((c, i) => (
+          <li>
+            <a href={`/products/${c.slug}`} class="group relative flex h-full flex-col border-2 border-navy-900 p-6 transition-colors hover:bg-navy-900 hover:text-white">
+              <span class="absolute right-4 top-2 font-display text-7xl font-extrabold text-navy-100 group-hover:text-white/10" aria-hidden="true">0{i + 1}</span>
+              <CategoryIcon slug={c.slug} class="relative h-12 w-12 text-signal-deep group-hover:text-hazard" />
+              <h3 class="display relative mt-6 text-3xl">{c.name}</h3>
+              <p class="relative mt-2 text-steel group-hover:text-white/80">{c.short}</p>
+              <span class="relative mt-6 pt-2 font-display text-lg font-bold uppercase tracking-wide text-signal-deep group-hover:text-hazard">View range &rarr;</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- WHY US / ISO -->
+  <section class="relative overflow-hidden bg-navy-900 text-white" aria-labelledby="why-h">
+    <div class="container-x grid gap-12 py-16 md:grid-cols-12 md:py-24">
+      <div class="md:col-span-5">
+        <p class="eyebrow text-signal">Why Multiple Industries</p>
+        <h2 id="why-h" class="display mt-2 text-5xl md:text-7xl">Built to standard</h2>
+        <Image src={isoWhite} alt="ISO 9001:2015 certified badge" width={160} height={160} class="mt-8 h-32 w-32 opacity-90" />
+        <p class="mt-6 text-white/80">{qualityPolicy}</p>
+      </div>
+      <ul class="grid gap-px bg-white/15 sm:grid-cols-2 md:col-span-7">
+        {why.map(([t, d]) => (
+          <li class="bg-navy-800 p-6">
+            <h3 class="display text-3xl text-hazard">{t}</h3>
+            <p class="mt-3 text-white/85">{d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- MISSION / VISION -->
+  <section class="bg-white" aria-labelledby="mv-h">
+    <div class="container-x py-16 md:py-24">
+      <h2 id="mv-h" class="sr-only">Mission and vision</h2>
+      <div class="grid border-t-8 border-signal md:grid-cols-2">
+        <div class="py-8 md:pr-10">
+          <p class="display text-5xl text-navy-900">Mission</p>
+          <p class="mt-4 text-lg leading-relaxed text-steel">{mission}</p>
+        </div>
+        <div class="border-t border-navy-100 py-8 md:border-l md:border-t-0 md:pl-10">
+          <p class="display text-5xl text-navy-900">Vision</p>
+          <p class="mt-4 text-2xl font-semibold leading-snug text-navy-900">{vision}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRANDS -->
+  <section class="border-y border-navy-100 bg-navy-50" aria-labelledby="brands-h">
+    <div class="container-x py-14">
+      <h2 id="brands-h" class="eyebrow text-navy-900">Brands &amp; partners</h2>
+      <ul class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {brands.map((b) => (
+          <li class="flex h-20 items-center justify-center border-2 border-dashed border-navy-700/40 bg-white font-display text-2xl font-bold uppercase tracking-wide text-navy-700">{b}</li>
+        ))}
+      </ul>
+      <!-- TODO: confirm partner list and replace placeholder tiles with logos. -->
+      <p class="mt-4 text-sm text-steel">Placeholder tiles, partner logos to be confirmed.</p>
+    </div>
+  </section>
+
+  <!-- CONTACT CTA -->
+  <section class="bg-signal text-navy-950 on-light" aria-labelledby="cta-h">
+    <div class="container-x flex flex-col gap-8 py-14 md:flex-row md:items-center md:justify-between md:py-20">
+      <div>
+        <h2 id="cta-h" class="display text-5xl md:text-7xl">Need pipes, materials or parts?</h2>
+        <p class="mt-3 text-lg font-medium">Talk to our sales team or visit the showroom on 8th Street Industrial Area.</p>
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row md:flex-col">
+        <a href={`tel:${hq.phones[0].href}`} class="btn btn-navy">Call {hq.phones[0].display}</a>
+        <a href="/contact" class="btn border-2 border-navy-950 hover:bg-navy-950 hover:text-white">All contacts</a>
+      </div>
+    </div>
+  </section>
 </Layout>
