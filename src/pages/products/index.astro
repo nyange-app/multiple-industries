@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Crumbs from '../../components/Crumbs.astro';
+import CategorySlip from '../../components/CategorySlip.astro';
+import { categories } from '../../data/categories';
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Products', href: '/products/' },
+];
+---
+
+<Layout
+  title="Products: six enquiry forms"
+  description="Water management, plumbing, bathroom and kitchen, building materials, domestic plasticware and automotive products from Multiple Industries, Kampala. Pick a form and send your enquiry."
+  crumbs={crumbs}
+>
+  <div class="wrap pt-4 sm:pt-6">
+    <Crumbs items={crumbs} />
+    <header class="mt-4 max-w-3xl">
+      <p class="form-label"><span class="serial text-sm">§00</span> The pad</p>
+      <h1 class="mt-1 text-4xl sm:text-5xl">Pick a form, tick what you need</h1>
+      <p class="mt-4 text-lg">Every product range has its own enquiry form. Tick items on any form and they all go onto one slip, which you send to our sales counter by WhatsApp or email.</p>
+    </header>
+    <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {categories.map((cat, i) => <CategorySlip cat={cat} index={i} headingLevel="h2" />)}
+    </ul>
+  </div>
+</Layout>

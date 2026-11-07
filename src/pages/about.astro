@@ -1,0 +1,118 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Crumbs from '../components/Crumbs.astro';
+import SectionHead from '../components/SectionHead.astro';
+import isoUnbs from '../assets/iso-unbs.png';
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'About us', href: '/about/' },
+];
+
+const ledger = [
+  { year: '1991', title: 'Founded in Kampala', text: 'We begin manufacturing and trading domestic and industrial building materials and domestic plasticware in Uganda.' },
+  { year: '2013', title: 'Automotive division', text: 'Selected spare parts for trucks and fleets: Fras-le brake lining and pads, Hanksugi truck tyres, Hengst fuel and air filters.' },
+  { year: '2019', title: 'Inland Freight Services', text: 'Transport and logistics services across the East African region.' },
+  { year: 'Today', title: 'ISO 9001:2015 and UNBS', text: 'Our quality system is ISO 9001:2015 certified and our products are certified by the Uganda National Bureau of Standards.' },
+];
+const range = [
+  'Plastic pipes to concrete products',
+  'Indoor and outdoor plumbing',
+  'Rainwater gutters',
+  'Light Gauge Steel Frame roof trusses',
+  'Kitchen and bathroom solutions',
+  'Roofing solutions',
+];
+---
+
+<Layout
+  title="About us"
+  description="Since 1991 Multiple Industries has led manufacturing and trading of building materials, domestic plasticware, automotive spare parts and transport services in Uganda. ISO 9001:2015 certified."
+  crumbs={crumbs}
+>
+  <div class="wrap pt-4 sm:pt-6">
+    <Crumbs items={crumbs} />
+
+    <section class="relative mt-4" aria-labelledby="about-title">
+      <div aria-hidden="true" class="slip paper-canary absolute inset-0 translate-x-2 translate-y-2.5 rotate-[0.8deg]"></div>
+      <div class="slip perf smudge relative px-5 pb-8 pt-7 sm:px-10">
+        <div class="form-head">
+          <p class="form-label">Company record · About us</p>
+          <p class="serial">File MI-1991</p>
+        </div>
+        <div class="grid gap-8 pt-6 lg:grid-cols-[1.4fr_1fr]">
+          <div>
+            <h1 id="about-title" class="text-4xl sm:text-5xl">A one stop source for building, home and road since 1991</h1>
+            <p class="mt-5 text-lg leading-8">
+              Since 1991, Multiple Industries has been a leader in manufacturing and trading of domestic and industrial building materials, domestic plasticware, automotive spare parts and transport services in Uganda.
+            </p>
+            <p class="mt-4 leading-7">
+              Our plasticware range includes jerry cans, basins, buckets, cups, mugs, plates, wrapped drinking straws, tiffin boxes and trays, all made from food-grade raw materials.
+            </p>
+          </div>
+          <div>
+            <h2 class="form-label">Building range</h2>
+            <ul class="mt-2">
+              {range.map((r) => (
+                <li class="flex items-center gap-3 border-b border-dotted border-carbon/40 py-2">
+                  <span aria-hidden="true" class="tick !size-5" style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M5 17c3 2 5 5 7 9 4-9 9-16 17-22' fill='none' stroke='%23c8202f' stroke-width='3.6' stroke-linecap='round'/%3E%3C/svg%3E&quot;)"></span>
+                  <span class="typed">{r}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ledger timeline -->
+    <section class="mt-20" aria-labelledby="ledger-title">
+      <SectionHead no="01" label="Ledger" id="ledger-title" title="Entries in the book" />
+      <div class="drop">
+        <ol class="slip paper-pink tear perf smudge px-4 pt-5 sm:px-8">
+          {ledger.map((e) => (
+            <li class="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-carbon/25 py-4 sm:grid-cols-[7rem_1fr]">
+              <span class="serial text-xl sm:text-2xl">{e.year}</span>
+              <div>
+                <h3 class="text-xl">{e.title}</h3>
+                <p class="mt-1">{e.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- Mission, vision, quality policy -->
+    <section class="mt-20" aria-labelledby="policy-title">
+      <SectionHead no="02" label="Policies" id="policy-title" title="What we hold ourselves to" />
+      <div class="grid gap-6 lg:grid-cols-3">
+        <article class="slip perf smudge p-6 pt-7">
+          <p class="form-label">Memo M-01</p>
+          <h3 class="mt-2 text-2xl">Mission</h3>
+          <p class="mt-3 leading-7">Having a competent, experienced and motivated team, and continual interactions with our customers and other interested parties, we will manufacture and sell top quality plastic products, and supply reliable building materials, selected automotive products, irrigation systems to satisfy and exceed customer requirements and increase shareholder value while maintaining a sustainable environment.</p>
+        </article>
+        <article class="slip paper-canary perf smudge p-6 pt-7">
+          <p class="form-label">Memo M-02</p>
+          <h3 class="mt-2 text-2xl">Vision</h3>
+          <p class="mt-3 text-lg font-semibold leading-8 text-carbon">To be the most preferred one stop source for quality building materials, general household items, selected automotive, irrigation and water management systems.</p>
+        </article>
+        <article class="slip perf smudge relative p-6 pt-7">
+          <p class="form-label">Memo M-03</p>
+          <h3 class="mt-2 text-2xl">Quality policy</h3>
+          <p class="mt-3 leading-7">We manufacture and supply quality UPVC, HDPE and PP-R pipes in all sizes, drinking straws, domestic plastics and quality irrigation systems and building materials as a single stop for building and construction. We aim to be the market leader in Uganda and the East African Community through a Quality Management System in accordance with ISO 9001:2015.</p>
+          <div class="mt-5 flex items-center gap-4">
+            <Image src={isoUnbs} alt="UNBS Q-mark and ISO 9001:2015 certified company badges" width={180} class="h-auto w-36" />
+            <span class="stamp stamp-anim text-[0.65rem]" style="--rot:-10deg"><span>Approved</span></span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="mt-16 flex flex-wrap items-center gap-4">
+      <a href="/products/" class="btn btn-stamp">Browse the product forms</a>
+      <a href="/contact/" class="btn btn-ghost">Visit the showroom</a>
+    </section>
+  </div>
+</Layout>

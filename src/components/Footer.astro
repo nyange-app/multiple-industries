@@ -1,0 +1,47 @@
+---
+import { OFFICES, NAV, EMAIL_SALES } from '../config';
+import { categories } from '../data/categories';
+---
+
+<footer class="mt-16 bg-carbon-deep pb-24 pt-10 text-white">
+  <div class="wrap">
+    <div class="slip paper-pink tear perf smudge px-5 pt-6 sm:px-8">
+      <div class="form-head">
+        <p class="form-label">Multiple Industries Ltd · Office copy</p>
+        <p class="serial text-sm">Est. 1991</p>
+      </div>
+      <div class="grid gap-8 py-6 md:grid-cols-[1.2fr_1fr_1fr]">
+        {OFFICES.map((o) => (
+          <div>
+            <h2 class="text-lg">{o.name}</h2>
+            <address class="typed mt-2 not-italic text-[0.95rem] leading-relaxed">
+              {o.street}<br />{o.box}, {o.city}, Uganda
+            </address>
+            <ul class="mt-2 grid gap-1 text-sm">
+              {o.phones.map((p) => <li><a class="link inline-flex min-h-11 items-center" href={`tel:${p.tel}`}>{p.label}</a></li>)}
+              {o.emails.map((e) => <li><a class="link inline-flex min-h-11 items-center break-all" href={`mailto:${e}`}>{e}</a></li>)}
+            </ul>
+          </div>
+        ))}
+        <div class="grid gap-6 sm:grid-cols-2 md:col-span-3 lg:col-span-1 lg:grid-cols-1">
+          <nav aria-label="Products">
+            <h2 class="form-label">Product forms</h2>
+            <ul class="mt-1 text-sm">
+              {categories.map((c) => <li><a class="inline-flex min-h-10 items-center gap-2 font-semibold text-carbon hover:text-stamp" href={`/products/${c.slug}/`}><span class="serial text-xs">{c.code}</span>{c.name}</a></li>)}
+            </ul>
+          </nav>
+          <nav aria-label="Footer">
+            <h2 class="form-label">Pages</h2>
+            <ul class="mt-1 flex flex-wrap gap-x-4 text-sm">
+              {NAV.map((n) => <li><a class="inline-flex min-h-10 items-center font-semibold text-carbon hover:text-stamp" href={n.href}>{n.label}</a></li>)}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2 py-6 text-sm text-white/85 sm:flex-row sm:items-center sm:justify-between">
+      <p>© 2026 Multiple Industries Limited. ISO 9001:2015 certified. Products certified by UNBS.</p>
+      <a class="font-semibold text-white underline underline-offset-4" href={`mailto:${EMAIL_SALES}`}>{EMAIL_SALES}</a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { categories } from '../data/categories';
+---
+
+<Layout title="Page not found" description="This page could not be found on the Multiple Industries website." noindex>
+  <section class="wrap pt-10" aria-labelledby="nf-title">
+    <div class="relative mx-auto max-w-2xl">
+      <div aria-hidden="true" class="slip paper-pink absolute inset-0 translate-x-2 translate-y-2.5 rotate-[1.2deg]"></div>
+      <div class="slip perf smudge relative overflow-hidden px-5 pb-8 pt-7 sm:px-10">
+        <div class="form-head">
+          <p class="form-label">Enquiry slip</p>
+          <p class="serial">No. 404</p>
+        </div>
+        <h1 id="nf-title" class="mt-6 text-4xl sm:text-5xl">This slip has been voided</h1>
+        <p class="mt-4 text-lg">The page you asked for is not on the pad. Try one of the product forms below, or go back to the start.</p>
+        <div class="stamp absolute right-4 top-24 text-4xl sm:right-10 sm:text-6xl" style="--rot:-14deg">Void</div>
+        <ul class="mt-6 grid gap-x-6 sm:grid-cols-2">
+          {categories.map((c) => (
+            <li><a class="flex min-h-12 items-center gap-3 border-b border-dotted border-carbon/40 font-bold text-carbon hover:text-stamp" href={`/products/${c.slug}/`}><span class="serial w-8 text-sm">{c.code}</span>{c.name}</a></li>
+          ))}
+        </ul>
+        <a href="/" class="btn btn-primary mt-7">Back to the home page</a>
+      </div>
+    </div>
+  </section>
+</Layout>

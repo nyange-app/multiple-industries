@@ -1,0 +1,30 @@
+---
+import type { Category } from '../data/categories';
+interface Props { cat: Category; index: number; headingLevel?: 'h2' | 'h3' }
+const { cat, index, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+const rots = ['-0.6deg', '0.5deg', '-0.3deg', '0.7deg', '-0.5deg', '0.4deg'];
+---
+
+<li class="lift group min-w-0" style={`--lift-rot:${rots[index % 6]}`}>
+  <a href={`/products/${cat.slug}/`} class={`slip perf smudge paper-${cat.paper} flex h-full flex-col p-5 pt-6 no-underline`}>
+    <div class="form-head !border-b">
+      <span class="form-label">Enquiry form</span>
+      <span class="serial">{cat.code}-{String(index + 1).padStart(2, '0')}</span>
+    </div>
+    <H class="mt-3 text-2xl group-hover:text-stamp">{cat.name}</H>
+    <p class="mt-1 text-[0.95rem] text-muted">{cat.short}</p>
+    <ul class="mt-4 grid gap-1.5" aria-label={`Sample items in ${cat.name}`}>
+      {cat.items.slice(0, 3).map((it, k) => (
+        <li class={`${k === 2 ? 'max-sm:hidden ' : ''}flex items-center gap-2.5 border-b border-dotted border-carbon/35 pb-1.5`}>
+          <span aria-hidden="true" class="size-4 shrink-0 rounded-[1px] border-2 border-carbon bg-paper/70"></span>
+          <span class="typed min-w-0 truncate text-[0.95rem]">{it.name}</span>
+        </li>
+      ))}
+    </ul>
+    <span class="mt-auto inline-flex items-center gap-2 pt-5 font-bold text-carbon">
+      Open the form
+      <svg aria-hidden="true" width="22" height="12" viewBox="0 0 22 12" class="transition-transform group-hover:translate-x-1"><path d="M1 6h19M15 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+  </a>
+</li>
