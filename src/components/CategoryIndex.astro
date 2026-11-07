@@ -1,0 +1,34 @@
+---
+import type { Category } from '../data/categories';
+import Arrow from './Arrow.astro';
+
+interface Props {
+  items: Category[];
+  compact?: boolean;
+  headingLevel?: 'h2' | 'h3';
+  current?: string;
+}
+const { items, compact = false, headingLevel = 'h3', current } = Astro.props;
+const H = headingLevel;
+---
+
+<ol class:list={['ix', { 'ix-compact': compact }]}>
+  {
+    items.map((c) => (
+      <li>
+        <a href={`/products/${c.slug}/`} class="ix-row on-signal" aria-current={current === c.slug ? 'page' : undefined}>
+          <span class="ix-num" aria-hidden="true">{c.num}</span>
+          <span>
+            <H class="ix-name">
+              <span class="sr-only">{c.num}. </span>
+              {c.name}
+            </H>
+            {!compact && <span class="ix-desc md:hidden">{c.summary}</span>}
+          </span>
+          {!compact && <span class="ix-desc hidden md:block">{c.summary}</span>}
+          <Arrow class="ix-arrow" />
+        </a>
+      </li>
+    ))
+  }
+</ol>

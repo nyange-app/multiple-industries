@@ -1,0 +1,126 @@
+---
+import Arrow from '../components/Arrow.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Layout from '../layouts/Layout.astro';
+import { INTRO, MISSION, QUALITY_POLICY, VISION } from '../config';
+import { categories } from '../data/categories';
+
+const crumbs = [{ name: 'About', href: '/about/' }];
+
+const divisions = [
+  {
+    k: 'Manufacturing',
+    v: 'UPVC, HDPE and PP-R plastic pipes, drinking straws and domestic household plastics, made at our factory on 8th Street, Industrial Area, Kampala.',
+  },
+  {
+    k: 'Building materials',
+    v: 'Plastic pipes to concrete products; indoor and outdoor plumbing; rainwater gutters; Light Gauge Steel Frame roof trusses; kitchen and bathroom solutions; roofing solutions.',
+  },
+  {
+    k: 'Plasticware',
+    v: 'Jerry cans, basins, buckets, cups, mugs, plates, wrapped drinking straws, tiffin boxes and trays, made with food-grade raw materials.',
+  },
+  {
+    k: 'Automotive',
+    v: 'Since 2013: Fras-le brake lining and pads, Hanksugi truck tyres and Hengst fuel and air filters.',
+  },
+  {
+    k: 'Transport',
+    v: 'Since 2019: Inland Freight Services, transport and logistics across East Africa.',
+  },
+];
+---
+
+<Layout
+  title="About us"
+  description="Since 1991, Multiple Industries has led manufacturing and trading of building materials, plastic pipes, domestic plasticware, automotive spare parts and transport services in Uganda. ISO 9001:2015 certified."
+  breadcrumbs={crumbs}
+>
+  <div class="wrap pt-2">
+    <Breadcrumbs items={[{ name: 'Home', href: '/' }, ...crumbs]} />
+  </div>
+
+  <section class="border-b-2 border-ink">
+    <div class="wrap pt-4 pb-12 md:pb-16">
+      <SectionHead letter="A" label="About" />
+      <h1 class="display display-xl mt-5">One stop<br />since <span class="text-signal">1991.</span></h1>
+      <p class="statement mt-8 max-w-[52rem]">{INTRO}</p>
+    </div>
+  </section>
+
+  <section class="wrap grid gap-8 py-12 md:py-20 lg:grid-cols-12 lg:gap-6" aria-labelledby="div-title">
+    <div class="lg:col-span-3">
+      <SectionHead letter="B" label="What we do" />
+    </div>
+    <div class="lg:col-span-9">
+      <h2 id="div-title" class="display display-md">Five divisions</h2>
+      <dl class="mt-8 border-b-2 border-ink">
+        {
+          divisions.map((d, i) => (
+            <div class="grid gap-2 border-t-2 border-ink py-5 md:grid-cols-[4rem_14rem_1fr] md:gap-6">
+              <span class="display text-[2.25rem] text-signal" style="font-stretch:62%" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <dt class="display text-[1.75rem] md:text-[2rem]" style="font-stretch:72%">
+                {d.k}
+              </dt>
+              <dd class="max-w-[40rem] leading-relaxed">{d.v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="on-signal bg-signal text-paper" aria-labelledby="qp-title">
+    <div class="wrap grid gap-8 py-12 md:py-20 lg:grid-cols-12 lg:gap-6">
+      <div class="lg:col-span-3">
+        <SectionHead letter="C" label="Quality policy" inverse />
+      </div>
+      <div class="lg:col-span-9">
+        <h2 id="qp-title" class="display display-lg">ISO 9001:2015</h2>
+        <p class="statement mt-6 max-w-[54rem]">{QUALITY_POLICY}</p>
+        <p class="mt-6 max-w-[40rem] text-lg">Products certified by the Uganda National Bureau of Standards (UNBS).</p>
+        <div class="mt-8 inline-flex bg-paper p-4">
+          <img src="/img/unbs-iso-9001.webp" width="230" height="126" loading="lazy" decoding="async" alt="UNBS Q-mark and ISO 9001:2015 Certified Company badges" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap grid gap-8 py-12 md:py-20 lg:grid-cols-12 lg:gap-6" aria-labelledby="mv-title">
+    <div class="lg:col-span-3">
+      <SectionHead letter="D" label="Purpose" />
+      <h2 id="mv-title" class="sr-only">Vision and mission</h2>
+    </div>
+    <div class="grid gap-12 lg:col-span-9">
+      <figure>
+        <figcaption class="label text-signal">Vision</figcaption>
+        <blockquote class="display display-md mt-3 normal-case" style="line-height:0.95">&ldquo;{VISION}&rdquo;</blockquote>
+      </figure>
+      <figure class="border-t-2 border-ink pt-6">
+        <figcaption class="label text-signal">Mission</figcaption>
+        <blockquote class="statement mt-3 max-w-[54rem]">{MISSION}</blockquote>
+      </figure>
+    </div>
+  </section>
+
+  <section class="border-t-2 border-ink" aria-labelledby="more-title">
+    <div class="wrap grid gap-8 py-12 md:py-16 lg:grid-cols-12 lg:gap-6">
+      <div class="lg:col-span-3">
+        <SectionHead letter="E" label="More" />
+      </div>
+      <div class="lg:col-span-9">
+        <h2 id="more-title" class="display display-sm">Certificates, CSR and achievements</h2>
+        <p class="mt-4 max-w-[40rem] text-muted">
+          Pages for certificates, CSR activities and achievements are coming soon. <!-- TODO: add these pages. -->
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href={`/products/${categories[0].slug}/`} class="btn btn-ink sm:min-w-72">Start with {categories[0].name} <Arrow /></a>
+          <a href="/contact/" class="btn btn-line sm:min-w-72">Contact us <Arrow /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

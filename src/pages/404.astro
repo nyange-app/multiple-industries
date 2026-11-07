@@ -1,0 +1,20 @@
+---
+import Arrow from '../components/Arrow.astro';
+import CategoryIndex from '../components/CategoryIndex.astro';
+import Layout from '../layouts/Layout.astro';
+import { categories } from '../data/categories';
+---
+
+<Layout title="Page not found" description="This page is not in the index." noindex>
+  <section class="wrap pt-8 pb-14 md:pt-14 md:pb-20">
+    <p class="label text-muted">Error 404</p>
+    <h1 class="display display-xl mt-4">
+      Not in the<br /><span class="text-signal">index.</span>
+    </h1>
+    <p class="mt-6 max-w-[34rem] text-lg">The page you were looking for has moved or never existed. Try one of the six categories.</p>
+    <a href="/" class="btn btn-ink mt-8">Back to the home page <Arrow /></a>
+    <div class="mt-12">
+      <CategoryIndex items={categories} compact />
+    </div>
+  </section>
+</Layout>

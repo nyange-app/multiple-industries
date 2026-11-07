@@ -1,0 +1,129 @@
+---
+import Arrow from '../components/Arrow.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Layout from '../layouts/Layout.astro';
+import { HEAD_OFFICE, SALES_EMAIL, SHOWROOM } from '../config';
+
+const crumbs = [{ name: 'Contact', href: '/contact/' }];
+const offices = [
+  { letter: 'A', office: SHOWROOM, note: 'See products, get sizes and prices, place orders.' },
+  { letter: 'B', office: HEAD_OFFICE, note: 'Factory, head office and general enquiries.' },
+];
+const mailto = (to: string, subject: string) => `mailto:${to}?subject=${encodeURIComponent(subject)}`;
+const shortcuts = [
+  { label: 'Quote for pipes and fittings', to: SALES_EMAIL, subject: 'Quote request: pipes and fittings' },
+  { label: 'Quote for building materials', to: SALES_EMAIL, subject: 'Quote request: building materials' },
+  { label: 'Plasticware and straws (wholesale)', to: SALES_EMAIL, subject: 'Enquiry: domestic plasticware' },
+  { label: 'Automotive spare parts', to: SALES_EMAIL, subject: 'Enquiry: automotive spare parts' },
+  { label: 'Showroom visit', to: SHOWROOM.emails[0], subject: 'Showroom visit' },
+  { label: 'General enquiry', to: HEAD_OFFICE.emails[0], subject: 'General enquiry' },
+];
+---
+
+<Layout
+  title="Contact"
+  description="Contact Multiple Industries in Kampala: Head Office & Factory at Plot 714/715 and Sales Office & Showroom at Plot 13/23, 8th Street Industrial Area. Hotline +256 414 236021/2."
+  breadcrumbs={crumbs}
+>
+  <div class="wrap pt-2">
+    <Breadcrumbs items={[{ name: 'Home', href: '/' }, ...crumbs]} />
+  </div>
+
+  <section class="border-b-2 border-ink">
+    <div class="wrap pt-4 pb-10 md:pb-14">
+      <h1 class="display display-xl">Contact<span class="text-signal">.</span></h1>
+      <p class="mt-6 max-w-[38rem] text-lg leading-relaxed">
+        Two addresses on 8th Street, Industrial Area, Kampala. Call, email or walk in.
+      </p>
+    </div>
+  </section>
+
+  {
+    offices.map(({ letter, office, note }) => (
+      <section class="border-b-2 border-ink" aria-labelledby={`office-${letter}`}>
+        <div class="wrap grid gap-8 py-12 md:py-16 lg:grid-cols-12 lg:gap-6">
+          <div class="lg:col-span-3">
+            <SectionHead letter={letter} label="Office" />
+          </div>
+          <div class="lg:col-span-9">
+            <h2 id={`office-${letter}`} class="display display-md">
+              {office.name}
+            </h2>
+            <p class="mt-3 text-muted">{note}</p>
+            <div class="mt-8 grid gap-8 md:grid-cols-2">
+              <div>
+                <h3 class="label text-muted">Address</h3>
+                <address class="mt-2 text-xl leading-snug not-italic">
+                  {office.street}
+                  <br />
+                  {office.box && (
+                    <>
+                      {office.box}
+                      <br />
+                    </>
+                  )}
+                  {office.city}, {office.country}
+                </address>
+                <a href={office.map} class="btn btn-line mt-5 w-full sm:w-auto" rel="noopener">
+                  Get directions <Arrow />
+                </a>
+              </div>
+              <div>
+                <h3 class="label text-muted">Phone & email</h3>
+                <ul class="ruled mt-2 border-y border-ink">
+                  {office.phones.map((p) => (
+                    <li>
+                      <a href={`tel:${p.tel}`} class="group flex min-h-14 items-center justify-between gap-4 py-2 no-underline">
+                        <span>
+                          <span class="block text-sm text-muted">{p.label}</span>
+                          <span class="display text-[1.7rem] group-hover:text-signal" style="font-stretch:70%">
+                            {p.display}
+                          </span>
+                        </span>
+                        <Arrow class="h-5 w-5 shrink-0" />
+                      </a>
+                    </li>
+                  ))}
+                  {office.emails.map((e) => (
+                    <li>
+                      <a href={`mailto:${e}`} class="group flex min-h-14 items-center justify-between gap-4 py-2 no-underline">
+                        <span class="font-semibold break-all underline decoration-signal decoration-2 group-hover:text-signal">{e}</span>
+                        <Arrow class="h-5 w-5 shrink-0" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="wrap grid gap-8 py-12 md:py-16 lg:grid-cols-12 lg:gap-6" aria-labelledby="write-title">
+    <div class="lg:col-span-3">
+      <SectionHead letter="C" label="Write" />
+    </div>
+    <div class="lg:col-span-9">
+      <h2 id="write-title" class="display display-md">Start an email</h2>
+      <p class="mt-3 max-w-[38rem] text-muted">Pick a topic. Your email app opens with the subject filled in.</p>
+      <ol class="ix ix-compact mt-8">
+        {
+          shortcuts.map((s, i) => (
+            <li>
+              <a href={mailto(s.to, s.subject)} class="ix-row on-signal">
+                <span class="ix-num" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span class="ix-name">{s.label}</span>
+                <Arrow class="ix-arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+</Layout>

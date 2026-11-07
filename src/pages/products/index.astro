@@ -1,0 +1,30 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CategoryIndex from '../../components/CategoryIndex.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Layout from '../../layouts/Layout.astro';
+import { categories } from '../../data/categories';
+
+const crumbs = [{ name: 'Products', href: '/products/' }];
+---
+
+<Layout
+  title="Products"
+  description="The Multiple Industries product index: water management, plumbing, bathroom and kitchen, building materials, domestic plasticware and automotive parts, from Kampala, Uganda."
+  breadcrumbs={crumbs}
+>
+  <div class="wrap pt-2">
+    <Breadcrumbs items={[{ name: 'Home', href: '/' }, ...crumbs]} />
+  </div>
+  <section class="wrap pt-4 pb-14 md:pb-24">
+    <SectionHead letter="A" label="Contents" />
+    <h1 class="display display-xl mt-5">Products<span class="text-signal">.</span></h1>
+    <p class="mt-6 max-w-[38rem] text-lg leading-relaxed">
+      Six categories, one supplier. Choose a category to see the product lines, or call the showroom for sizes, stock and
+      quotes.
+    </p>
+    <div class="mt-10 md:mt-14">
+      <CategoryIndex items={categories} headingLevel="h2" />
+    </div>
+  </section>
+</Layout>

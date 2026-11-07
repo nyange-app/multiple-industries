@@ -1,0 +1,14 @@
+---
+/* Left-hand label column used by every section: "A. Contents" */
+interface Props {
+  letter: string;
+  label: string;
+  inverse?: boolean;
+}
+const { letter, label, inverse = false } = Astro.props;
+---
+
+<p class:list={['label flex items-center gap-2', inverse ? 'text-paper' : 'text-ink']}>
+  <span class:list={['inline-grid h-6 min-w-6 place-items-center px-1', inverse ? 'bg-paper text-ink' : 'bg-ink text-paper']}>{letter}</span>
+  {label}
+</p>
