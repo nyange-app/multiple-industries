@@ -1,88 +1,25 @@
 ---
 import '../styles/global.css';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import SlipBar from '../components/SlipBar.astro';
-import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '../config';
+import { SITE_NAME } from '../config';
 
-interface Crumb { name: string; href: string }
 interface Props {
   title?: string;
   description?: string;
-  crumbs?: Crumb[];
-  jsonLd?: Record<string, unknown>[];
-  noindex?: boolean;
 }
 
-const { title, description = SITE_DESCRIPTION, crumbs, jsonLd = [], noindex = false } = Astro.props;
-const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} | Quality Building Materials Since 1991`;
-const canonical = new URL(Astro.url.pathname, SITE_URL).href;
-const ogImage = new URL('/og.png', SITE_URL).href;
-
-const ld = [...jsonLd];
-if (crumbs && crumbs.length) {
-  ld.push({
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: crumbs.map((c, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      name: c.name,
-      item: new URL(c.href, SITE_URL).href,
-    })),
-  });
-}
+const { title = SITE_NAME, description = '' } = Astro.props;
 ---
 
-<!doctype html>
-<html lang="en-UG">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script is:inline>document.documentElement.classList.add('js')</script>
-    <title>{fullTitle}</title>
+    <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex" />}
-    <meta name="theme-color" content="#22328a" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={SITE_NAME} />
-    <meta property="og:locale" content="en_UG" />
-    <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Multiple Industries enquiry slip: quality building materials since 1991" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={fullTitle} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
-
-    {ld.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
   </head>
-  <body class="min-h-dvh">
-    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded focus:bg-paper focus:px-4 focus:py-3 focus:font-bold focus:text-carbon">Skip to content</a>
-
-    <!-- shared ink filter for rubber stamps -->
-    <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
-      <filter id="ink-rough" x="-10%" y="-10%" width="120%" height="120%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n" />
-        <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" result="d" />
-        <feComponentTransfer in="n" result="speck"><feFuncA type="discrete" tableValues="1 1 1 0 1 1 1 1" /></feComponentTransfer>
-        <feComposite in="d" in2="speck" operator="in" />
-      </filter>
-    </svg>
-
-    <Header />
-    <main id="main" tabindex="-1" class="overflow-x-clip outline-none">
+  <body class="min-h-dvh bg-white font-sans text-ink antialiased">
+    <main id="main">
       <slot />
     </main>
-    <Footer />
-    <SlipBar />
   </body>
 </html>
