@@ -1,0 +1,39 @@
+---
+import Icon from './Icon.astro';
+import { categories } from '../data/categories';
+
+interface Props {
+  headingLevel?: 'h2' | 'h3';
+}
+const { headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+---
+
+<ul class="grid gap-px border border-ink bg-ink sm:grid-cols-2 lg:grid-cols-3">
+  {
+    categories.map((c) => (
+      <li class="bg-card">
+        <a
+          href={`/products/${c.slug}/`}
+          class="group relative flex h-full gap-4 p-5 transition-colors hover:bg-signal-soft sm:flex-col sm:p-6"
+        >
+          <span class="flex shrink-0 flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <span class="flex size-12 items-center justify-center bg-ink text-signal sm:size-14">
+              <Icon name={c.icon} class="size-6 sm:size-7" />
+            </span>
+            <span class="label hidden text-steel sm:inline">MI-{c.code}</span>
+          </span>
+          <span class="flex flex-1 flex-col">
+            <span class="label text-plate sm:hidden">MI-{c.code}</span>
+            <H class="display-md text-xl sm:mt-2 sm:text-2xl">{c.name}</H>
+            <span class="mt-1.5 text-[0.95rem] leading-snug text-steel">{c.short}</span>
+            <span class="label mt-4 inline-flex items-center gap-2 text-ink">
+              View range
+              <Icon name="arrow" class="size-4 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" />
+            </span>
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

@@ -1,25 +1,260 @@
 ---
 import '../styles/global.css';
-import { SITE_NAME } from '../config';
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+import Icon from '../components/Icon.astro';
+import { NAV, OFFICES, PRIMARY_TEL, SITE_NAME, SITE_SHORT, SITE_TAGLINE, SITE_URL } from '../config';
+import { categories } from '../data/categories';
 
-interface Props {
-  title?: string;
-  description?: string;
+interface Crumb {
+  name: string;
+  href: string;
 }
 
-const { title = SITE_NAME, description = '' } = Astro.props;
+interface Props {
+  title: string;
+  description: string;
+  breadcrumbs?: Crumb[];
+  jsonLd?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const { title, description, breadcrumbs, jsonLd = [], noindex = false } = Astro.props;
+const site = Astro.site ?? new URL(SITE_URL);
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL('/og.png', site).href;
+const fullTitle = title.includes(SITE_SHORT) ? title : `${title} | ${SITE_SHORT}`;
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+
+const schemas: Record<string, unknown>[] = [...jsonLd];
+if (breadcrumbs && breadcrumbs.length) {
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [{ name: 'Home', href: '/' }, ...breadcrumbs].map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      item: new URL(c.href, site).href,
+    })),
+  });
+}
+const year = 2026;
 ---
 
-<html lang="en">
+<!doctype html>
+<html lang="en-UG">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#15161a" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_UG" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE_NAME} — ${SITE_TAGLINE}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
   </head>
-  <body class="min-h-dvh bg-white font-sans text-ink antialiased">
-    <main id="main">
+  <body class="flex min-h-dvh flex-col bg-paper font-sans text-ink antialiased">
+    <a
+      href="#main"
+      class="label sr-only z-50 bg-signal px-4 py-3 text-ink focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+      >Skip to content</a
+    >
+
+    <header class="sticky top-0 z-40 bg-ink text-paper">
+      <div class="wrap flex h-16 items-center justify-between gap-4 md:h-[4.5rem]">
+        <a href="/" class="flex min-h-11 items-center" aria-label={`${SITE_NAME} — home`}>
+          <Image
+            src={logo}
+            alt={`${SITE_NAME} logo`}
+            width={180}
+            height={44}
+            loading="eager"
+            class="h-9 w-auto md:h-11"
+          />
+        </a>
+
+        <nav aria-label="Main" class="hidden items-center gap-1 md:flex">
+          {
+            NAV.map((n) => (
+              <a
+                href={n.href}
+                aria-current={isActive(n.href) ? 'page' : undefined}
+                class="label flex min-h-11 items-center border-b-2 border-transparent px-3 text-paper/85 hover:text-paper aria-[current=page]:border-signal aria-[current=page]:text-paper"
+              >
+                {n.label}
+              </a>
+            ))
+          }
+          <a href={`tel:${PRIMARY_TEL.tel}`} class="btn btn-signal ml-3 min-h-11 py-2 text-sm">
+            <Icon name="phone" class="size-4" />
+            {PRIMARY_TEL.display}
+          </a>
+        </nav>
+
+        <div class="flex items-center gap-2 md:hidden">
+          <a
+            href={`tel:${PRIMARY_TEL.tel}`}
+            class="flex size-11 items-center justify-center bg-signal text-ink"
+            aria-label={`Call ${PRIMARY_TEL.display}`}
+          >
+            <Icon name="phone" class="size-5" />
+          </a>
+          <details class="menu group">
+            <summary
+              class="flex size-11 cursor-pointer items-center justify-center border border-paper/30 text-paper"
+              aria-label="Menu"
+            >
+              <Icon name="menu" class="menu-open size-6" />
+              <Icon name="close" class="menu-close size-6" />
+            </summary>
+            <nav
+              aria-label="Mobile"
+              class="absolute inset-x-0 top-16 border-t border-paper/15 bg-ink shadow-2xl"
+            >
+              <ul class="wrap py-2">
+                {
+                  NAV.map((n, i) => (
+                    <li class="border-b border-paper/10 last:border-0">
+                      <a
+                        href={n.href}
+                        aria-current={isActive(n.href) ? 'page' : undefined}
+                        class="flex min-h-14 items-center justify-between text-xl font-bold [font-stretch:80%] uppercase aria-[current=page]:text-signal"
+                      >
+                        <span>
+                          <span class="label mr-3 text-fog">0{i + 1}</span>
+                          {n.label}
+                        </span>
+                        <Icon name="arrow" class="size-5 text-signal" />
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+              <div class="wrap grid gap-2 pb-5">
+                <a href={`tel:${PRIMARY_TEL.tel}`} class="btn btn-signal w-full">
+                  <Icon name="phone" class="size-5" /> Call {PRIMARY_TEL.display}
+                </a>
+              </div>
+            </nav>
+          </details>
+        </div>
+      </div>
+    </header>
+
+    {
+      breadcrumbs && breadcrumbs.length > 0 && (
+        <nav aria-label="Breadcrumb" class="border-b border-rule bg-paper-2/60">
+          <ol class="wrap label flex min-h-11 flex-wrap items-center gap-x-2 py-2 text-steel">
+            <li>
+              <a href="/" class="link">
+                Home
+              </a>
+            </li>
+            {breadcrumbs.map((c, i) => (
+              <li class="flex items-center gap-2">
+                <span aria-hidden="true">/</span>
+                {i === breadcrumbs.length - 1 ? (
+                  <span aria-current="page" class="text-ink">
+                    {c.name}
+                  </span>
+                ) : (
+                  <a href={c.href} class="link">
+                    {c.name}
+                  </a>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+
+    <main id="main" class="flex-1" tabindex="-1">
       <slot />
     </main>
+
+    <footer class="border-t border-paper/10 bg-ink text-paper">
+      <div class="wrap grid gap-10 py-12 md:grid-cols-12 md:py-16">
+        <div class="md:col-span-3">
+          <Image src={logo} alt="" width={200} height={49} class="h-12 w-auto" />
+          <p class="mt-5 max-w-xs text-fog">{SITE_TAGLINE}.</p>
+          <p class="label mt-4 text-fog">ISO 9001:2015 · UNBS certified</p>
+        </div>
+        <nav aria-label="Products" class="md:col-span-3">
+          <h2 class="label text-signal">Products</h2>
+          <ul class="mt-3 grid grid-cols-2 gap-x-4 md:grid-cols-1">
+            {
+              categories.map((c) => (
+                <li>
+                  <a href={`/products/${c.slug}/`} class="flex min-h-11 items-center leading-tight text-paper/90 hover:text-signal">
+                    {c.name}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <div class="grid gap-10 sm:grid-cols-2 md:col-span-6">
+        {
+          OFFICES.map((o) => (
+            <div>
+              <h2 class="label text-signal">{o.name}</h2>
+              <address class="mt-4 not-italic leading-relaxed text-fog">
+                {o.street}
+                <br />
+                {o.postal && (
+                  <>
+                    {o.postal}
+                    <br />
+                  </>
+                )}
+                {o.city}, Uganda
+              </address>
+              <ul class="mt-2">
+                {o.phones.slice(0, 2).map((p) => (
+                  <li>
+                    <a href={`tel:${p.tel}`} class="flex min-h-11 items-center text-paper hover:text-signal">
+                      {p.display}
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <a href={`mailto:${o.emails[0]}`} class="flex min-h-11 items-center text-sm [overflow-wrap:anywhere] text-paper hover:text-signal">
+                    {o.emails[0]}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          ))
+        }
+        </div>
+      </div>
+      <div class="border-t border-paper/10">
+        <div class="wrap label flex flex-col gap-2 py-5 text-fog sm:flex-row sm:justify-between">
+          <p>&copy; {year} {SITE_NAME}</p>
+          <p>Kampala · Uganda · East Africa</p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

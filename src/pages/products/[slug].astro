@@ -1,0 +1,160 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import { categories, type Category } from '../../data/categories';
+import { OFFICES, PRIMARY_TEL, SALES_EMAIL } from '../../config';
+
+export const getStaticPaths: GetStaticPaths = () =>
+  categories.map((category) => ({ params: { slug: category.slug }, props: { category } }));
+
+interface Props {
+  category: Category;
+}
+const { category: c } = Astro.props;
+const others = categories.filter((o) => o.slug !== c.slug);
+const made = c.products.filter((p) => p.origin === 'Manufactured').length;
+const subject = encodeURIComponent('Quote request: ' + c.name);
+const body = encodeURIComponent(
+  'Hello Multiple Industries,\n\nI would like a quote for the following ' + c.name +
+    ' products:\n\n- Product:\n- Size / specification:\n- Quantity:\n- Delivery location:\n\nName:\nPhone:\n',
+);
+const quote = 'mailto:' + SALES_EMAIL + '?subject=' + subject + '&body=' + body;
+---
+
+<Layout
+  title={`${c.name} — Products`}
+  description={`${c.name} from Multiple Industries, Kampala: ${c.short} Call ${PRIMARY_TEL.display} for prices and availability.`}
+  breadcrumbs={[
+    { name: 'Products', href: '/products/' },
+    { name: c.name, href: `/products/${c.slug}/` },
+  ]}
+>
+  <header class="grid-ink bg-ink text-paper">
+    <div class="wrap grid gap-8 py-10 md:grid-cols-12 md:py-16">
+      <div class="md:col-span-8">
+        <p class="label flex flex-wrap gap-x-4 gap-y-1 text-fog">
+          <span class="bg-signal px-2 py-0.5 text-ink">MI-{c.code}</span>
+          <span>Product datasheet</span>
+          <span>Division {c.code} of 06</span>
+        </p>
+        <h1 class="display mt-6 text-5xl text-balance sm:text-6xl lg:text-7xl">{c.name}</h1>
+        <p class="mt-5 max-w-2xl text-lg leading-relaxed text-paper/85">{c.intro}</p>
+      </div>
+      <div class="hidden items-end justify-end md:col-span-4 md:flex">
+        <div class="relative flex size-44 items-center justify-center border border-paper/25 text-signal lg:size-52">
+          <Icon name={c.icon} class="size-24 lg:size-28" />
+          <span class="label absolute top-2 left-2 text-fog">Fig. {c.code}</span>
+        </div>
+      </div>
+    </div>
+    <div class="wrap"><div class="ticks text-paper"></div></div>
+  </header>
+
+  <div class="wrap grid gap-10 py-12 md:py-16 lg:grid-cols-12">
+    <section class="lg:col-span-8" aria-labelledby="range-title">
+      <div class="flex flex-wrap items-end justify-between gap-3 border-t-2 border-ink pt-3">
+        <h2 id="range-title" class="display-md text-3xl">Product range</h2>
+        <p class="label text-steel">
+          {c.products.length} lines · {made} made in Kampala
+        </p>
+      </div>
+      <table class="mt-6 w-full border-collapse text-left">
+        <caption class="sr-only">{c.name} products, origin and typical use</caption>
+        <thead>
+          <tr class="label border-b border-ink text-steel">
+            <th scope="col" class="py-3 pr-4 font-medium">Product</th>
+            <th scope="col" class="hidden py-3 pr-4 font-medium sm:table-cell">Typical use</th>
+            <th scope="col" class="py-3 text-right font-medium">Origin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            c.products.map((p, i) => (
+              <tr class="border-b border-rule align-top">
+                <th scope="row" class="py-4 pr-4 font-normal">
+                  <span class="label mr-2 text-steel">{c.code}.{String(i + 1).padStart(2, '0')}</span>
+                  <span class="font-semibold">{p.name}</span>
+                  <span class="mt-1 block text-sm text-steel sm:hidden">{p.use}</span>
+                </th>
+                <td class="hidden py-4 pr-4 text-steel sm:table-cell">{p.use}</td>
+                <td class="py-4 text-right">
+                  <span
+                    class:list={[
+                      'label inline-block px-2 py-1 whitespace-nowrap',
+                      p.origin === 'Manufactured' ? 'bg-ink text-signal' : 'border border-ink text-ink',
+                    ]}
+                  >
+                    {p.origin === 'Manufactured' ? 'Made' : 'Supplied'}
+                  </span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+      <p class="label mt-4 text-steel">
+        Sizes, pressure classes and colours on request. <span class="text-plate">TODO: confirm full product list & specs.</span>
+      </p>
+
+      <div class="mt-8 grid grid-cols-3 gap-2 sm:gap-4">
+        <div class="aspect-square border border-dashed border-steel/60 bg-paper-2/60 p-2 sm:aspect-[4/3] sm:p-3">
+          <p class="label text-[0.65rem] text-steel sm:text-xs">Photo · Fig. {c.code}a</p>
+        </div>
+        <div class="aspect-square border border-dashed border-steel/60 bg-paper-2/60 p-2 sm:aspect-[4/3] sm:p-3">
+          <p class="label text-[0.65rem] text-steel sm:text-xs">Photo · Fig. {c.code}b</p>
+        </div>
+        <div class="aspect-square border border-dashed border-steel/60 bg-paper-2/60 p-2 sm:aspect-[4/3] sm:p-3">
+          <p class="label text-[0.65rem] text-steel sm:text-xs">Photo · Fig. {c.code}c</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="lg:col-span-4" aria-label="Order and enquiries">
+      <div class="border-2 border-ink bg-card lg:sticky lg:top-24">
+        <div class="bg-signal px-5 py-3">
+          <p class="label">Prices & availability</p>
+        </div>
+        <div class="p-5">
+          <h2 class="display-md text-2xl">Request a quote</h2>
+          <p class="mt-2 text-steel">Tell us the product, size and quantity. Our sales desk replies by phone or email.</p>
+          <div class="mt-5 grid gap-3">
+            <a href={quote} class="btn btn-ink w-full"><Icon name="mail" class="size-5" /> Email a quote request</a>
+            <a href={`tel:${PRIMARY_TEL.tel}`} class="btn btn-line w-full"><Icon name="phone" class="size-5" /> {PRIMARY_TEL.display}</a>
+          </div>
+          <dl class="mt-6 border-t border-rule pt-4 text-sm">
+            <dt class="label text-steel">Showroom</dt>
+            <dd class="mt-1">{OFFICES[1].street}, Kampala</dd>
+            <dt class="label mt-3 text-steel">Hotlines</dt>
+            <dd class="mt-1">
+              <ul class="flex flex-wrap gap-x-4">
+                {OFFICES[1].phones.slice(1).map((p) => (
+                  <li><a href={`tel:${p.tel}`} class="link inline-flex min-h-11 items-center">{p.display}</a></li>
+                ))}
+              </ul>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <section class="border-t border-rule bg-paper-2/50 py-12 md:py-16" aria-labelledby="other-title">
+    <div class="wrap">
+      <h2 id="other-title" class="display-md text-3xl">Other divisions</h2>
+      <ul class="mt-6 grid gap-px border border-ink bg-ink sm:grid-cols-2 lg:grid-cols-5">
+        {
+          others.map((o) => (
+            <li class="bg-card">
+              <a href={`/products/${o.slug}/`} class="group flex min-h-16 items-center gap-3 p-4 hover:bg-signal-soft">
+                <Icon name={o.icon} class="size-6 shrink-0 text-plate" />
+                <span class="flex-1 font-semibold leading-tight">{o.name}</span>
+                <Icon name="arrow" class="size-4 shrink-0" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Layout>

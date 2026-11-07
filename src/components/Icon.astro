@@ -1,0 +1,54 @@
+---
+/** Inline line-icon set (24px grid, 1.75 stroke). Decorative by default. */
+type Name =
+  | 'water' | 'plumbing' | 'bath' | 'build' | 'plastic' | 'auto'
+  | 'arrow' | 'phone' | 'mail' | 'pin' | 'check' | 'menu' | 'close' | 'clock';
+
+interface Props {
+  name: Name;
+  class?: string;
+  label?: string;
+}
+
+const { name, class: cls = 'size-6', label } = Astro.props;
+
+const paths: Record<Name, string> = {
+  water:
+    '<path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11Z"/><path d="M9 14.5a3 3 0 0 0 3 3"/>',
+  plumbing:
+    '<path d="M3 7h7a3 3 0 0 1 3 3v11"/><path d="M3 11h5a1 1 0 0 1 1 1v9"/><path d="M3 5v8"/><path d="M11 21h4"/><path d="M14 4h7M17.5 4v4"/>',
+  bath:
+    '<path d="M3 12h18v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M6 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/>',
+  build:
+    '<path d="M2 11 12 4l10 7"/><path d="M5 9.5V20h14V9.5"/><path d="M5 20 12 13l7 7"/><path d="M12 13V20"/>',
+  plastic:
+    '<path d="M7 7h10l-1.2 13.2a1 1 0 0 1-1 .8H9.2a1 1 0 0 1-1-.8L7 7Z"/><path d="M5.5 7h13"/><path d="M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7"/>',
+  auto:
+    '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M12 14.5v6M3.5 12h6M14.5 12h6"/>',
+  arrow: '<path d="M4 12h15"/><path d="m13 6 6 6-6 6"/>',
+  phone:
+    '<path d="M5 3h3.5l1.5 4.5-2.2 1.3a11 11 0 0 0 5.4 5.4l1.3-2.2L19 13.5V17a2 2 0 0 1-2 2A15 15 0 0 1 3 5a2 2 0 0 1 2-2Z"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3.5 6 8.5 7 8.5-7"/>',
+  pin: '<path d="M12 21s7-6.2 7-11.5a7 7 0 0 0-14 0C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  check: '<path d="m4.5 12.5 5 5 10-11"/>',
+  menu: '<path d="M3 7h18M3 12h18M3 17h18"/>',
+  close: '<path d="M5 5l14 14M19 5 5 19"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/>',
+};
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="square"
+  stroke-linejoin="miter"
+  class={cls}
+  aria-hidden={label ? undefined : 'true'}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  focusable="false"
+  set:html={paths[name]}
+/>

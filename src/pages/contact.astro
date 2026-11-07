@@ -1,0 +1,129 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { OFFICES, SALES_EMAIL } from '../config';
+import { categories } from '../data/categories';
+
+const field = 'mt-1.5 font-sans normal-case tracking-normal block w-full min-h-12 border border-ink bg-card px-3 py-2 text-base';
+---
+
+<Layout
+  title="Contact Us — Head Office & Showroom, Kampala"
+  description="Contact Multiple Industries Limited: head office & factory at Plot 714/715 and sales office & showroom at Plot 13/23, 8th Street Industrial Area, Kampala. Hotline +256 414 236021/2."
+  breadcrumbs={[{ name: 'Contact', href: '/contact/' }]}
+>
+  <section class="grid-ink bg-ink text-paper">
+    <div class="wrap py-12 md:py-16">
+      <p class="label text-fog"><span class="text-signal">§ 06</span>&ensp;Contact</p>
+      <h1 class="display mt-6 text-5xl sm:text-7xl">Contact us</h1>
+      <p class="mt-5 max-w-2xl text-lg text-paper/85">
+        Both offices are on 8th Street, Industrial Area, Kampala. Call for prices and stock, or visit the
+        showroom.
+      </p>
+    </div>
+    <div class="wrap"><div class="ticks text-paper"></div></div>
+  </section>
+
+  <section class="py-12 md:py-16" aria-label="Offices">
+    <div class="wrap grid gap-6 md:grid-cols-2">
+      {
+        OFFICES.map((o, i) => (
+          <article id={o.id} class="border-2 border-ink bg-card">
+            <header class="flex items-center justify-between bg-ink px-5 py-3 text-paper">
+              <h2 class="display-md text-xl">{o.name}</h2>
+              <span class="label text-signal">Loc. 0{i + 1}</span>
+            </header>
+            <div class="p-5">
+              <address class="flex gap-3 not-italic leading-relaxed">
+                <Icon name="pin" class="mt-0.5 size-5 shrink-0 text-plate" />
+                <span>
+                  {o.street}
+                  <br />
+                  {o.postal && (
+                    <>
+                      {o.postal}
+                      <br />
+                    </>
+                  )}
+                  {o.city}, Uganda
+                </span>
+              </address>
+              <ul class="mt-4 border-t border-rule">
+                {o.phones.map((p) => (
+                  <li class="border-b border-rule">
+                    <a href={`tel:${p.tel}`} class="flex min-h-12 items-center gap-3 hover:bg-signal-soft">
+                      <Icon name="phone" class="size-5 shrink-0 text-plate" />
+                      <span class="label w-24 shrink-0 text-steel">{p.label}</span>
+                      <span class="font-semibold">{p.display}</span>
+                    </a>
+                  </li>
+                ))}
+                {o.emails.map((e) => (
+                  <li class="border-b border-rule">
+                    <a href={`mailto:${e}`} class="flex min-h-12 items-center gap-3 hover:bg-signal-soft">
+                      <Icon name="mail" class="size-5 shrink-0 text-plate" />
+                      <span class="font-semibold break-all">{e}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${o.street}, Kampala, Uganda`)}`}
+                class="btn btn-line mt-5 w-full"
+                rel="noopener"
+              >
+                <Icon name="pin" class="size-5" /> Open in Maps
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="border-t border-rule bg-paper-2/50 py-12 md:py-16" aria-labelledby="enquiry-title">
+    <div class="wrap grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <div class="border-t-2 border-ink pt-3">
+          <p class="label text-steel"><span class="text-plate">Form</span>&ensp;Enquiry</p>
+          <h2 id="enquiry-title" class="display mt-5 text-4xl">Send an enquiry</h2>
+        </div>
+        <p class="mt-4 text-steel">
+          This form opens your email app with the details filled in, addressed to {SALES_EMAIL}.
+        </p>
+      </div>
+      <form
+        class="grid gap-5 sm:grid-cols-2 lg:col-span-8"
+        action={`mailto:${SALES_EMAIL}`}
+        method="post"
+        enctype="text/plain"
+      >
+        <label class="label text-ink">
+          Name
+          <input class={field} type="text" name="name" autocomplete="name" required />
+        </label>
+        <label class="label text-ink">
+          Phone
+          <input class={field} type="tel" name="phone" autocomplete="tel" inputmode="tel" />
+        </label>
+        <label class="label text-ink sm:col-span-2">
+          Division
+          <select class={field} name="division">
+            {categories.map((c) => <option>{c.name}</option>)}
+            <option>Transport & logistics</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label class="label text-ink sm:col-span-2">
+          Message
+          <textarea class={`${field} min-h-36`} name="message" rows="5" required></textarea>
+        </label>
+        <div class="sm:col-span-2">
+          <button type="submit" class="btn btn-ink w-full sm:w-auto">
+            <Icon name="mail" class="size-5" /> Send via email
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+</Layout>

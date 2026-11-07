@@ -1,12 +1,211 @@
-@import '@fontsource-variable/nunito';
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/jetbrains-mono';
 
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-/* TODO: brand tokens. */
+/*
+ * Direction 7 — "Spec Sheet"
+ * Paper + ink datasheet, signal yellow and plate purple taken from the logo.
+ */
 @theme {
-  --color-brand: #eb1700;
-  --color-ink: #191919;
+  --color-paper: #f4f2ed;
+  --color-paper-2: #e8e4db;
+  --color-card: #fbfaf7;
+  --color-rule: #cbc5b8;
+  --color-ink: #15161a;
+  --color-ink-2: #23252b;
+  --color-ink-3: #33363e;
+  --color-steel: #4a4f5c;
+  --color-fog: #b9bcc4; /* muted text on ink — 9.6:1 */
+  --color-signal: #f2b705; /* logo yellow — use with ink text */
+  --color-signal-soft: #fbe7a6;
+  --color-plate: #7d1a70; /* logo purple — 9.1:1 on paper */
+  --color-plate-soft: #f1e4ee;
 
-  --font-sans: 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-tag: 2px;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    font-stretch: 100%;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--color-signal);
+  }
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-ink);
+  }
+  summary {
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+@layer components {
+  /* Condensed display type */
+  .display {
+    font-stretch: 68%;
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+  .display-md {
+    font-stretch: 75%;
+    font-weight: 750;
+    line-height: 1.02;
+    text-transform: uppercase;
+  }
+  /* Datasheet label */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .wrap {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .wrap {
+      padding-inline: 2rem;
+    }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.25rem;
+    font-weight: 700;
+    font-stretch: 85%;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-tag);
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      transform 0.15s;
+  }
+  .btn-signal {
+    background: var(--color-signal);
+    color: var(--color-ink);
+    border-color: var(--color-signal);
+  }
+  .btn-signal:hover {
+    background: #ffc928;
+  }
+  .btn-ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .btn-ink:hover {
+    background: var(--color-ink-3);
+  }
+  .btn-line {
+    background: transparent;
+    color: var(--color-ink);
+  }
+  .btn-line:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .btn-line-dark {
+    background: transparent;
+    color: var(--color-paper);
+    border-color: var(--color-paper);
+  }
+  .btn-line-dark:hover {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .btn:active {
+      transform: translateY(1px);
+    }
+  }
+
+  /* Ruler ticks along an edge */
+  .ticks {
+    height: 10px;
+    background-image:
+      repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 10px),
+      repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 50px);
+    background-size:
+      100% 5px,
+      100% 10px;
+    background-repeat: no-repeat;
+    background-position:
+      0 100%,
+      0 100%;
+    opacity: 0.45;
+  }
+
+  /* Faint drafting grid */
+  .grid-paper {
+    background-image:
+      linear-gradient(to right, rgb(21 22 26 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(21 22 26 / 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .grid-ink {
+    background-image:
+      linear-gradient(to right, rgb(244 242 237 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(244 242 237 / 0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Hazard stripe band */
+  .hazard {
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--color-signal) 0 14px,
+      var(--color-ink) 14px 28px
+    );
+  }
+
+  .link {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-signal);
+  }
+  .link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  /* Mobile menu */
+  .menu[open] .menu-open {
+    display: none;
+  }
+  .menu:not([open]) .menu-close {
+    display: none;
+  }
 }
