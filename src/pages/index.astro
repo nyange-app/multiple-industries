@@ -1,8 +1,187 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
-import { SITE_DESCRIPTION, SITE_NAME } from '../config';
+import Icon from '../components/Icon.astro';
+import iso from '../assets/iso-white.png';
+import { categories } from '../data/categories';
+import { CONTACT, SITE_DESCRIPTION, SITE_LEGAL, SITE_URL } from '../config';
+
+const brands = ['Wavin', 'Franke', 'Vado', 'Fras-le', 'Hanksugi', 'Hengst', 'Conmix', 'Tegra', 'Feroof', 'Smartframe', 'Polynum', 'Apex']; // TODO: confirm brands/partners with client
+const stats = [
+  ['1991', 'Founded in Kampala'],
+  ['ISO 9001:2015', 'Quality Management System'],
+  ['UNBS', 'Certified products'],
+  ['6', 'Product categories'],
+];
+const ld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE_LEGAL,
+    url: SITE_URL,
+    logo: `${SITE_URL}/favicon.svg`,
+    foundingDate: '1991',
+    description: SITE_DESCRIPTION,
+    email: 'sales@multipleindustries.com',
+    telephone: '+256414236021',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: SITE_LEGAL,
+    url: SITE_URL,
+    telephone: '+256414236021',
+    email: 'response@multipleindustries.com',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Plot 714/715, 8th Street Industrial Area, P.O. Box 20166',
+      addressLocality: 'Kampala',
+      addressCountry: 'UG',
+    },
+  },
+];
 ---
 
-<Layout title={SITE_NAME} description={SITE_DESCRIPTION}>
-  <h1 class="p-8 text-3xl font-bold">{SITE_NAME}</h1>
+<Layout title="Multiple Industries Ltd | Plastic Pipes & Building Materials, Uganda" description={SITE_DESCRIPTION} jsonLd={ld}>
+  <!-- HERO -->
+  <section class="relative isolate overflow-hidden">
+    <div class="bg-blueprint absolute inset-0 -z-10"></div>
+    <div class="glow absolute inset-0 -z-10"></div>
+    <div class="container-x grid gap-12 py-16 lg:grid-cols-[1.25fr_1fr] lg:items-center lg:py-28">
+      <div>
+        <p class="eyebrow">Manufacturing in Kampala since 1991</p>
+        <h1 class="mt-4 text-[2.9rem] sm:text-7xl lg:text-[5.4rem]">
+          Quality building materials <span class="text-gradient">you can trust.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-muted">
+          Leading manufacturer of UPVC, HDPE and PP-R plastic pipes, drinking straws and household plastics, with building materials, automotive spare parts and irrigation systems for East Africa.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href="/products/water-management" class="btn btn-primary">Explore products</a>
+          <a href="/contact" class="btn btn-ghost">Contact sales</a>
+        </div>
+      </div>
+      <!-- engineering schematic -->
+      <div class="card drift p-6" aria-hidden="true">
+        <svg viewBox="0 0 400 320" class="w-full" fill="none" stroke-linecap="round">
+          <defs><linearGradient id="gr" x1="0" x2="1"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#34d399"/></linearGradient></defs>
+          <g stroke="#263243" stroke-width="1"><path d="M0 80h400M0 160h400M0 240h400M80 0v320M160 0v320M240 0v320M320 0v320"/></g>
+          <path d="M20 80h140a20 20 0 0 1 20 20v100a20 20 0 0 0 20 20h160" stroke="url(#gr)" stroke-width="22" opacity=".9"/>
+          <path d="M20 80h140a20 20 0 0 1 20 20v100a20 20 0 0 0 20 20h160" stroke="#070a0f" stroke-width="14"/>
+          <path d="M20 80h140a20 20 0 0 1 20 20v100a20 20 0 0 0 20 20h160" stroke="url(#gr)" stroke-width="2" stroke-dasharray="4 10"/>
+          <circle cx="180" cy="150" r="5" fill="#22d3ee"/><circle cx="20" cy="80" r="5" fill="#34d399"/><circle cx="380" cy="220" r="5" fill="#34d399"/>
+          <g fill="#9fb0c3" font-family="Space Grotesk Variable, sans-serif" font-size="12"><text x="30" y="56">UPVC / HDPE / PP-R</text><text x="196" y="146">all sizes</text><text x="250" y="266">ISO 9001:2015</text></g>
+        </svg>
+      </div>
+    </div>
+    <div class="container-x pb-12">
+      <dl class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line lg:grid-cols-4">
+        {stats.map(([k, v]) => (
+          <div class="bg-surface p-5"><dt class="font-display text-2xl font-semibold text-gradient sm:text-3xl">{k}</dt><dd class="mt-1 text-sm text-muted">{v}</dd></div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- ABOUT TEASER -->
+  <section class="section">
+    <div class="container-x grid gap-10 lg:grid-cols-2 lg:gap-16">
+      <div class="reveal">
+        <p class="eyebrow">About us</p>
+        <h2 class="mt-3 text-4xl sm:text-5xl">One stop service for the East African region.</h2>
+      </div>
+      <div class="reveal space-y-5 text-lg text-muted">
+        <p>Multiple Industries has always tried to offer a one stop service with diversified products covering the entire range of building materials, full range of domestic household products, automotive spare parts and transport services in the East African Region.</p>
+        <p>Since 2013 our automotive division has supplied Fras-le, Hanksugi and Hengst. In 2019 we launched Inland Freight Services for transport and logistics across East Africa.</p>
+        <a href="/about" class="btn btn-ghost">Our story <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES BENTO -->
+  <section class="section pt-0" id="products">
+    <div class="container-x">
+      <div class="reveal mb-10 max-w-2xl">
+        <p class="eyebrow">Products</p>
+        <h2 class="mt-3 text-4xl sm:text-5xl">Six categories, one source.</h2>
+      </div>
+      <div class="grid auto-rows-[minmax(14rem,auto)] gap-4 md:grid-cols-4">
+        {categories.map((c) => (
+          <a href={`/products/${c.slug}`} class={`card reveal group flex flex-col justify-between overflow-hidden p-6 ${c.span}`}>
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl border border-line bg-bg text-cyan"><Icon d={c.icon} /></span>
+            {c.span.includes('row-span-2') && <Icon d={c.icon} class="pointer-events-none absolute -right-10 top-10 hidden h-80 w-80 text-cyan opacity-[0.07] md:block" />}
+            <span class="mt-8 block">
+              <span class="block font-display text-2xl font-semibold tracking-tight sm:text-3xl">{c.name}</span>
+              <span class="mt-2 block text-muted">{c.short}</span>
+              <span class="mt-4 inline-flex items-center gap-2 font-medium text-cyan">View range <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">&rarr;</span></span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US / ISO -->
+  <section class="section border-y border-line bg-surface">
+    <div class="container-x grid items-center gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
+      <div class="reveal flex justify-center">
+        <div class="card flex h-64 w-64 items-center justify-center rounded-full p-8">
+          <Image src={iso} alt="ISO 9001:2015 certification badge" width={200} height={200} class="h-full w-full object-contain" />
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow">Why Multiple Industries</p>
+        <h2 class="mt-3 text-4xl sm:text-5xl">Engineered to a standard.</h2>
+        <p class="mt-5 text-lg text-muted">We manufacture and supply quality UPVC, HDPE and PP-R pipes in all sizes, drinking straws, domestic plastics and quality irrigation systems and building materials as a single stop for building and construction, under a Quality Management System in accordance with ISO 9001:2015.</p>
+        <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+          {['ISO 9001:2015 certified', 'Products certified by UNBS', 'Food-grade raw materials for plasticware', 'Manufacturer, not just a trader'].map((t) => (
+            <li class="flex items-start gap-3"><span class="mt-1 text-emerald" aria-hidden="true">&#10003;</span><span>{t}</span></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION / VISION -->
+  <section class="section">
+    <div class="container-x grid gap-4 lg:grid-cols-2">
+      <article class="card reveal p-7 sm:p-10">
+        <p class="eyebrow">Mission</p>
+        <p class="mt-4 text-lg leading-relaxed text-ink">Having a competent, experienced and motivated team, and continual interactions with our customers and other interested parties, we will manufacture and sell top quality plastic products, and supply reliable building materials, selected automotive products, irrigation systems to satisfy and exceed customer requirements and increase shareholder value while maintaining a sustainable environment.</p>
+      </article>
+      <article class="card reveal p-7 sm:p-10">
+        <p class="eyebrow">Vision</p>
+        <p class="mt-4 font-display text-2xl leading-snug tracking-tight sm:text-4xl">To be the most preferred one stop source for quality building materials, general household items, selected automotive, irrigation and water management systems.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- BRANDS -->
+  <section class="section pt-0">
+    <div class="container-x">
+      <p class="eyebrow reveal">Brands &amp; partners</p>
+      <ul class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        {brands.map((b) => (
+          <li class="card hoverable flex h-20 items-center justify-center font-display text-lg font-medium text-muted">{b}</li>
+        ))}
+      </ul>
+      <p class="mt-3 text-sm text-muted">Placeholder tiles. TODO: confirm partner list and add approved logos.</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section pt-0">
+    <div class="container-x">
+      <div class="card relative isolate overflow-hidden p-8 text-center sm:p-14">
+        <div class="glow absolute inset-0 -z-10"></div>
+        <h2 class="mx-auto max-w-3xl text-4xl sm:text-6xl">Let&rsquo;s build something that lasts.</h2>
+        <p class="mx-auto mt-4 max-w-xl text-muted">Talk to our sales team about pipes, building materials, automotive parts or irrigation.</p>
+        <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <a class="btn btn-primary" href="tel:+256414236021">Call +256 414 236021/2</a>
+          <a class="btn btn-ghost" href="mailto:sales@multipleindustries.com">sales@multipleindustries.com</a>
+        </div>
+        <p class="mt-6 text-sm text-muted">{CONTACT.head.address}</p>
+      </div>
+    </div>
+  </section>
 </Layout>

@@ -1,0 +1,5 @@
+---
+interface Props { d: string; class?: string }
+const { d, class: cls = 'h-7 w-7' } = Astro.props;
+---
+<svg viewBox="0 0 24 24" class={cls} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={d} />

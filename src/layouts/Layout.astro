@@ -1,25 +1,44 @@
 ---
 import '../styles/global.css';
-import { SITE_NAME } from '../config';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Seo from '../components/Seo.astro';
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '../config';
 
 interface Props {
   title?: string;
   description?: string;
+  jsonLd?: object[];
+  crumbs?: { name: string; href: string }[];
 }
-
-const { title = SITE_NAME, description = '' } = Astro.props;
+const { title = SITE_NAME, description = SITE_DESCRIPTION, jsonLd = [], crumbs } = Astro.props;
+const ld = [...jsonLd];
+if (crumbs) {
+  ld.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [{ name: 'Home', href: '/' }, ...crumbs].map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      item: new URL(c.href, SITE_URL).href,
+    })),
+  });
+}
 ---
 
-<html lang="en">
+<html lang="en-UG">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <meta name="theme-color" content="#070a0f" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <Seo {title} {description} jsonLd={ld} />
   </head>
-  <body class="min-h-dvh bg-white font-sans text-ink antialiased">
-    <main id="main">
-      <slot />
-    </main>
+  <body class="min-h-dvh font-sans antialiased">
+    <a href="#main" class="sr-only z-50 rounded-full bg-cyan px-4 py-3 font-semibold text-on-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Skip to content</a>
+    <Header />
+    <main id="main"><slot /></main>
+    <Footer />
   </body>
 </html>

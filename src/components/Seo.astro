@@ -1,0 +1,28 @@
+---
+import { SITE_NAME, SITE_URL } from '../config';
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  jsonLd?: object[];
+}
+const { title, description, path = Astro.url.pathname, jsonLd = [] } = Astro.props;
+const canonical = new URL(path, SITE_URL).href.replace(/\/$/, '') || SITE_URL;
+const ogImage = new URL('/og.png', SITE_URL).href;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical || SITE_URL} />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content="en_UG" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+{jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}

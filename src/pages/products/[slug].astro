@@ -1,0 +1,61 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHead from '../../components/PageHead.astro';
+import Icon from '../../components/Icon.astro';
+import { categories } from '../../data/categories';
+
+export function getStaticPaths() {
+  return categories.map((category) => ({ params: { slug: category.slug }, props: { category } }));
+}
+const { category } = Astro.props;
+const others = categories.filter((c) => c.slug !== category.slug);
+---
+
+<Layout
+  title={`${category.name} | Multiple Industries Ltd`}
+  description={category.intro}
+  crumbs={[{ name: 'Products', href: '/products/water-management' }, { name: category.name, href: `/products/${category.slug}` }]}
+>
+  <PageHead
+    eyebrow="Product category"
+    title={category.name}
+    lead={category.intro}
+    crumbs={[{ name: 'Products', href: '/products/water-management' }, { name: category.name }]}
+  >
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <a class="btn btn-primary" href={`mailto:sales@multipleindustries.com?subject=${encodeURIComponent("Quote request: " + category.name)}`}>Request a quote</a>
+      <a class="btn btn-ghost" href="tel:+256414236021">Call sales</a>
+    </div>
+  </PageHead>
+
+  <section class="section">
+    <div class="container-x">
+      <h2 class="mb-8 text-3xl sm:text-4xl">Product range</h2>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {category.products.map((p) => (
+          <li class="card hoverable reveal p-6">
+            <div class="mb-6 flex h-28 items-center justify-center rounded-xl border border-dashed border-line bg-bg/60 text-muted">
+              <Icon d={category.icon} class="h-10 w-10 opacity-60" />
+              <span class="sr-only">Product image placeholder</span>
+            </div>
+            <h3 class="text-xl">{p.name}</h3>
+            <p class="mt-2 text-sm text-muted">{p.note}</p>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-6 text-sm text-muted">Placeholder product list. TODO: replace with the confirmed catalogue, specifications and photography.</p>
+    </div>
+  </section>
+
+  <section class="section border-t border-line bg-surface pt-12">
+    <div class="container-x">
+      <h2 class="mb-6 text-3xl">Other categories</h2>
+      <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {others.map((c) => (
+          <li><a class="card flex min-h-16 items-center gap-4 p-4" href={`/products/${c.slug}`}>
+            <span class="text-cyan"><Icon d={c.icon} class="h-6 w-6" /></span><span class="font-medium">{c.name}</span></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Layout>
