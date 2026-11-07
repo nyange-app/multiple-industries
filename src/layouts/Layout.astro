@@ -1,25 +1,211 @@
 ---
 import '../styles/global.css';
-import { SITE_NAME } from '../config';
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.webp';
+import { HEAD_OFFICE, NAV, SHOWROOM, SITE_DESCRIPTION, SITE_LEGAL_NAME, SITE_NAME, SITE_URL } from '../config';
+import { categories } from '../data/categories';
 
+interface Crumb {
+  name: string;
+  href: string;
+}
 interface Props {
-  title?: string;
+  title: string;
   description?: string;
+  breadcrumbs?: Crumb[];
+  jsonLd?: Record<string, unknown>[];
+  noindex?: boolean;
 }
 
-const { title = SITE_NAME, description = '' } = Astro.props;
+const { title, description = SITE_DESCRIPTION, breadcrumbs, jsonLd = [], noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+const ogImage = new URL('/og.png', SITE_URL).href;
+const path = Astro.url.pathname;
+
+const ld: Record<string, unknown>[] = [...jsonLd];
+if (breadcrumbs && breadcrumbs.length) {
+  ld.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((b, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: b.name,
+      item: new URL(b.href, SITE_URL).href,
+    })),
+  });
+}
+const isActive = (href: string) => {
+  if (href === '/') return path === '/';
+  if (href === '/#collection') return path.startsWith('/products');
+  return path.startsWith(href);
+};
 ---
 
-<html lang="en">
+<!doctype html>
+<html lang="en-UG">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#121314" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_UG" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Multiple Industries: quality building materials you can trust since 1991" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {ld.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
   </head>
-  <body class="min-h-dvh bg-white font-sans text-ink antialiased">
-    <main id="main">
+  <body class="min-h-dvh antialiased">
+    <a
+      href="#main"
+      class="sr-only z-[100] bg-brass px-4 py-3 font-bold text-night focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+      >Skip to content</a
+    >
+
+    <header class="sticky top-0 z-50 border-b border-graphite-2/80 bg-charcoal/90 backdrop-blur-md">
+      <div class="wrap flex h-16 items-center justify-between gap-4 md:h-[4.5rem]">
+        <a href="/" class="group flex min-h-11 items-center gap-3" aria-label="Multiple Industries, home">
+          <span
+            class="grid size-9 place-items-center border border-brass/70 font-serif text-xl text-brass transition-colors group-hover:bg-brass group-hover:text-night"
+            aria-hidden="true">M</span
+          >
+          <span class="flex flex-col leading-none">
+            <span class="font-serif text-[1.35rem] text-porcelain">Multiple Industries</span>
+            <span class="mt-1 text-[0.62rem] font-bold tracking-[0.24em] text-steel uppercase">Kampala · Since 1991</span>
+          </span>
+        </a>
+
+        <nav aria-label="Main" class="hidden md:block">
+          <ul class="flex items-center gap-1">
+            {
+              NAV.map((n) => (
+                <li>
+                  <a
+                    href={n.href}
+                    aria-current={isActive(n.href) ? 'page' : undefined}
+                    class="relative inline-flex min-h-11 items-center px-3 text-sm font-semibold text-porcelain-dim transition-colors hover:text-porcelain aria-[current=page]:text-brass"
+                  >
+                    {n.label}
+                  </a>
+                </li>
+              ))
+            }
+            <li class="ml-3">
+              <a href={`tel:${HEAD_OFFICE.phones[0].tel}`} class="btn btn-brass min-h-11 px-4 py-2 text-[0.8rem]">Call {HEAD_OFFICE.phones[0].display}</a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="flex items-center gap-2 md:hidden">
+          <a href={`tel:${HEAD_OFFICE.phones[0].tel}`} class="btn btn-ghost min-h-11 px-3 py-2 text-xs" aria-label="Call the hotline">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z" /></svg>
+            Call
+          </a>
+          <details class="menu relative">
+            <summary class="grid size-11 place-items-center border border-graphite-2 text-porcelain" aria-label="Menu">
+              <svg class="menu-icon-open" width="20" height="20" viewBox="0 0 20 20" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 6h16M2 14h16" /></svg>
+              <svg class="menu-icon-close" width="20" height="20" viewBox="0 0 20 20" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" /></svg>
+            </summary>
+            <nav aria-label="Mobile" class="fixed inset-x-0 top-16 border-b border-graphite-2 bg-night px-5 pt-2 pb-6 shadow-2xl shadow-black">
+              <ul class="divide-y divide-graphite-2">
+                {
+                  NAV.map((n) => (
+                    <li>
+                      <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined} class="flex min-h-14 items-center font-serif text-3xl text-porcelain aria-[current=page]:text-brass">
+                        {n.label}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+              <p class="eyebrow mt-6 mb-2">Collection</p>
+              <ul class="grid grid-cols-2 gap-x-4 text-sm text-porcelain-dim">
+                {categories.map((c) => (
+                  <li><a href={`/products/${c.slug}/`} class="flex min-h-11 items-center hover:text-brass-bright">{c.name}</a></li>
+                ))}
+              </ul>
+            </nav>
+          </details>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1" class="focus:outline-none">
       <slot />
     </main>
+
+    <footer class="mt-24 border-t border-graphite-2 bg-night">
+      <div class="wrap grid gap-12 py-16 md:grid-cols-12">
+        <div class="md:col-span-3">
+          <div class="inline-block bg-[#90177b] p-2">
+            <Image src={logo} alt="Multiple Industries Ltd. logo" width={240} class="h-auto w-[200px]" loading="eager" />
+          </div>
+          <p class="mt-6 max-w-xs font-serif text-2xl leading-snug text-porcelain-dim">
+            Quality building materials you can <em class="text-brass">trust</em>, since 1991.
+          </p>
+          <p class="mt-4 text-sm text-steel">ISO 9001:2015 certified · Products certified by UNBS</p>
+        </div>
+
+        <nav aria-label="Collection" class="md:col-span-3">
+          <p class="eyebrow mb-4">The Collection</p>
+          <ul class="space-y-1 text-sm text-porcelain-dim">
+            {categories.map((c) => (
+              <li><a href={`/products/${c.slug}/`} class="inline-flex min-h-11 items-center hover:text-brass-bright md:min-h-9">{c.name}</a></li>
+            ))}
+          </ul>
+        </nav>
+
+        <div class="grid gap-10 sm:grid-cols-2 md:col-span-6">
+          {
+            [HEAD_OFFICE, SHOWROOM].map((o) => (
+              <address class="not-italic">
+                <p class="eyebrow mb-4">{o.label}</p>
+                <p class="text-sm leading-relaxed text-porcelain-dim">
+                  {o.street}
+                  <br />
+                  {'po' in o && o.po && (<>{o.po}<br /></>)}
+                  {o.city}, {o.country}
+                </p>
+                <ul class="mt-3 space-y-1 text-sm">
+                  {o.phones.map((p) => (
+                    <li><a href={`tel:${p.tel}`} class="link-brass inline-flex min-h-11 items-center md:min-h-8">{p.display}</a></li>
+                  ))}
+                  {o.emails.map((e) => (
+                    <li><a href={`mailto:${e}`} class="link-brass inline-flex min-h-11 items-center break-words md:min-h-8">{e}</a></li>
+                  ))}
+                </ul>
+              </address>
+            ))
+          }
+        </div>
+      </div>
+      <div class="border-t border-graphite-2">
+        <div class="wrap flex flex-col gap-3 py-6 text-xs text-steel sm:flex-row sm:items-center sm:justify-between">
+          <p>© 2026 {SITE_LEGAL_NAME}</p>
+          <ul class="flex flex-wrap gap-x-5">
+            <li><a href="/about/" class="inline-flex min-h-11 items-center hover:text-porcelain">About</a></li>
+            <li><a href="/contact/" class="inline-flex min-h-11 items-center hover:text-porcelain">Contact</a></li>
+            <li><a href="/sitemap-index.xml" class="inline-flex min-h-11 items-center hover:text-porcelain">Sitemap</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

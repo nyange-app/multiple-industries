@@ -1,0 +1,17 @@
+---
+/** A spotlit plinth with a line-drawn object on it. */
+import type { ObjectKind } from '../data/categories';
+import ExhibitObject from './ExhibitObject.astro';
+
+interface Props {
+  kind: ObjectKind;
+  on?: boolean;
+  class?: string;
+}
+const { kind, on = false, class: cls = '' } = Astro.props;
+---
+
+<div class:list={['stage flex flex-col justify-end', { on }, cls]}>
+  <ExhibitObject kind={kind} class="relative z-10 mx-auto -mb-3 w-[68%] max-w-72" />
+  <div class="plinth"></div>
+</div>
