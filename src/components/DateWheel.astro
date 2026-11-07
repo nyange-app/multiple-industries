@@ -1,0 +1,36 @@
+---
+/**
+ * Mould date-stamp dial (the little clock moulded into plastic parts),
+ * here reading "91" for the year Multiple Industries was founded.
+ */
+interface Props {
+  class?: string;
+}
+const { class: cls = 'h-28 w-28' } = Astro.props;
+const nums = Array.from({ length: 12 }, (_, i) => {
+  const a = ((i + 1) / 12) * Math.PI * 2 - Math.PI / 2;
+  return { n: i + 1, x: 50 + Math.cos(a) * 36, y: 50 + Math.sin(a) * 36 + 3.4 };
+});
+---
+<svg class={cls} viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="dw-face" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#e9ece7" />
+      <stop offset="1" stop-color="#dbe0d9" />
+    </radialGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#dw-face)" />
+  <circle cx="50" cy="50" r="47" fill="none" stroke="#1b1d1f" stroke-opacity=".18" stroke-width="2" />
+  <circle cx="50" cy="51" r="47" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="1" />
+  {
+    nums.map((p) => (
+      <text x={p.x.toFixed(1)} y={p.y.toFixed(1)} text-anchor="middle" font-size="9.5" font-weight="700" fill="#525a61" font-family="Figtree Variable, sans-serif">
+        {p.n}
+      </text>
+    ))
+  }
+  <circle cx="50" cy="50" r="23" fill="#e4e8e2" stroke="#1b1d1f" stroke-opacity=".15" />
+  <path d="M50 64 V38 M44 44 L50 37 L56 44" fill="none" stroke="#1b1d1f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <text x="37" y="57" text-anchor="middle" font-size="14" font-weight="800" fill="#1b1d1f" font-family="Bricolage Grotesque Variable, sans-serif">9</text>
+  <text x="63" y="57" text-anchor="middle" font-size="14" font-weight="800" fill="#1b1d1f" font-family="Bricolage Grotesque Variable, sans-serif">1</text>
+</svg>

@@ -1,0 +1,45 @@
+---
+/**
+ * Resin identification code: the chasing-arrows triangle moulded into
+ * plastic parts. Only used for real pipe materials (HDPE 2, PVC 3, PP 5).
+ */
+interface Props {
+  code: number;
+  abbr: string;
+  class?: string;
+}
+const { code, abbr, class: cls = 'h-12 w-12' } = Astro.props;
+const V = [
+  [24, 2],
+  [46, 40],
+  [2, 40],
+];
+const segs = V.map((a, i) => {
+  const b = V[(i + 1) % 3];
+  const lerp = (t: number) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const s = lerp(0.16);
+  const e = lerp(0.72);
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  const len = Math.hypot(dx, dy);
+  const ux = dx / len;
+  const uy = dy / len;
+  const tip = [e[0] + ux * 5, e[1] + uy * 5];
+  const l = [e[0] - uy * 3.6, e[1] + ux * 3.6];
+  const r = [e[0] + uy * 3.6, e[1] - ux * 3.6];
+  const f = (p: number[]) => p.map((n) => n.toFixed(2)).join(' ');
+  return { line: `M${f(s)} L${f(e)}`, head: `M${f(l)} L${f(tip)} L${f(r)} Z` };
+});
+---
+<svg class={cls} viewBox="0 0 48 52" role="img" aria-label={`Resin code ${code}, ${abbr}`}>
+  {
+    segs.map((s) => (
+      <g>
+        <path d={s.line} fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" />
+        <path d={s.head} fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round" />
+      </g>
+    ))
+  }
+  <text x="24" y="33" text-anchor="middle" font-size="14" font-weight="800" fill="currentColor" font-family="Bricolage Grotesque Variable, sans-serif">{code}</text>
+  <text x="24" y="51" text-anchor="middle" font-size="8.5" font-weight="700" letter-spacing="0.5" fill="currentColor" font-family="Bricolage Grotesque Variable, sans-serif">{abbr}</text>
+</svg>

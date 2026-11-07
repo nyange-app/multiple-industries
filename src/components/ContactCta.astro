@@ -1,0 +1,37 @@
+---
+import Icon from './Icon.astro';
+import { OFFICES, PRIMARY_PHONE, SALES_EMAIL } from '../config';
+interface Props {
+  title?: string;
+  subject?: string;
+}
+const { title = 'Need a price, a size or a delivery?', subject = 'Enquiry from website' } = Astro.props;
+const showroom = OFFICES[1];
+---
+<section class="wrap mt-16" aria-labelledby="cta-title">
+  <div class="cta-panel relative overflow-hidden rounded-[var(--radius-mould)] p-6 sm:p-10">
+    <div class="relative grid gap-8 md:grid-cols-[1.4fr_1fr] md:items-center">
+      <div>
+        <h2 id="cta-title" class="text-3xl text-ink sm:text-4xl">{title}</h2>
+        <p class="mt-3 max-w-xl text-lg text-ink">
+          Talk to our sales team, or visit the showroom at {showroom.street}, Kampala.
+        </p>
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row md:flex-col">
+        <a href={`tel:${PRIMARY_PHONE.tel}`} class="btn btn-dark"><Icon name="phone" /> Call {PRIMARY_PHONE.display}</a>
+        <a href={`mailto:${SALES_EMAIL}?subject=${encodeURIComponent(subject)}`} class="btn"><Icon name="mail" /> Email sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .cta-panel {
+    background:
+      radial-gradient(120% 80% at 10% 0%, rgb(255 255 255 / 0.28), transparent 60%),
+      linear-gradient(180deg, #f07330, var(--color-cta));
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.45),
+      inset 0 -3px 0 rgb(0 0 0 / 0.12),
+      0 14px 30px -14px rgb(182 74 14 / 0.6);
+  }
+</style>

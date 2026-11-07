@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Icon from '../components/Icon.astro';
+import { OFFICES, SALES_EMAIL } from '../config';
+const crumbs = [{ name: 'Contact', href: '/contact/' }];
+---
+<Layout
+  title="Contact us"
+  description="Contact Multiple Industries in Kampala: head office and factory at Plot 714/715 and showroom at Plot 13/23, 8th Street Industrial Area. Hotline +256 414 236021."
+  breadcrumbs={crumbs}
+>
+  <Breadcrumbs items={crumbs} />
+  <section class="wrap mt-2" aria-labelledby="c-title">
+    <div class="panel pellets p-6 sm:p-10">
+      <p class="eyebrow">8th Street Industrial Area, Kampala</p>
+      <h1 id="c-title" class="deboss mt-3 text-[2.4rem] leading-[1.02] sm:text-6xl">Talk to us</h1>
+      <p class="mt-4 max-w-2xl text-lg text-muted">
+        Call, email or visit. Our head office and factory and our sales office and showroom are both on 8th Street.
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap mt-8 grid gap-4 md:grid-cols-2" aria-label="Our offices">
+    {
+      OFFICES.map((o) => (
+        <article class="panel ejector flex flex-col p-6 pt-9 sm:p-8 sm:pt-10">
+          <h2 class="text-2xl sm:text-3xl">{o.name}</h2>
+          <address class="mt-3 flex gap-3 not-italic text-muted">
+            <Icon name="pin" class="mt-0.5 h-6 w-6 shrink-0 text-ppr-deep" />
+            <span>
+              {o.street}
+              <br />
+              {o.pobox}, {o.city}, Uganda
+            </span>
+          </address>
+          <ul class="mt-5 grid gap-2">
+            {o.phones.map((p) => (
+              <li>
+                <a href={`tel:${p.tel}`} class="cavity flex min-h-12 items-center gap-3 px-4 font-semibold no-underline hover:text-ppr-deep">
+                  <Icon name="phone" class="h-5 w-5 text-ppr-deep" />
+                  <span class="text-sm font-normal text-muted">{p.label}</span>
+                  <span class="ml-auto">{p.display}</span>
+                </a>
+              </li>
+            ))}
+            {o.emails.map((e) => (
+              <li>
+                <a href={`mailto:${e}`} class="cavity flex min-h-12 items-center gap-3 px-4 font-semibold no-underline hover:text-ppr-deep">
+                  <Icon name="mail" class="h-5 w-5 shrink-0 text-ppr-deep" />
+                  <span class="min-w-0 break-all">{e}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a href={o.map} class="btn mt-6 self-start" rel="noopener">
+            <Icon name="pin" /> Get directions
+          </a>
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="wrap mt-12" aria-labelledby="f-title">
+    <div class="panel grid gap-8 p-6 sm:p-10 lg:grid-cols-[1fr_1.4fr]">
+      <div>
+        <h2 id="f-title" class="text-3xl">Send an enquiry</h2>
+        <p class="mt-3 text-muted">
+          This opens your email app with your message addressed to {SALES_EMAIL}. Include sizes and quantities and
+          we will reply with prices.
+        </p>
+      </div>
+      <form action={`mailto:${SALES_EMAIL}`} method="get" enctype="text/plain" class="grid gap-4">
+        <label class="grid gap-1.5">
+          <span class="font-display font-semibold">Subject</span>
+          <input name="subject" required placeholder="e.g. HDPE pipes for a borehole" class="cavity min-h-12 w-full border-0 px-4 text-base" />
+        </label>
+        <label class="grid gap-1.5">
+          <span class="font-display font-semibold">Message</span>
+          <textarea name="body" rows="5" required placeholder="What you need, sizes, quantities, delivery location, your phone number" class="cavity w-full border-0 px-4 py-3 text-base"></textarea>
+        </label>
+        <button type="submit" class="btn btn-cta justify-self-start">
+          <Icon name="mail" /> Write email
+        </button>
+      </form>
+    </div>
+  </section>
+</Layout>

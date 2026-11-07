@@ -1,0 +1,25 @@
+---
+interface Props {
+  items: { name: string; href: string }[];
+}
+const { items } = Astro.props;
+---
+<nav aria-label="Breadcrumb" class="wrap pt-6">
+  <ol class="flex flex-wrap items-center gap-1 text-sm text-muted">
+    <li><a href="/" class="inline-flex min-h-11 items-center underline-offset-4 hover:underline">Home</a></li>
+    {
+      items.map((c, i) => (
+        <li class="flex items-center gap-1">
+          <span aria-hidden="true" class="px-1 text-upvc">/</span>
+          {i === items.length - 1 ? (
+            <span aria-current="page" class="font-semibold text-ink">{c.name}</span>
+          ) : (
+            <a href={c.href} class="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
+              {c.name}
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

@@ -1,0 +1,89 @@
+---
+import Icon from './Icon.astro';
+import { CATEGORIES } from '../data/categories';
+import { OFFICES, NAV, LEGAL_NAME, TAGLINE } from '../config';
+---
+<footer class="footer mt-20 bg-hdpe text-[#d6dadd]">
+  <div class="wrap grid gap-10 py-14 md:grid-cols-12">
+    <div class="md:col-span-4">
+      <p class="font-display text-2xl font-bold text-white">Multiple Industries Ltd</p>
+      <p class="mt-2 max-w-xs">{TAGLINE}.</p>
+      <p class="mt-5 inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1.5 text-sm">
+        <Icon name="shield" class="h-4 w-4 text-stripe-lite" /> ISO 9001:2015 · UNBS certified products
+      </p>
+    </div>
+
+    <nav aria-label="Products" class="md:col-span-3">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.14em] text-white">Products</p>
+      <ul class="mt-3 grid gap-0.5">
+        {
+          CATEGORIES.map((c) => (
+            <li>
+              <a class="inline-flex min-h-11 items-center underline-offset-4 hover:text-white hover:underline" href={`/products/${c.slug}/`}>
+                {c.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="grid gap-8 sm:grid-cols-2 md:col-span-5">
+      {
+        OFFICES.map((o) => (
+          <address class="not-italic">
+            <p class="font-display text-sm font-bold uppercase tracking-[0.14em] text-white">{o.name}</p>
+            <p class="mt-3 text-sm leading-relaxed">
+              {o.street}
+              <br />
+              {o.pobox}, {o.city}, Uganda
+            </p>
+            <ul class="mt-2 text-sm">
+              {o.phones.map((p) => (
+                <li>
+                  <a class="inline-flex min-h-11 items-center text-stripe-lite underline-offset-4 hover:underline" href={`tel:${p.tel}`}>
+                    {p.label}: {p.display}
+                  </a>
+                </li>
+              ))}
+              {o.emails.map((e) => (
+                <li>
+                  <a class="inline-flex min-h-11 items-center break-all text-stripe-lite underline-offset-4 hover:underline" href={`mailto:${e}`}>
+                    {e}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </address>
+        ))
+      }
+    </div>
+  </div>
+  <div class="border-t border-white/10">
+    <div class="wrap flex flex-col gap-2 py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
+      <p>© 2026 {LEGAL_NAME}</p>
+      <ul class="flex flex-wrap gap-x-5">
+        {
+          NAV.map((n) => (
+            <li>
+              <a class="inline-flex min-h-11 items-center hover:text-white" href={n.href}>
+                {n.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    border-top: 0.5rem solid var(--color-hdpe);
+    box-shadow:
+      inset 0 0.5rem 0 var(--color-stripe),
+      inset 0 0.75rem 0 var(--color-hdpe),
+      inset 0 1rem 0 var(--color-stripe);
+  }
+</style>

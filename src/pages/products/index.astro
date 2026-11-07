@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CategoryTile from '../../components/CategoryTile.astro';
+import ContactCta from '../../components/ContactCta.astro';
+import { CATEGORIES } from '../../data/categories';
+const crumbs = [{ name: 'Products', href: '/products/' }];
+---
+<Layout
+  title="Products"
+  description="Six product lines from Multiple Industries, Kampala: water management, plumbing, bathroom and kitchen, building materials, domestic plasticware and automotive."
+  breadcrumbs={crumbs}
+>
+  <Breadcrumbs items={crumbs} />
+  <section class="wrap mt-2" aria-labelledby="p-title">
+    <div class="panel pellets p-6 sm:p-10">
+      <p class="eyebrow">One stop supplier</p>
+      <h1 id="p-title" class="deboss mt-3 text-[2.4rem] leading-[1.02] sm:text-6xl">Our products</h1>
+      <p class="mt-4 max-w-2xl text-lg text-muted">
+        Pipes and plasticware from our own factory, plus building materials, kitchen and bathroom fittings, irrigation
+        systems and automotive spare parts from trusted brands.
+      </p>
+    </div>
+    <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+      {CATEGORIES.map((c, i) => <CategoryTile cat={c} index={i} headingLevel="h2" />)}
+    </ul>
+  </section>
+  <ContactCta />
+</Layout>

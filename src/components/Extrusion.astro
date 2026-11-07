@@ -1,0 +1,18 @@
+---
+/** A length of HDPE pipe with its printed line marking, slowly extruding. */
+const marks = [
+  'Multiple Industries',
+  'Kampala · Uganda',
+  'Since 1991',
+  'ISO 9001:2015',
+  'UNBS certified',
+  'UPVC · HDPE · PP-R',
+];
+const run = [...marks, ...marks];
+---
+<div class="extrusion" aria-hidden="true">
+  <div class="extrusion-print">
+    {run.map((m) => <span>{m}</span>)}
+    {run.map((m) => <span>{m}</span>)}
+  </div>
+</div>

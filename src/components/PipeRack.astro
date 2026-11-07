@@ -1,0 +1,24 @@
+---
+/** The three pipe materials made in the factory, as rounded lengths of pipe. */
+import ResinCode from './ResinCode.astro';
+const pipes = [
+  { cls: 'pipe-hdpe', name: 'HDPE water pipe', code: 2, abbr: 'HDPE' },
+  { cls: 'pipe-pvc', name: 'UPVC water pipe', code: 3, abbr: 'PVC' },
+  { cls: 'pipe-ppr', name: 'PP-R water pipe', code: 5, abbr: 'PP' },
+];
+---
+<ul class="grid gap-4">
+  {
+    pipes.map((p, i) => (
+      <li class="flex items-center gap-4">
+        <span class="cavity grid h-[4.25rem] w-[3.75rem] shrink-0 place-items-center text-ink/80">
+          <ResinCode code={p.code} abbr={p.abbr} class="h-11 w-11" />
+        </span>
+        <div class="min-w-0 flex-1">
+          <span class={`pipe ${p.cls} h-7 sm:h-8`} style={`width:${100 - i * 9}%`} />
+          <p class="mt-1.5 font-display text-sm font-semibold text-muted">{p.name}</p>
+        </div>
+      </li>
+    ))
+  }
+</ul>

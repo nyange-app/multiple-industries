@@ -1,0 +1,116 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import DateWheel from '../components/DateWheel.astro';
+import Icon from '../components/Icon.astro';
+import ContactCta from '../components/ContactCta.astro';
+import certs from '../assets/certifications.png';
+import { INTRO, MISSION, VISION, QUALITY_POLICY } from '../config';
+const crumbs = [{ name: 'About us', href: '/about/' }];
+const history = [
+  {
+    year: '1991',
+    title: 'Manufacturing and trading begins',
+    text: 'Multiple Industries starts manufacturing and trading domestic and industrial building materials and domestic plasticware in Uganda.',
+  },
+  {
+    year: '2013',
+    title: 'Automotive division',
+    text: 'We add automotive spare parts: Fras-le brake lining and pads, Hanksugi truck tyres and Hengst fuel and air filters.',
+  },
+  {
+    year: '2019',
+    title: 'Inland Freight Services',
+    text: 'Our transport and logistics business starts serving customers across East Africa.',
+  },
+];
+const makes = [
+  ['Pipes', 'UPVC, HDPE and PP-R water pipes, from plastic pipes to concrete products.'],
+  ['Plumbing', 'Indoor and outdoor plumbing and rainwater gutters.'],
+  ['Structure', 'Light Gauge Steel Frame roof trusses and roofing solutions.'],
+  ['Interiors', 'Kitchen and bathroom solutions.'],
+  ['Plasticware', 'Jerry cans, basins, buckets, cups, mugs, plates, wrapped drinking straws, tiffin boxes and trays, made from food-grade raw materials.'],
+  ['Automotive & transport', 'Selected spare parts and transport services.'],
+];
+---
+<Layout
+  title="About us"
+  description="Since 1991 Multiple Industries has led manufacturing and trading of building materials, plasticware, automotive spare parts and transport services in Uganda. ISO 9001:2015 certified."
+  breadcrumbs={crumbs}
+>
+  <Breadcrumbs items={crumbs} />
+  <section class="wrap mt-2" aria-labelledby="a-title">
+    <div class="panel pellets ejector p-6 pt-9 sm:p-10 lg:p-12">
+      <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div>
+          <p class="eyebrow">About Multiple Industries</p>
+          <h1 id="a-title" class="deboss mt-3 text-[2.4rem] leading-[1.02] sm:text-6xl">A one stop supplier, since 1991</h1>
+          <p class="mt-5 max-w-2xl text-lg text-muted">{INTRO}</p>
+        </div>
+        <DateWheel class="h-36 w-36 lg:h-44 lg:w-44" />
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap mt-16" aria-labelledby="h-title">
+    <h2 id="h-title" class="text-3xl sm:text-4xl">Our history</h2>
+    <ol class="mt-6 grid gap-4 md:grid-cols-3">
+      {
+        history.map((h) => (
+          <li class="panel p-6">
+            <span class="cavity inline-grid h-14 place-items-center px-4 font-display text-3xl font-extrabold text-ppr-deep">{h.year}</span>
+            <h3 class="mt-4 text-xl">{h.title}</h3>
+            <p class="mt-2 text-muted">{h.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="wrap mt-16" aria-labelledby="m-title">
+    <h2 id="m-title" class="text-3xl sm:text-4xl">What we make and supply</h2>
+    <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        makes.map(([h, p]) => (
+          <li class="cavity p-5">
+            <h3 class="text-lg">{h}</h3>
+            <p class="mt-1 text-muted">{p}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="wrap mt-16 grid gap-4 md:grid-cols-2" aria-label="Mission and vision">
+    <article class="panel p-6 sm:p-8">
+      <p class="eyebrow">Mission</p>
+      <h2 class="mt-2 text-2xl sm:text-3xl">Our mission</h2>
+      <p class="mt-3 text-muted">{MISSION}</p>
+    </article>
+    <article class="panel p-6 sm:p-8">
+      <p class="eyebrow">Vision</p>
+      <h2 class="mt-2 text-2xl sm:text-3xl">Our vision</h2>
+      <p class="mt-3 text-muted">{VISION}</p>
+    </article>
+  </section>
+
+  <section id="quality" class="wrap mt-16" aria-labelledby="q-title">
+    <div class="panel grid gap-8 p-6 sm:p-10 lg:grid-cols-[1.3fr_1fr] lg:items-center">
+      <div>
+        <p class="eyebrow">Quality policy</p>
+        <h2 id="q-title" class="mt-2 text-3xl sm:text-4xl">ISO 9001:2015 and UNBS</h2>
+        <p class="mt-4 text-muted">{QUALITY_POLICY}</p>
+        <p class="mt-4 flex items-center gap-2 font-semibold">
+          <Icon name="shield" class="h-5 w-5 text-ppr-deep" /> Our products are certified by the Uganda National Bureau of Standards (UNBS).
+        </p>
+        <!-- TODO: link Certificates, CSR Activities and Achievements pages once content is supplied. -->
+      </div>
+      <div class="rounded-[1.1rem] bg-white p-5 shadow-[var(--shadow-cavity)]">
+        <Image src={certs} alt="UNBS Q-mark and ISO 9001:2015 certified company badges" width={520} class="mx-auto h-auto w-full max-w-sm" />
+      </div>
+    </div>
+  </section>
+
+  <ContactCta />
+</Layout>
