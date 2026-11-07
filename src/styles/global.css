@@ -1,12 +1,101 @@
-@import '@fontsource-variable/nunito';
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/inter';
 
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-/* TODO: brand tokens. */
+/* Editorial Catalogue design tokens */
 @theme {
-  --color-brand: #eb1700;
-  --color-ink: #191919;
+  --color-paper: #f6f1e7;
+  --color-paper-deep: #ece4d3;
+  --color-ink: #1b1814;
+  --color-ink-soft: #5a5148;
+  --color-clay: #a63f22;
+  --color-clay-dark: #8a3219;
+  --color-rule: #cfc4ae;
+  --color-ink-rule: #3a342c;
 
-  --font-sans: 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --breakpoint-xs: 30rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-variation-settings: 'opsz' 144, 'SOFT' 30;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-clay);
+    outline-offset: 3px;
+  }
+  .on-ink :focus-visible { outline-color: #f3c9b8; }
+  ::selection { background: var(--color-clay); color: var(--color-paper); }
+}
+
+@layer components {
+  .wrap { margin-inline: auto; width: 100%; max-width: 76rem; padding-inline: 1rem; }
+  @media (min-width: 48rem) { .wrap { padding-inline: 2rem; } }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-clay);
+  }
+  .on-ink .eyebrow { color: #f0b9a2; }
+
+  .numeral {
+    font-family: var(--font-serif);
+    font-variation-settings: 'opsz' 144;
+    font-style: italic;
+    color: var(--color-clay);
+    font-feature-settings: 'lnum';
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+    min-height: 3rem; padding: .7rem 1.4rem;
+    font-size: .875rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    border: 1px solid var(--color-ink); color: var(--color-ink);
+    transition: background-color .2s, color .2s;
+  }
+  .btn:hover { background: var(--color-ink); color: var(--color-paper); }
+  .btn-clay { background: var(--color-clay); border-color: var(--color-clay); color: #fff; }
+  .btn-clay:hover { background: var(--color-clay-dark); border-color: var(--color-clay-dark); color: #fff; }
+
+  .link-u { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: var(--color-clay); }
+  .link-u:hover { text-decoration-thickness: 2px; }
+
+  /* Spec-sheet index rows */
+  .index-row { border-top: 1px solid var(--color-rule); }
+  .index-row:last-child { border-bottom: 1px solid var(--color-rule); }
+  .index-link { display: grid; grid-template-columns: 2.75rem 1fr 1.5rem; gap: .25rem 1rem; align-items: baseline; padding: 1.25rem 0; min-height: 44px; }
+  .index-link .t { transition: transform .25s, color .2s; }
+  .index-link:hover .t, .index-link:focus-visible .t { color: var(--color-clay); transform: translateX(.35rem); }
+  @media (min-width: 48rem) {
+    .index-link { grid-template-columns: 5rem 1.2fr 1.4fr 2rem; padding: 1.75rem 0; }
+  }
+
+  .pipe-art circle { vector-effect: non-scaling-stroke; }
 }
