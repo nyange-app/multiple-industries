@@ -1,0 +1,23 @@
+---
+import { Image } from 'astro:assets';
+import emblem from '../assets/emblem.png';
+interface Props {
+  size?: 'sm' | 'md';
+}
+const { size = 'md' } = Astro.props;
+---
+
+<span class="inline-flex items-center gap-3">
+  <Image
+    src={emblem}
+    alt=""
+    width={size === 'md' ? 44 : 38}
+    densities={[1, 2, 3]}
+    class="h-auto shrink-0 rounded-[3px]"
+    loading="eager"
+  />
+  <span class="flex flex-col leading-none">
+    <span class="font-display text-[1.125rem] font-black tracking-[0.02em] uppercase sm:text-[1.25rem]">Multiple</span>
+    <span class="font-display text-[0.6875rem] font-bold tracking-[0.2em] uppercase opacity-90 sm:text-[0.75rem]">Industries Ltd</span>
+  </span>
+</span>

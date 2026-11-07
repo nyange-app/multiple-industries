@@ -1,8 +1,267 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
-import { SITE_DESCRIPTION, SITE_NAME } from '../config';
+import Icon from '../components/Icon.astro';
+import AisleSign from '../components/AisleSign.astro';
+import ContactSign from '../components/ContactSign.astro';
+import isoBadge from '../assets/iso-unbs.png';
+import { aisles, brands } from '../data/aisles';
+import { HEAD_OFFICE, SHOWROOM, SITE_DESCRIPTION, SITE_LEGAL_NAME, SITE_NAME, SITE_URL } from '../config';
+
+const intro =
+  'Multiple Industries has always tried to offer a one stop service with diversified products covering the entire range of building materials, full range of domestic household products, automotive spare parts and transport services in the East African Region.';
+const mission =
+  'Having a competent, experienced and motivated team, and continual interactions with our customers and other interested parties, we will manufacture and sell top quality plastic products, and supply reliable building materials, selected automotive products, irrigation systems to satisfy and exceed customer requirements and increase shareholder value while maintaining a sustainable environment.';
+const vision =
+  'To be the most preferred one stop source for quality building materials, general household items, selected automotive, irrigation and water management systems.';
+
+const milestones = [
+  { year: '1991', text: 'Founded in Kampala as a manufacturer and trader of building materials and plastics.' },
+  { year: '2013', text: 'Automotive division opens: Fras-le brakes, Hanksugi truck tyres, Hengst filters.' },
+  { year: '2019', text: 'Inland Freight Services launches transport and logistics across East Africa.' },
+];
+
+const checks = [
+  { title: 'ISO 9001:2015 certified', text: 'A Quality Management System covering how we manufacture and supply.' },
+  { title: 'UNBS certified products', text: 'Products certified by the Uganda National Bureau of Standards.' },
+  { title: 'Food-grade raw materials', text: 'Our plasticware is made from food-grade raw materials.' },
+  { title: 'One stop since 1991', text: 'Pipes, plumbing, building materials, plasticware and automotive under one roof.' },
+];
+
+const address = (o: typeof HEAD_OFFICE | typeof SHOWROOM) => ({
+  '@type': 'PostalAddress',
+  streetAddress: o.street,
+  addressLocality: o.city,
+  addressCountry: 'UG',
+});
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${SITE_URL}/#organization`,
+    name: SITE_LEGAL_NAME,
+    alternateName: SITE_NAME,
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo.png`,
+    foundingDate: '1991',
+    description: SITE_DESCRIPTION,
+    email: 'response@multipleindustries.com',
+    telephone: '+256414236021',
+    address: { ...address(HEAD_OFFICE), postOfficeBoxNumber: '20166' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HomeAndConstructionBusiness',
+    '@id': `${SITE_URL}/#showroom`,
+    name: `${SITE_LEGAL_NAME} Sales Office & Showroom`,
+    url: SITE_URL,
+    image: `${SITE_URL}/og.png`,
+    parentOrganization: { '@id': `${SITE_URL}/#organization` },
+    telephone: '+256752914900',
+    email: 'showroomhq@multipleindustries.com',
+    address: address(SHOWROOM),
+    areaServed: 'East Africa',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    '@id': `${SITE_URL}/#headoffice`,
+    name: `${SITE_LEGAL_NAME} Head Office & Factory`,
+    url: SITE_URL,
+    image: `${SITE_URL}/og.png`,
+    parentOrganization: { '@id': `${SITE_URL}/#organization` },
+    telephone: '+256414236021',
+    email: 'response@multipleindustries.com',
+    address: { ...address(HEAD_OFFICE), postOfficeBoxNumber: '20166' },
+  },
+];
 ---
 
-<Layout title={SITE_NAME} description={SITE_DESCRIPTION}>
-  <h1 class="p-8 text-3xl font-bold">{SITE_NAME}</h1>
+<Layout
+  title="Multiple Industries | Pipes, Building Materials & Plasticware, Kampala"
+  description={SITE_DESCRIPTION}
+  jsonLd={jsonLd}
+>
+  <!-- HERO: headline + overhead showroom directory -->
+  <section class="relative overflow-hidden" aria-labelledby="hero-heading">
+    <div class="wrap grid gap-10 pt-10 pb-14 md:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pb-20">
+      <div class="lg:pt-10">
+        <p class="eyebrow">Since 1991 · Kampala, Uganda</p>
+        <h1 id="hero-heading" class="mt-4 text-[2.5rem] leading-[1.02] font-black sm:text-6xl lg:text-[4.25rem]">
+          Quality building materials you can <span class="relative whitespace-nowrap">trust<span aria-hidden="true" class="absolute inset-x-0 -bottom-1 h-2.5 bg-signal -z-10"></span></span> since 1991
+        </h1>
+        <p class="lede mt-5 !text-base sm:!text-lg">{intro}</p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="#aisles" class="btn btn-plum">Find your aisle <Icon name="arrowRight" class="go size-5" /></a>
+          <a href={`tel:${SHOWROOM.phones[0].tel}`} class="btn btn-signal"><Icon name="phone" class="size-5" />Call {SHOWROOM.phones[0].display}</a>
+        </div>
+        <p class="mt-8 inline-flex items-center gap-3 rounded-full border border-line bg-white py-2 pr-4 pl-3 text-sm">
+          <span class="here-dot" aria-hidden="true"></span>
+          <span><b class="font-display font-extrabold">You are here:</b> 8th Street Industrial Area, Kampala</span>
+        </p>
+      </div>
+
+      <div class="hang mx-auto w-full max-w-lg lg:max-w-none" style="--drop: 3rem">
+        <div class="hang__swing">
+          <nav class="directory on-dark" aria-label="Showroom directory">
+            <div class="flex items-center justify-between gap-3 px-4 pt-4 pb-3">
+              <p class="eyebrow">Showroom directory</p>
+              <span class="font-display text-xs font-bold tracking-[0.14em] text-white/70 uppercase">6 aisles</span>
+            </div>
+            <ul>
+              {
+                aisles.map((a) => (
+                  <li>
+                    <a href={`/products/${a.slug}/`} class="directory__row">
+                      <span class="num">{a.number}</span>
+                      <Icon name={a.icon} class="size-6 text-white/80" />
+                      <span>{a.name}</span>
+                      <Icon name="arrowRight" class="go size-5" />
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+            <a href="/contact/" class="directory__row !grid-cols-[auto_1fr_auto] bg-signal !text-ink hover:!bg-[#ffd45c]">
+              <Icon name="info" class="size-6" />
+              <span>Trade counter &amp; enquiries</span>
+              <Icon name="arrowRight" class="size-5" />
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust strip -->
+    <div class="border-y border-line bg-white">
+      <ul class="wrap grid grid-cols-2 gap-x-4 gap-y-3 py-4 text-sm sm:text-base lg:grid-cols-4">
+        <li class="flex items-center gap-2.5"><Icon name="shield" class="size-6 shrink-0 text-plum" /><b class="font-display">ISO 9001:2015</b></li>
+        <li class="flex items-center gap-2.5"><Icon name="check" class="size-6 shrink-0 text-go" /><b class="font-display">UNBS certified</b></li>
+        <li class="flex items-center gap-2.5"><Icon name="building" class="size-6 shrink-0 text-plum" /><b class="font-display">Kampala factory</b></li>
+        <li class="flex items-center gap-2.5"><Icon name="truck" class="size-6 shrink-0 text-plum" /><b class="font-display">East Africa transport</b></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ABOUT TEASER: information desk -->
+  <section class="bg-white" aria-labelledby="about-heading">
+    <div class="wrap grid gap-10 py-16 md:py-20 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+      <div>
+        <p class="eyebrow">Information desk</p>
+        <h2 id="about-heading" class="h-section mt-3">One stop for building, home and fleet since 1991</h2>
+        <p class="mt-5 text-lg">
+          Since 1991 we have led the manufacturing and trading of domestic and industrial building materials, domestic plasticware,
+          automotive spare parts and transport services in Uganda.
+        </p>
+        <p class="mt-4 text-muted">
+          From plastic pipes to concrete products, indoor and outdoor plumbing, rainwater gutters, Light Gauge Steel Frame roof trusses,
+          kitchen and bathroom solutions and roofing.
+        </p>
+        <a href="/about/" class="btn btn-outline mt-7">About Multiple Industries <Icon name="arrowRight" class="go size-5" /></a>
+      </div>
+      <ol class="grid gap-5 sm:grid-cols-3 lg:grid-cols-1 lg:gap-4" aria-label="Milestones">
+        {
+          milestones.map((m) => (
+            <li class="flex flex-col gap-3 rounded-lg border-2 border-plum bg-paper p-4 lg:flex-row lg:items-center lg:gap-5">
+              <span class="font-display inline-block self-start rounded bg-plum px-3 pt-1.5 pb-1 text-2xl font-black text-signal tabular-nums">{m.year}</span>
+              <p>{m.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- AISLES -->
+  <section id="aisles" class="relative" aria-labelledby="aisles-heading">
+    <div class="floorline" aria-hidden="true"></div>
+    <div class="wrap py-16 md:py-20">
+      <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="eyebrow">Product aisles</p>
+          <h2 id="aisles-heading" class="h-section mt-3">Six aisles. One trip.</h2>
+        </div>
+        <p class="lede md:max-w-sm md:text-right">Pick an aisle to see what we stock, then call or visit the trade counter.</p>
+      </div>
+      <ul class="mt-6 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        {aisles.map((a) => <li><AisleSign aisle={a} /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- QUALITY CHECKPOINT -->
+  <section class="on-dark bg-plum text-white" aria-labelledby="quality-heading">
+    <div class="wrap grid gap-10 py-16 md:py-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
+      <div>
+        <p class="eyebrow">Quality checkpoint</p>
+        <h2 id="quality-heading" class="h-section mt-3">Checked, certified and built to last</h2>
+        <p class="lede mt-4">
+          We manufacture and supply under a Quality Management System in accordance with ISO 9001:2015, aiming to be the market
+          leader in Uganda and the East African Community.
+        </p>
+        <div class="mt-8 inline-block rounded-lg bg-white p-4 shadow-xl">
+          <Image src={isoBadge} alt="UNBS Q-mark and ISO 9001:2015 Certified Company badges" width={260} class="h-auto w-[220px] sm:w-[260px]" />
+        </div>
+      </div>
+      <ul class="grid gap-4 sm:grid-cols-2">
+        {
+          checks.map((c) => (
+            <li class="rounded-lg border border-white/15 bg-plum-deep/60 p-5">
+              <span class="grid size-10 place-items-center rounded bg-go text-white">
+                <Icon name="check" class="size-6" stroke={3} />
+              </span>
+              <h3 class="mt-4 text-xl font-extrabold">{c.title}</h3>
+              <p class="mt-1.5 text-white/80">{c.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- MISSION / VISION: notice board -->
+  <section aria-labelledby="mv-heading">
+    <div class="wrap py-16 md:py-20">
+      <p class="eyebrow">Notice board</p>
+      <h2 id="mv-heading" class="h-section mt-3">Where we are heading</h2>
+      <div class="mt-4 grid gap-x-6 gap-y-2 lg:grid-cols-[1fr_1.35fr]">
+        <div class="hang" style="--drop: 2rem">
+          <div class="hang__swing h-full">
+            <article class="sign sign--signal h-full p-6 md:p-8">
+              <h3 class="eyebrow !text-ink">Our vision</h3>
+              <p class="font-display mt-4 text-2xl leading-snug font-bold md:text-[1.75rem]">{vision}</p>
+            </article>
+          </div>
+        </div>
+        <div class="hang" style="--drop: 2rem">
+          <div class="hang__swing h-full">
+            <article class="sign sign--white h-full p-6 md:p-8">
+              <h3 class="eyebrow">Our mission</h3>
+              <p class="mt-4 text-lg leading-relaxed">{mission}</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRANDS -->
+  <section class="border-t border-line bg-white" aria-labelledby="brands-heading">
+    <div class="wrap py-16 md:py-20">
+      <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="eyebrow">On the shelves</p>
+          <h2 id="brands-heading" class="h-section mt-3">Brands and partners</h2>
+        </div>
+        <p class="text-sm text-muted md:max-w-xs md:text-right">Partner logos coming soon. Ask the showroom for the full list.</p>
+      </div>
+      <!-- TODO(content): confirm brand/partner list with the client and replace text tiles with logos. -->
+      <ul class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {brands.map((b) => <li class="brand-tag">{b}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <ContactSign />
 </Layout>

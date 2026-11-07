@@ -1,0 +1,155 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactSign from '../components/ContactSign.astro';
+import isoBadge from '../assets/iso-unbs.png';
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'About us', href: '/about/' },
+];
+const milestones = [
+  {
+    year: '1991',
+    title: 'Founded in Kampala',
+    text: 'Manufacturing and trading of domestic and industrial building materials, domestic plasticware, automotive spare parts and transport services in Uganda.',
+  },
+  {
+    year: '2013',
+    title: 'Automotive division',
+    text: 'Fras-le brake lining and pads, Hanksugi truck tyres, and Hengst fuel and air filters.',
+  },
+  {
+    year: '2019',
+    title: 'Inland Freight Services',
+    text: 'Transport and logistics services across East Africa.',
+  },
+];
+const range = [
+  'Plastic pipes: UPVC, HDPE and PP-R',
+  'Concrete products',
+  'Indoor and outdoor plumbing',
+  'Rainwater gutters',
+  'Light Gauge Steel Frame roof trusses',
+  'Kitchen and bathroom solutions',
+  'Roofing solutions',
+  'Irrigation systems',
+];
+const plasticware = ['Jerry cans', 'Basins', 'Buckets', 'Cups', 'Mugs', 'Plates', 'Wrapped drinking straws', 'Tiffin boxes', 'Trays'];
+---
+
+<Layout
+  title="About Us | Multiple Industries Ltd, Kampala since 1991"
+  description="Since 1991 Multiple Industries has manufactured plastic pipes and household plastics and supplied building materials, automotive parts and transport in Uganda. ISO 9001:2015 certified."
+  breadcrumbs={crumbs}
+>
+  <section class="wrap pt-4 pb-14 md:pb-20" aria-labelledby="about-h1">
+    <Breadcrumbs items={crumbs} />
+    <div class="mt-6 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-end lg:gap-16">
+      <div>
+        <p class="eyebrow">Information desk</p>
+        <h1 id="about-h1" class="mt-3 text-[2.5rem] leading-[1.03] font-black sm:text-6xl">About Multiple Industries</h1>
+        <p class="lede mt-5">
+          Since 1991, Multiple Industries has been leading the manufacturing and trading of domestic and industrial building materials,
+          domestic plasticware, automotive spare parts and transport services in Uganda.
+        </p>
+      </div>
+      <div class="hang" style="--drop: 2.5rem">
+        <div class="hang__swing">
+          <div class="sign sign--signal flex items-center gap-5 p-6">
+            <span class="pictogram !size-16 !border-ink"><Icon name="info" class="size-9" /></span>
+            <p class="font-display text-xl leading-snug font-extrabold sm:text-2xl">
+              ISO 9001:2015 certified. Products certified by the Uganda National Bureau of Standards.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-line bg-white" aria-labelledby="timeline-heading">
+    <div class="wrap py-14 md:py-20">
+      <p class="eyebrow">Our journey</p>
+      <h2 id="timeline-heading" class="h-section mt-3">Three milestones</h2>
+      <ol class="mt-6 grid gap-x-6 gap-y-4 md:grid-cols-3">
+        {
+          milestones.map((m) => (
+            <li class="hang" style="--drop: 2rem">
+              <div class="hang__swing h-full">
+                <div class="sign h-full p-6">
+                  <span class="aisle-no !min-w-24"><small>Year</small><b>{m.year}</b></span>
+                  <h3 class="mt-4 text-2xl font-extrabold">{m.title}</h3>
+                  <p class="mt-2 text-white/85">{m.text}</p>
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section aria-labelledby="range-heading">
+    <div class="wrap grid gap-10 py-14 md:py-20 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <p class="eyebrow">What we make and supply</p>
+        <h2 id="range-heading" class="h-section mt-3">From plastic pipes to concrete products</h2>
+        <ul class="mt-6 grid gap-2 sm:grid-cols-2">
+          {
+            range.map((r) => (
+              <li class="flex items-start gap-2.5"><Icon name="check" class="mt-0.5 size-5 shrink-0 text-go" stroke={3} />{r}</li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow">Household plasticware</p>
+        <h2 class="h-section mt-3">Made from food-grade raw materials</h2>
+        <ul class="mt-6 flex flex-wrap gap-2">
+          {plasticware.map((p) => <li class="brand-tag !min-h-0 !text-base">{p}</li>)}
+        </ul>
+        <a href="/products/domestic-plasticware/" class="btn btn-outline mt-7">Go to aisle 05 <Icon name="arrowRight" class="go size-5" /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="on-dark bg-plum text-white" aria-labelledby="policy-heading">
+    <div class="wrap grid gap-8 py-14 md:py-20 lg:grid-cols-3">
+      <div class="lg:col-span-3">
+        <p class="eyebrow">Notice board</p>
+        <h2 id="policy-heading" class="h-section mt-3">Mission, vision and quality policy</h2>
+      </div>
+      <article class="rounded-lg border border-white/15 bg-plum-deep/60 p-6">
+        <h3 class="eyebrow">Mission</h3>
+        <p class="mt-3 text-white/90">
+          Having a competent, experienced and motivated team, and continual interactions with our customers and other interested parties,
+          we will manufacture and sell top quality plastic products, and supply reliable building materials, selected automotive products,
+          irrigation systems to satisfy and exceed customer requirements and increase shareholder value while maintaining a sustainable environment.
+        </p>
+      </article>
+      <article class="rounded-lg bg-signal p-6 text-ink">
+        <h3 class="eyebrow !text-ink">Vision</h3>
+        <p class="font-display mt-3 text-xl leading-snug font-bold">
+          To be the most preferred one stop source for quality building materials, general household items, selected automotive,
+          irrigation and water management systems.
+        </p>
+      </article>
+      <article class="rounded-lg border border-white/15 bg-plum-deep/60 p-6">
+        <h3 class="eyebrow">Quality policy</h3>
+        <p class="mt-3 text-white/90">
+          To manufacture and supply quality UPVC, HDPE and PP-R pipes in all sizes, drinking straws, domestic plastics and quality irrigation
+          systems and building materials as a single stop for building and construction, and to be the market leader in Uganda and the
+          East African Community through a Quality Management System in accordance with ISO 9001:2015.
+        </p>
+        <div class="mt-5 inline-block rounded bg-white p-3">
+          <Image src={isoBadge} alt="UNBS Q-mark and ISO 9001:2015 Certified Company badges" width={200} class="h-auto w-[180px]" />
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- TODO(content): Certificates, CSR Activities and Achievements pages from the old site. -->
+  <ContactSign />
+</Layout>

@@ -1,0 +1,47 @@
+---
+/** "Visit us" green exit-style call to action with both offices. */
+import Icon from './Icon.astro';
+import { HEAD_OFFICE, SHOWROOM } from '../config';
+interface Props {
+  heading?: string;
+}
+const { heading = 'Visit the showroom on 8th Street' } = Astro.props;
+const offices = [SHOWROOM, HEAD_OFFICE];
+const maps = 'https://www.google.com/maps/search/?api=1&query=Multiple+Industries+8th+Street+Industrial+Area+Kampala';
+---
+
+<section class="on-dark bg-go text-white" aria-labelledby="visit-heading">
+  <div class="wrap grid gap-10 py-14 md:py-20 lg:grid-cols-[1fr_1.15fr] lg:items-center">
+    <div>
+      <p class="eyebrow !text-white before:!bg-white">Way to the trade counter</p>
+      <h2 id="visit-heading" class="h-section mt-3">{heading}</h2>
+      <p class="mt-4 max-w-md text-lg text-white/90">
+        See the range, check sizes and get a quote from our team. Call ahead or come straight to the counter.
+      </p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a href={`tel:${SHOWROOM.phones[0].tel}`} class="btn btn-go"><Icon name="phone" class="size-5" />Call {SHOWROOM.phones[0].display}</a>
+        <a href={maps} class="btn btn-outline" rel="noopener">Get directions <Icon name="arrowUpRight" class="size-5" /></a>
+      </div>
+    </div>
+    <ul class="grid gap-4 sm:grid-cols-2">
+      {
+        offices.map((o) => (
+          <li class="rounded-lg border-2 border-white/35 bg-go-deep p-5">
+            <p class="flex items-center gap-3">
+              <span class="pictogram !size-10 bg-white text-go-deep !border-white"><Icon name={o === SHOWROOM ? 'store' : 'building'} class="size-5" /></span>
+              <span class="font-display text-lg font-extrabold leading-tight">{o.label}</span>
+            </p>
+            <address class="mt-3 not-italic text-white/90">{o.street}, {o.city}</address>
+            <a href={`tel:${o.phones[0].tel}`} class="font-display mt-3 inline-flex min-h-11 items-center gap-2 text-lg font-bold underline decoration-2 underline-offset-4">
+              <Icon name="phone" class="size-5" />{o.phones[0].display}
+            </a>
+            <br />
+            <a href={`mailto:${o.emails[0]}`} class="inline-flex min-h-11 items-center gap-2 underline underline-offset-4">
+              <Icon name="mail" class="size-5 shrink-0" /><span set:html={o.emails[0].replace('@', '<wbr>@')} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

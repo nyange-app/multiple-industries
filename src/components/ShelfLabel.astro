@@ -1,0 +1,24 @@
+---
+/** Shelf-edge label card for a product line. */
+interface Props {
+  bay: string;
+  name: string;
+  note: string;
+  href?: string;
+}
+const { bay, name, note, href = '/contact/' } = Astro.props;
+---
+
+<li class="shelf h-full">
+  <article class="shelf-label">
+    <div class="bay" aria-hidden="true"><small>Bay</small>{bay}</div>
+    <h3 class="text-lg font-extrabold">{name}</h3>
+    <p class="mt-1 text-[0.98rem] text-muted">{note}</p>
+    <div class="mt-3 flex items-end justify-between gap-3 border-t border-dashed border-line pt-2.5">
+      <a href={href} class="font-display inline-flex min-h-11 items-center gap-1.5 font-bold text-plum underline decoration-signal decoration-[3px] underline-offset-4 hover:decoration-plum">
+        Ask about stock<span class="sr-only">: {name}</span>
+      </a>
+      <span class="barcode shrink-0" aria-hidden="true"></span>
+    </div>
+  </article>
+</li>

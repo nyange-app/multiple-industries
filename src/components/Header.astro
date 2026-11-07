@@ -1,0 +1,115 @@
+---
+import Icon from './Icon.astro';
+import Wordmark from './Wordmark.astro';
+import { aisles } from '../data/aisles';
+import { MAIN_TEL, SALES_EMAIL, SHOWROOM } from '../config';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const links = [
+  { href: '/products/', label: 'Products' },
+  { href: '/about/', label: 'About us' },
+  { href: '/contact/', label: 'Contact' },
+];
+const isActive = (href: string) => {
+  const h = href.replace(/\/$/, '');
+  return path === h || path.startsWith(h + '/');
+};
+const showroomTel = SHOWROOM.phones[0];
+---
+
+<header class="on-dark relative z-40 bg-plum text-white">
+  <div class="hidden border-b border-white/10 bg-plum-deep text-sm md:block">
+    <div class="wrap flex h-10 items-center justify-between gap-6">
+      <p class="flex items-center gap-2 text-white/85">
+        <Icon name="pin" class="size-4 text-signal" />
+        8th Street Industrial Area, Kampala, Uganda
+      </p>
+      <p class="flex items-center gap-5">
+        <a href={`tel:${MAIN_TEL.tel}`} class="inline-flex items-center gap-1.5 text-white/90 hover:text-signal">
+          <Icon name="phone" class="size-4" />{MAIN_TEL.display}
+        </a>
+        <a href={`mailto:${SALES_EMAIL}`} class="inline-flex items-center gap-1.5 text-white/90 hover:text-signal">
+          <Icon name="mail" class="size-4" />{SALES_EMAIL}
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <div class="wrap flex h-[4.5rem] items-center justify-between gap-3">
+    <a href="/" class="-m-1 rounded p-1 text-white no-underline" aria-label="Multiple Industries Ltd, home">
+      <Wordmark />
+    </a>
+
+    <nav aria-label="Main" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {
+          links.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                aria-current={isActive(l.href) ? 'page' : undefined}
+                class="font-display inline-flex min-h-12 items-center rounded px-4 font-bold text-white/90 hover:text-white aria-[current=page]:text-signal aria-[current=page]:underline aria-[current=page]:decoration-2 aria-[current=page]:underline-offset-8"
+              >
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+        <li class="ml-3">
+          <a href={`tel:${showroomTel.tel}`} class="btn btn-signal">
+            <Icon name="phone" class="size-5" />
+            {showroomTel.display}
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2 lg:hidden">
+      <a href={`tel:${showroomTel.tel}`} class="btn btn-signal !px-3.5" aria-label={`Call the showroom on ${showroomTel.display}`}>
+        <Icon name="phone" class="size-5" />
+        <span class="hidden min-[400px]:inline">Call</span>
+      </a>
+      <details class="nav-menu">
+        <summary class="btn btn-outline !px-3.5" aria-label="Menu">
+          <Icon name="menu" class="icon-open size-6" />
+          <Icon name="close" class="icon-close size-6" />
+          <span class="hidden min-[400px]:inline">Menu</span>
+        </summary>
+        <div class="absolute inset-x-0 top-full border-t border-white/10 bg-plum-deep shadow-2xl">
+          <nav aria-label="Mobile" class="wrap py-5">
+            <p class="eyebrow mb-2">Showroom directory</p>
+            <ul class="mb-5">
+              {
+                aisles.map((a) => (
+                  <li>
+                    <a href={`/products/${a.slug}/`} class="directory__row !px-0 first:!border-t-0">
+                      <span class="num">{a.number}</span>
+                      <Icon name={a.icon} class="size-6 text-white/80" />
+                      <span>{a.name}</span>
+                      <Icon name="arrowRight" class="go size-5" />
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+            <ul class="grid grid-cols-3 gap-2">
+              {
+                links.map((l) => (
+                  <li>
+                    <a
+                      href={l.href}
+                      aria-current={isActive(l.href) ? 'page' : undefined}
+                      class="btn btn-outline w-full !px-2 text-sm aria-[current=page]:!border-signal aria-[current=page]:!text-signal"
+                    >
+                      {l.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,76 @@
+---
+import Icon from './Icon.astro';
+import Wordmark from './Wordmark.astro';
+import { aisles } from '../data/aisles';
+import { HEAD_OFFICE, SHOWROOM, SITE_LEGAL_NAME, SITE_TAGLINE } from '../config';
+const offices = [HEAD_OFFICE, SHOWROOM];
+---
+
+<footer class="on-dark bg-plum-deep text-white">
+  <div class="floorline" aria-hidden="true"></div>
+  <div class="wrap grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-[1fr_0.9fr_1.9fr]">
+    <div>
+      <a href="/" class="inline-block rounded text-white" aria-label="Multiple Industries Ltd, home"><Wordmark /></a>
+      <p class="mt-4 max-w-xs text-white/80">{SITE_TAGLINE}.</p>
+      <p class="mt-4 inline-flex items-center gap-2 rounded border border-white/20 px-3 py-2 text-sm text-white/85">
+        <Icon name="shield" class="size-5 text-signal" /> ISO 9001:2015 certified · UNBS certified products
+      </p>
+    </div>
+
+    <nav aria-label="Product aisles">
+      <h2 class="eyebrow mb-3">Aisles</h2>
+      <ul class="space-y-0.5">
+        {
+          aisles.map((a) => (
+            <li>
+              <a href={`/products/${a.slug}/`} class="group inline-flex min-h-11 items-center gap-3 text-white/90 hover:text-white">
+                <span class="font-display w-7 font-black text-signal tabular-nums">{a.number}</span>
+                <span class="group-hover:underline">{a.name}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="grid gap-8 sm:grid-cols-2">
+      {
+        offices.map((o) => (
+          <div>
+            <h2 class="eyebrow mb-3">{o.label}</h2>
+            <address class="not-italic text-white/85">
+              {o.street}
+              <br />
+              {'po' in o && o.po ? (<>{o.po}<br /></>) : null}
+              {o.city}, {o.country}
+            </address>
+            <ul class="mt-3 space-y-1">
+              {o.phones.map((p) => (
+                <li>
+                  <a href={`tel:${p.tel}`} class="inline-flex min-h-11 items-center gap-2 font-bold text-white hover:text-signal">
+                    <Icon name="phone" class="size-4 text-signal" />
+                    {p.display}
+                  </a>
+                </li>
+              ))}
+              {o.emails.map((e) => (
+                <li>
+                  <a href={`mailto:${e}`} class="inline-flex min-h-11 items-center gap-2 text-white/90 hover:text-signal">
+                    <Icon name="mail" class="size-4 shrink-0 text-signal" />
+                    <span set:html={e.replace('@', '<wbr>@')} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <div class="border-t border-white/10">
+    <div class="wrap flex flex-col gap-1 py-4 text-sm sm:items-center text-white/70 sm:flex-row sm:justify-between">
+      <p>© 2026 {SITE_LEGAL_NAME}. All rights reserved.</p>
+      <p class="flex gap-4"><a href="/about/" class="inline-flex min-h-11 items-center hover:text-white">About</a><a href="/contact/" class="inline-flex min-h-11 items-center hover:text-white">Contact</a><a href="/products/" class="inline-flex min-h-11 items-center hover:text-white">Products</a></p>
+    </div>
+  </div>
+</footer>

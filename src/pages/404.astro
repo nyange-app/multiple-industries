@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { aisles } from '../data/aisles';
+---
+
+<Layout title="Page not found | Multiple Industries" description="This page could not be found." noindex>
+  <section class="wrap grid gap-10 py-14 md:py-20 lg:grid-cols-2 lg:items-center" aria-labelledby="nf-heading">
+    <div class="hang max-w-md" style="--drop: 2.75rem">
+      <div class="hang__swing">
+        <div class="sign sign--signal p-7">
+          <span class="aisle-no"><small>Aisle</small><b>404</b></span>
+          <p class="font-display mt-5 text-2xl font-extrabold">This shelf is empty.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="eyebrow">Wrong turn</p>
+      <h1 id="nf-heading" class="mt-3 text-4xl font-black sm:text-5xl">We could not find that page</h1>
+      <p class="lede mt-4">It may have moved when we rebuilt the site. Pick an aisle or head back to the entrance.</p>
+      <a href="/" class="btn btn-plum mt-6"><Icon name="arrowLeft" class="size-5" />Back to the entrance</a>
+      <ul class="mt-8 grid gap-2 sm:grid-cols-2">
+        {
+          aisles.map((a) => (
+            <li>
+              <a href={`/products/${a.slug}/`} class="inline-flex min-h-11 items-center gap-3 font-bold text-plum hover:underline">
+                <span class="font-display rounded bg-plum px-1.5 pt-0.5 text-sm text-signal">{a.number}</span>{a.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Layout>

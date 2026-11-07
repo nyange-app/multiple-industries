@@ -1,0 +1,136 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ShelfLabel from '../../components/ShelfLabel.astro';
+import AisleSign from '../../components/AisleSign.astro';
+import ContactSign from '../../components/ContactSign.astro';
+import { aisles, type Aisle } from '../../data/aisles';
+import { SHOWROOM, SALES_EMAIL } from '../../config';
+
+export function getStaticPaths() {
+  return aisles.map((aisle, i) => ({
+    params: { slug: aisle.slug },
+    props: {
+      aisle,
+      prev: aisles[(i - 1 + aisles.length) % aisles.length],
+      next: aisles[(i + 1) % aisles.length],
+    },
+  }));
+}
+
+interface Props {
+  aisle: Aisle;
+  prev: Aisle;
+  next: Aisle;
+}
+const { aisle, prev, next } = Astro.props;
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Products', href: '/products/' },
+  { name: aisle.name, href: `/products/${aisle.slug}/` },
+];
+const bays = 'ABCDEFGHIJ';
+const others = aisles.filter((a) => a.slug !== aisle.slug).slice(0, 3);
+const mailSubject = encodeURIComponent(`Enquiry: ${aisle.name}`);
+---
+
+<Layout
+  title={`${aisle.name} | Aisle ${aisle.number} | Multiple Industries Kampala`}
+  description={`${aisle.short} ${aisle.audience} Multiple Industries, 8th Street Industrial Area, Kampala.`}
+  breadcrumbs={crumbs}
+>
+  <!-- Sticky aisle marker -->
+  <div class="sticky top-0 z-30 border-b-2 border-ink bg-signal">
+    <div class="wrap flex h-14 items-center justify-between gap-2">
+      <a href={`/products/${prev.slug}/`} class="inline-grid size-11 place-items-center rounded hover:bg-black/5" aria-label={`Previous aisle: ${prev.name}`}>
+        <Icon name="arrowLeft" class="size-6" />
+      </a>
+      <p class="font-display flex min-w-0 items-center gap-2.5 font-extrabold">
+        <span class="rounded bg-plum px-2 pt-1 pb-0.5 text-sm text-signal tabular-nums">AISLE {aisle.number}</span>
+        <span class="truncate">{aisle.name}</span>
+      </p>
+      <a href={`/products/${next.slug}/`} class="inline-grid size-11 place-items-center rounded hover:bg-black/5" aria-label={`Next aisle: ${next.name}`}>
+        <Icon name="arrowRight" class="size-6" />
+      </a>
+    </div>
+  </div>
+
+  <section class="relative" aria-labelledby="aisle-heading">
+    <div class="wrap pt-4 pb-12 md:pb-16">
+      <Breadcrumbs items={crumbs} />
+      <div class="mt-4 grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-start lg:gap-14">
+        <div class="hang max-w-xl" style="--drop: 2.75rem">
+          <div class="hang__swing">
+            <div class="sign p-6 md:p-8">
+              <div class="flex items-center justify-between gap-4">
+                <span class="aisle-no !min-w-20 !py-2"><small>Aisle</small><b class="!text-5xl">{aisle.number}</b></span>
+                <span class="pictogram !size-16 text-white"><Icon name={aisle.icon} class="size-9" stroke={1.75} /></span>
+              </div>
+              <h1 id="aisle-heading" class="mt-6 text-4xl font-black sm:text-5xl">{aisle.name}</h1>
+              <p class="font-display mt-3 inline-flex items-center gap-2 font-bold text-signal">
+                <Icon name="arrowUp" class="size-5" />{aisle.audience}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="lg:pt-12">
+          <p class="eyebrow">About this aisle</p>
+          <p class="mt-3 text-xl leading-relaxed">{aisle.intro}</p>
+          {
+            aisle.brands && (
+              <p class="mt-5 flex flex-wrap items-center gap-2">
+                <span class="text-sm font-bold text-muted">Brands:</span>
+                {aisle.brands.map((b) => (
+                  <span class="font-display rounded border-2 border-plum bg-white px-2.5 pt-1 pb-0.5 text-sm font-extrabold text-plum">{b}</span>
+                ))}
+              </p>
+            )
+          }
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href={`tel:${SHOWROOM.phones[0].tel}`} class="btn btn-plum"><Icon name="phone" class="size-5" />Call {SHOWROOM.phones[0].display}</a>
+            <a href={`mailto:${SALES_EMAIL}?subject=${mailSubject}`} class="btn btn-outline"><Icon name="mail" class="size-5" />Email for a quote</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-line bg-white" aria-labelledby="stock-heading">
+    <div class="wrap py-14 md:py-18">
+      <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="eyebrow">On the shelves</p>
+          <h2 id="stock-heading" class="h-section mt-3">What you will find in aisle {aisle.number}</h2>
+        </div>
+        <p class="text-sm text-muted md:max-w-xs md:text-right">The range shown is a guide. Ask the showroom for current stock, sizes and prices.</p>
+      </div>
+      <!-- TODO(content): replace indicative product list with the confirmed range. -->
+      <ul class="mt-8 grid gap-x-5 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          aisle.products.map((p, i) => (
+            <ShelfLabel bay={`${aisle.number}-${bays[i]}`} name={p.name} note={p.note} href={`mailto:${SALES_EMAIL}?subject=${encodeURIComponent(`Enquiry: ${p.name}`)}`} />
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="more-heading">
+    <div class="floorline" aria-hidden="true"></div>
+    <div class="wrap py-14 md:py-18">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="eyebrow">Keep walking</p>
+          <h2 id="more-heading" class="h-section mt-3">Other aisles</h2>
+        </div>
+        <a href="/products/" class="btn btn-outline">Full directory <Icon name="arrowRight" class="go size-5" /></a>
+      </div>
+      <ul class="mt-6 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        {others.map((a) => <li><AisleSign aisle={a} /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <ContactSign heading={`Need ${aisle.name.toLowerCase()}? Come to the counter.`} />
+</Layout>
