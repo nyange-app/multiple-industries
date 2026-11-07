@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import House from '../components/House.astro';
+import { categories } from '../data/categories';
+---
+<Layout title="Page not found" description="This page is not in the house. Find Multiple Industries products by where they go." noindex>
+  <section class="bg-sky">
+    <div class="wrap grid gap-8 pb-14 pt-10 md:pt-16 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+      <div>
+        <p class="eyebrow">Error 404</p>
+        <h1 class="mt-3 max-w-[16ch] text-[2.4rem] font-extrabold sm:text-5xl">That room isn't in this house.</h1>
+        <p class="mt-4 text-lg text-muted">The page may have moved when we rebuilt the site. Try one of these instead:</p>
+        <ul class="mt-5 grid gap-2 sm:grid-cols-2">
+          {categories.map((c) => (
+            <li><a href={`/products/${c.slug}/`} class="card flex min-h-12 items-center gap-3 px-3 py-2 font-semibold hover:border-ink"><span class="badge-n !h-8 !w-8 !text-sm !border-2" aria-hidden="true">{c.n}</span>{c.name}</a></li>
+          ))}
+        </ul>
+        <a href="/" class="btn btn-leaf mt-6">Back to the home page</a>
+      </div>
+      <div class="mx-auto aspect-square w-full max-w-sm overflow-hidden rounded-[1.75rem] border-2 border-ink">
+        <House view="0 0 640 640" class="h-full" id="nf" label="" />
+      </div>
+    </div>
+  </section>
+</Layout>

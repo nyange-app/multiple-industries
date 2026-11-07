@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { CONTACT } from '../config';
+import { categories } from '../data/categories';
+
+const offices = [
+  { ...CONTACT.showroom, note: 'See the range in person and talk to the sales team.', map: 'https://www.google.com/maps/search/?api=1&query=Plot+13%2F23+8th+Street+Industrial+Area+Kampala' },
+  { ...CONTACT.headOffice, note: 'Our factory and head office.', map: 'https://www.google.com/maps/search/?api=1&query=Plot+714%2F715+8th+Street+Industrial+Area+Kampala' },
+];
+---
+<Layout
+  title="Contact: showroom and head office, 8th Street, Kampala"
+  description="Call, email or visit Multiple Industries: Sales Office & Showroom at Plot 13/23 and Head Office & Factory at Plot 714/715, 8th Street Industrial Area, Kampala."
+  crumbs={[{ name: 'Contact', path: '/contact/' }]}
+>
+  <section class="bg-sky" aria-labelledby="c-title">
+    <div class="wrap pb-12 pt-8 md:pt-14">
+      <p class="eyebrow">Contact</p>
+      <h1 id="c-title" class="mt-3 max-w-[18ch] text-[2.4rem] font-extrabold sm:text-5xl">Two doors on 8th Street.</h1>
+      <p class="mt-4 max-w-2xl text-lg text-muted">Both offices are in the Industrial Area, Kampala. Call ahead to check sizes and stock before you travel.</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href={CONTACT.hotline.href} class="btn btn-sun">Call {CONTACT.hotline.label}</a>
+        <a href="mailto:sales@multipleindustries.com" class="btn btn-ghost">sales@multipleindustries.com</a>
+      </div>
+    </div>
+    <div class="groundline bg-day" aria-hidden="true"></div>
+  </section>
+
+  <section class="wrap grid gap-5 py-14 md:grid-cols-2" aria-label="Offices">
+    {offices.map((o, i) => (
+      <article class="card overflow-hidden">
+        <div class="flex items-center gap-3 border-b-2 border-ink bg-sun-soft px-5 py-4">
+          <span class="badge-n" aria-hidden="true">{String.fromCharCode(65 + i)}</span>
+          <h2 class="text-2xl font-bold">{o.label}</h2>
+        </div>
+        <div class="p-5">
+          <p class="text-muted">{o.note}</p>
+          <address class="mt-4 not-italic text-lg">
+            {o.street}<br />
+            {'pobox' in o && o.pobox ? <>{o.pobox}<br /></> : null}
+            {o.city}, {o.country}
+          </address>
+          <ul class="mt-4 grid gap-1">
+            {o.phones.map((p) => (
+              <li><a href={p.href} class="font-display inline-flex min-h-11 items-center gap-2 text-lg font-semibold"><span aria-hidden="true">☎</span> <span class="underline decoration-sun decoration-[3px] underline-offset-4">{p.label}</span></a></li>
+            ))}
+            {o.emails.map((e) => (
+              <li><a href={`mailto:${e}`} class="inline-flex min-h-11 items-center break-all underline decoration-sky-deep decoration-2 underline-offset-4">{e}</a></li>
+            ))}
+          </ul>
+          <a href={o.map} class="btn btn-leaf mt-5" rel="noopener">Open in Maps</a>
+        </div>
+      </article>
+    ))}
+  </section>
+
+  <section class="wrap" aria-labelledby="f-title">
+    <div class="card grid gap-8 p-6 md:p-10 lg:grid-cols-[1fr_1.4fr]">
+      <div>
+        <h2 id="f-title" class="text-3xl font-bold">Send an enquiry</h2>
+        <p class="mt-3 text-muted">This opens your email app with the details filled in, addressed to our sales team. Prefer the phone? Call {CONTACT.hotline.label}.</p>
+      </div>
+      <form action="mailto:sales@multipleindustries.com" method="post" enctype="text/plain" class="grid gap-4">
+        <div class="grid gap-1.5">
+          <label for="f-name" class="font-semibold">Your name</label>
+          <input id="f-name" name="Name" autocomplete="name" required class="min-h-12 rounded-xl border-2 border-line bg-day px-4 focus:border-ink" />
+        </div>
+        <div class="grid gap-1.5">
+          <label for="f-phone" class="font-semibold">Phone</label>
+          <input id="f-phone" name="Phone" type="tel" autocomplete="tel" class="min-h-12 rounded-xl border-2 border-line bg-day px-4 focus:border-ink" />
+        </div>
+        <div class="grid gap-1.5">
+          <label for="f-range" class="font-semibold">Which part of the house?</label>
+          <select id="f-range" name="Range" class="min-h-12 rounded-xl border-2 border-line bg-day px-4 focus:border-ink">
+            {categories.map((c) => <option>{c.n}. {c.name}</option>)}
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="grid gap-1.5">
+          <label for="f-msg" class="font-semibold">What do you need?</label>
+          <textarea id="f-msg" name="Message" rows="4" required class="rounded-xl border-2 border-line bg-day px-4 py-3 focus:border-ink"></textarea>
+        </div>
+        <button type="submit" class="btn btn-sun justify-self-start">Open email to send</button>
+      </form>
+    </div>
+  </section>
+</Layout>

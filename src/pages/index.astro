@@ -1,8 +1,188 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
-import { SITE_DESCRIPTION, SITE_NAME } from '../config';
+import HouseMap from '../components/HouseMap.astro';
+import ContactCta from '../components/ContactCta.astro';
+import isoBadge from '../assets/iso-unbs.webp';
+import { CONTACT, SITE_DESCRIPTION, SITE_LEGAL_NAME, SITE_NAME, SITE_TAGLINE, SITE_URL } from '../config';
+
+const brands = ['Wavin', 'Franke', 'Vado', 'Fras-le', 'Conmix', 'Tegra', 'Feroof', 'Smartframe', 'Polynum', 'Apex', 'Hengst', 'Hanksugi'];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${SITE_URL}/#org`,
+    name: SITE_LEGAL_NAME,
+    alternateName: SITE_NAME,
+    url: SITE_URL,
+    logo: `${SITE_URL}/og.png`,
+    slogan: SITE_TAGLINE,
+    foundingDate: '1991',
+    email: CONTACT.headOffice.emails[0],
+    telephone: '+256414236021',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: CONTACT.headOffice.street,
+      postOfficeBoxNumber: '20166',
+      addressLocality: 'Kampala',
+      addressCountry: 'UG',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HomeAndConstructionBusiness',
+    '@id': `${SITE_URL}/#showroom`,
+    name: `${SITE_LEGAL_NAME} — Sales Office & Showroom`,
+    parentOrganization: { '@id': `${SITE_URL}/#org` },
+    url: SITE_URL,
+    image: `${SITE_URL}/og.png`,
+    telephone: ['+256414236021', '+256752914900', '+256752914046'],
+    email: CONTACT.showroom.emails[0],
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: CONTACT.showroom.street,
+      addressLocality: 'Kampala',
+      addressCountry: 'UG',
+    },
+    areaServed: ['Uganda', 'East Africa'],
+  },
+];
+
+const timeline = [
+  { y: '1991', t: 'Founded in Kampala', d: 'Manufacturing and trading of building materials and domestic plasticware begins.' },
+  { y: '2013', t: 'Automotive division', d: 'Fras-le brake linings and pads, Hanksugi truck tyres and Hengst filters.' },
+  { y: '2019', t: 'Inland Freight Services', d: 'Transport and logistics across the East African region.' },
+];
 ---
 
-<Layout title={SITE_NAME} description={SITE_DESCRIPTION}>
-  <h1 class="p-8 text-3xl font-bold">{SITE_NAME}</h1>
+<Layout title={`${SITE_NAME}: ${SITE_TAGLINE}`} description={SITE_DESCRIPTION} jsonLd={jsonLd}>
+  <!-- Hero + the house -->
+  <section class="relative overflow-hidden bg-sky" aria-labelledby="hero-title">
+    <div aria-hidden="true" class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-sun/25 md:h-[28rem] md:w-[28rem]"></div>
+    <div class="wrap relative pb-6 pt-8 md:pt-14">
+      <p class="eyebrow">Since 1991 · Kampala, Uganda</p>
+      <h1 id="hero-title" class="mt-3 max-w-[18ch] text-[2.4rem] font-extrabold sm:text-5xl lg:text-[4.25rem]">
+        Everything a house needs, from the roof to the tap.
+      </h1>
+      <p class="mt-4 max-w-2xl text-lg text-muted md:text-xl">
+        Multiple Industries makes plastic pipes and household plastics in Kampala, and supplies building materials, irrigation
+        systems and automotive parts. One stop for builders, contractors and homes across East Africa.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="#house" class="btn btn-leaf">Explore the house <span aria-hidden="true">↓</span></a>
+        <a href="/contact/" class="btn btn-ghost">Visit the showroom</a>
+      </div>
+      <ul class="mt-6 flex flex-wrap gap-2 text-sm font-semibold" aria-label="Credentials">
+        <li class="rounded-full border-2 border-ink bg-white px-3 py-1">ISO 9001:2015 certified</li>
+        <li class="rounded-full border-2 border-ink bg-white px-3 py-1">UNBS certified products</li>
+        <li class="rounded-full border-2 border-ink bg-white px-3 py-1">Made in Uganda</li>
+      </ul>
+    </div>
+
+    <div id="house" class="wrap relative scroll-mt-20 pb-14 pt-6 md:pt-10">
+      <div class="mb-5 flex flex-wrap items-end justify-between gap-2">
+        <h2 class="text-2xl font-bold md:text-3xl">Tap a part of the house</h2>
+        <p class="text-muted">Six ranges, numbered from the tank to the truck.</p>
+      </div>
+      <HouseMap />
+    </div>
+    <div class="groundline bg-day" aria-hidden="true"></div>
+  </section>
+
+  <!-- About teaser -->
+  <section class="wrap grid gap-10 py-16 md:py-24 lg:grid-cols-[1.1fr_1fr] lg:items-start" aria-labelledby="about-title">
+    <div>
+      <p class="eyebrow">Who we are</p>
+      <h2 id="about-title" class="mt-3 text-3xl font-bold md:text-[2.75rem]">One stop, since 1991.</h2>
+      <p class="mt-5 text-lg text-muted">
+        Multiple Industries has always tried to offer a one stop service with diversified products covering the entire range of
+        building materials, full range of domestic household products, automotive spare parts and transport services in the East
+        African Region.
+      </p>
+      <a href="/about/" class="btn btn-ghost mt-6">Our story <span aria-hidden="true">→</span></a>
+    </div>
+    <ol class="relative grid gap-4 border-l-4 border-dashed border-sky-deep pl-6">
+      {timeline.map((t) => (
+        <li class="card relative p-5">
+          <span aria-hidden="true" class="absolute -left-[2.35rem] top-6 h-5 w-5 rounded-full border-[3px] border-ink bg-sun"></span>
+          <p class="font-display text-3xl font-extrabold text-leaf">{t.y}</p>
+          <h3 class="mt-1 text-lg font-bold">{t.t}</h3>
+          <p class="mt-1 text-muted">{t.d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- Why us / quality -->
+  <section class="bg-leaf text-white" aria-labelledby="why-title">
+    <div class="wrap grid gap-10 py-16 md:py-20 lg:grid-cols-[1fr_1.3fr] lg:items-center">
+      <div>
+        <p class="eyebrow !text-sun">Why buy from us</p>
+        <h2 id="why-title" class="mt-3 text-3xl font-bold md:text-[2.75rem]">Quality you can check, not just trust.</h2>
+        <p class="mt-5 text-lg text-white/90">
+          We run a Quality Management System in accordance with ISO 9001:2015, and our products are certified by the Uganda National
+          Bureau of Standards.
+        </p>
+        <div class="mt-6 inline-block rounded-2xl bg-white p-4">
+          <Image src={isoBadge} alt="UNBS Q-mark and ISO 9001:2015 certified company badges" class="h-24 w-auto md:h-28" />
+        </div>
+      </div>
+      <ul class="grid gap-4 sm:grid-cols-2">
+        {[
+          { t: 'Made in Kampala', d: 'UPVC, HDPE and PP-R pipes, drinking straws and domestic plastics from our own factory on 8th Street.' },
+          { t: 'Pipes in all sizes', d: 'Manufactured for water supply, plumbing, drainage and irrigation.' },
+          { t: 'Food-grade plastics', d: 'Household plasticware made from food-grade raw materials.' },
+          { t: 'One stop for the build', d: 'Roof trusses to taps, jerry cans to truck tyres, from one supplier.' },
+        ].map((f, i) => (
+          <li class="rounded-2xl border border-white/20 bg-white/5 p-5">
+            <span aria-hidden="true" class="font-display text-sm font-bold text-sun">0{i + 1}</span>
+            <h3 class="mt-1 text-xl font-bold">{f.t}</h3>
+            <p class="mt-1 text-white/85">{f.d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Mission & vision -->
+  <section class="wrap grid gap-5 py-16 md:grid-cols-2 md:py-24" aria-label="Mission and vision">
+    <article class="card relative overflow-hidden p-6 md:p-8">
+      <div aria-hidden="true" class="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-sky"></div>
+      <p class="eyebrow relative">Our mission</p>
+      <p class="relative mt-4 text-lg leading-relaxed">
+        Having a competent, experienced and motivated team, and continual interactions with our customers and other interested
+        parties, we will manufacture and sell top quality plastic products, and supply reliable building materials, selected
+        automotive products, irrigation systems to satisfy and exceed customer requirements and increase shareholder value while
+        maintaining a sustainable environment.
+      </p>
+    </article>
+    <article class="relative overflow-hidden rounded-[var(--radius-card)] border-2 border-ink bg-sun p-6 md:p-8">
+      <div aria-hidden="true" class="absolute -bottom-14 -right-14 h-44 w-44 rounded-full border-[14px] border-ink/10"></div>
+      <p class="font-display text-[0.8125rem] font-semibold uppercase tracking-[0.12em]">Our vision</p>
+      <p class="font-display relative mt-4 text-2xl font-bold leading-snug md:text-3xl">
+        “To be the most preferred one stop source for quality building materials, general household items, selected automotive,
+        irrigation and water management systems.”
+      </p>
+    </article>
+  </section>
+
+  <!-- Brands -->
+  <section class="border-y-2 border-ink bg-white py-14" aria-labelledby="brands-title">
+    <div class="wrap">
+      <div class="flex flex-wrap items-end justify-between gap-2">
+        <h2 id="brands-title" class="text-2xl font-bold md:text-3xl">Brands & partners we stock</h2>
+        <p class="text-sm text-muted">Logos to follow. <span class="sr-only">Brand list to be confirmed.</span></p>
+      </div>
+      <ul class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        {brands.map((b) => (
+          <li class="font-display grid min-h-16 place-items-center rounded-xl border-2 border-dashed border-line bg-day px-3 text-center text-lg font-bold text-muted">
+            {b}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <ContactCta />
 </Layout>

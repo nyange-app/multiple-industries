@@ -1,0 +1,21 @@
+---
+/** "Where it goes in the house": a simplified house with one zone lit. */
+import { categories } from '../data/categories';
+interface Props { active: string; class?: string }
+const { active, class: cls = '' } = Astro.props;
+const cat = categories.find((c) => c.slug === active);
+---
+<figure class:list={['minimap', cls]}>
+  <svg viewBox="0 0 800 960" role="img" aria-label={`Map of the house with the ${cat?.zone.toLowerCase()} highlighted`}>
+    <rect width="800" height="960" fill="#fff"></rect>
+    <path d="M0 700h800" stroke="#14213D" stroke-width="6"></path>
+    <path d="M0 792h800" stroke="#14213D" stroke-width="3" stroke-dasharray="6 12"></path>
+    {categories.map((c) => (
+      <a href={`/products/${c.slug}/`} aria-label={`${c.n}. ${c.name}`} class:list={['mm-zone', { 'is-on': c.slug === active }]}>
+        <path d={c.hit} />
+        <text x={c.spot[0]} y={c.spot[1] + 18} text-anchor="middle">{c.n}</text>
+      </a>
+    ))}
+  </svg>
+  <figcaption>Where it goes</figcaption>
+</figure>

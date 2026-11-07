@@ -1,12 +1,213 @@
-@import '@fontsource-variable/nunito';
+@import '@fontsource-variable/outfit';
+@import '@fontsource-variable/source-sans-3';
 
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-/* TODO: brand tokens. */
+/* ============================================================
+   The Cutaway House: design tokens
+   Daylight sky, deep leaf, sun yellow, ink. All text pairs AA.
+   ============================================================ */
 @theme {
-  --color-brand: #eb1700;
-  --color-ink: #191919;
+  --color-sky: #d7ecf4;
+  --color-sky-soft: #ebf6fa;
+  --color-sky-deep: #a9d3e6;
+  --color-leaf: #0f4c3a;
+  --color-leaf-deep: #0a3628;
+  --color-leaf-soft: #dcebe4;
+  --color-sun: #f2b705;
+  --color-sun-soft: #fdf0c4;
+  --color-ink: #14213d;
+  --color-muted: #42506b;
+  --color-line: #c9dbe3;
+  --color-day: #f7fbfc;
+  --color-water: #2b7fb8;
 
-  --font-sans: 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Source Sans 3 Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Outfit Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1.25rem;
+  --shadow-lift: 0 1px 0 rgb(20 33 61 / 0.06), 0 10px 24px -12px rgb(20 33 61 / 0.25);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    background: var(--color-day);
+    color: var(--color-ink);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px var(--color-sun);
+    border-radius: 6px;
+  }
+  ::selection { background: var(--color-sun); color: var(--color-ink); }
+}
+
+@layer components {
+  .wrap { width: 100%; max-width: 76rem; margin-inline: auto; padding-inline: 1rem; }
+  @media (min-width: 640px) { .wrap { padding-inline: 1.5rem; } }
+
+  .eyebrow {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-leaf);
+    display: inline-flex; align-items: center; gap: .5rem;
+  }
+  .eyebrow::before {
+    content: ''; width: .75rem; height: .75rem; border-radius: 999px;
+    background: var(--color-sun); box-shadow: 0 0 0 3px var(--color-sun-soft);
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    min-height: 48px; padding: .75rem 1.25rem; border-radius: 999px;
+    font-family: var(--font-display); font-weight: 600; font-size: 1rem;
+    text-decoration: none; transition: transform .15s ease, background-color .15s ease;
+    border: 2px solid var(--color-ink);
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-sun { background: var(--color-sun); color: var(--color-ink); box-shadow: 0 3px 0 var(--color-ink); }
+  .btn-sun:hover { background: #ffc61f; }
+  .btn-leaf { background: var(--color-leaf); color: #fff; border-color: var(--color-leaf); }
+  .btn-leaf:hover { background: var(--color-leaf-deep); }
+  .btn-ghost { background: #fff; color: var(--color-ink); }
+  .btn-ghost:hover { background: var(--color-sun-soft); }
+
+  /* Numbered zone badge, echoing the hotspots */
+  .badge-n {
+    display: inline-grid; place-items: center; flex: none;
+    width: 2.75rem; height: 2.75rem; border-radius: 999px;
+    background: var(--color-sun); color: var(--color-ink);
+    border: 3px solid var(--color-ink);
+    font-family: var(--font-display); font-weight: 800; font-size: 1.15rem;
+  }
+
+  .card {
+    background: #fff; border: 1.5px solid var(--color-line);
+    border-radius: var(--radius-card); box-shadow: var(--shadow-lift);
+  }
+
+  /* Ground line: the horizon divider used between sections */
+  .groundline {
+    height: 22px;
+    background:
+      radial-gradient(circle at 12px 0, var(--color-leaf) 0 3px, transparent 3.5px) 0 14px / 24px 8px repeat-x,
+      linear-gradient(var(--color-leaf), var(--color-leaf)) 0 6px / 100% 3px no-repeat;
+    opacity: .9;
+  }
+}
+
+/* ============================================================
+   House illustration + interaction
+   ============================================================ */
+.house { display: block; width: 100%; height: auto; }
+.house .zone-hit {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 6;
+  stroke-dasharray: 14 10;
+  stroke-linejoin: round;
+  transition: fill .2s ease, stroke .2s ease;
+}
+.house .zone { cursor: pointer; outline: none; }
+.house .zone:hover .zone-hit,
+.house .zone:focus-visible .zone-hit,
+.house .zone.is-focus .zone-hit {
+  fill: rgb(242 183 5 / 0.28);
+  stroke: var(--color-ink);
+}
+.house .zone:focus-visible .zone-hit { stroke-width: 8; }
+.house .zone.is-focus .zone-hit { fill: rgb(242 183 5 / 0.14); }
+.house .spot-dot { fill: var(--color-sun); stroke: var(--color-ink); stroke-width: 4; }
+.house .spot-n {
+  font-family: var(--font-display); font-weight: 800; font-size: 26px; fill: var(--color-ink);
+  pointer-events: none;
+}
+.house .spot-pulse {
+  fill: none; stroke: var(--color-sun); stroke-width: 6;
+  transform-box: fill-box; transform-origin: center;
+}
+.house .zone:hover .spot-dot,
+.house .zone:focus-visible .spot-dot { fill: #fff; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .house .spot-pulse { animation: pulse 2.6s ease-out infinite; }
+  .house .zone-2 .spot-pulse { animation-delay: .4s; }
+  .house .zone-3 .spot-pulse { animation-delay: .8s; }
+  .house .zone-4 .spot-pulse { animation-delay: 1.2s; }
+  .house .zone-5 .spot-pulse { animation-delay: 1.6s; }
+  .house .zone-6 .spot-pulse { animation-delay: 2s; }
+  .house .drips circle { animation: drip 1.8s ease-in infinite; }
+  .house .drips circle:nth-child(3n+2) { animation-delay: .6s; }
+  .house .drips circle:nth-child(3n) { animation-delay: 1.2s; }
+  .house .sun-glow { animation: glow 6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: .9; }
+  70%, 100% { transform: scale(1.9); opacity: 0; }
+}
+@keyframes drip {
+  0% { transform: translateY(-4px); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(6px); opacity: 0; }
+}
+@keyframes glow { 50% { transform: scale(1.12); } }
+
+/* Hovering a legend item lights the matching zone in the house */
+.house-map:has(.legend a[data-zone='1']:is(:hover, :focus-visible)) .zone-1 .zone-hit,
+.house-map:has(.legend a[data-zone='2']:is(:hover, :focus-visible)) .zone-2 .zone-hit,
+.house-map:has(.legend a[data-zone='3']:is(:hover, :focus-visible)) .zone-3 .zone-hit,
+.house-map:has(.legend a[data-zone='4']:is(:hover, :focus-visible)) .zone-4 .zone-hit,
+.house-map:has(.legend a[data-zone='5']:is(:hover, :focus-visible)) .zone-5 .zone-hit,
+.house-map:has(.legend a[data-zone='6']:is(:hover, :focus-visible)) .zone-6 .zone-hit {
+  fill: rgb(242 183 5 / 0.28);
+  stroke: var(--color-ink);
+}
+/* ...and hovering a zone lights its legend item */
+.house-map:has(.zone-1:is(:hover, :focus-visible)) .legend a[data-zone='1'],
+.house-map:has(.zone-2:is(:hover, :focus-visible)) .legend a[data-zone='2'],
+.house-map:has(.zone-3:is(:hover, :focus-visible)) .legend a[data-zone='3'],
+.house-map:has(.zone-4:is(:hover, :focus-visible)) .legend a[data-zone='4'],
+.house-map:has(.zone-5:is(:hover, :focus-visible)) .legend a[data-zone='5'],
+.house-map:has(.zone-6:is(:hover, :focus-visible)) .legend a[data-zone='6'] {
+  background: var(--color-sun-soft);
+  border-color: var(--color-ink);
+}
+
+/* Mini-map */
+.minimap { margin: 0; }
+.minimap svg { display: block; width: 100%; height: auto; border-radius: .75rem; border: 2px solid var(--color-ink); background: #fff; }
+.minimap .mm-zone path { fill: var(--color-sky); stroke: var(--color-ink); stroke-width: 6; stroke-linejoin: round; transition: fill .15s; }
+.minimap .mm-zone text { font-family: var(--font-display); font-weight: 800; font-size: 56px; fill: var(--color-ink); }
+.minimap .mm-zone:hover path { fill: var(--color-sun-soft); }
+.minimap .mm-zone.is-on path { fill: var(--color-sun); }
+.minimap figcaption {
+  margin-top: .35rem; font-family: var(--font-display); font-weight: 600; font-size: .75rem; line-height: 1.15; color: var(--color-ink); text-align: center;
+}
+
+/* Mobile nav via <details> */
+.menu > summary { list-style: none; }
+.menu > summary::-webkit-details-marker { display: none; }
+.menu[open] .icon-open { display: none; }
+.menu:not([open]) .icon-close { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; scroll-behavior: auto !important; }
 }

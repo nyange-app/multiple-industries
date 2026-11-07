@@ -1,0 +1,90 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import House from '../components/House.astro';
+import ContactCta from '../components/ContactCta.astro';
+import isoBadge from '../assets/iso-unbs.webp';
+import { SITE_TAGLINE } from '../config';
+
+const divisions = [
+  { t: 'Manufacturing', d: 'UPVC, HDPE and PP-R pipes, wrapped drinking straws and domestic plasticware: jerry cans, basins, buckets, cups, mugs, plates, tiffin boxes and trays, made from food-grade raw materials.' },
+  { t: 'Building materials', d: 'Plastic pipes to concrete products, indoor and outdoor plumbing, rainwater gutters, Light Gauge Steel Frame roof trusses, kitchen and bathroom solutions and roofing solutions.' },
+  { t: 'Automotive (since 2013)', d: 'Fras-le brake lining and pads, Hanksugi truck tyres, and Hengst fuel and air filters.' },
+  { t: 'Inland Freight Services (since 2019)', d: 'Transport and logistics services across the East African region.' },
+];
+---
+<Layout
+  title="About us: building materials and plastics since 1991"
+  description="Since 1991 Multiple Industries has led manufacturing and trading of building materials, domestic plasticware, automotive spare parts and transport services in Uganda. ISO 9001:2015 certified."
+  crumbs={[{ name: 'About', path: '/about/' }]}
+>
+  <section class="bg-sky" aria-labelledby="a-title">
+    <div class="wrap grid gap-8 pb-14 pt-8 md:pt-14 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+      <div>
+        <p class="eyebrow">About Multiple Industries</p>
+        <h1 id="a-title" class="mt-3 max-w-[16ch] text-[2.4rem] font-extrabold sm:text-5xl">{SITE_TAGLINE}.</h1>
+        <p class="mt-5 max-w-2xl text-lg text-muted md:text-xl">
+          Since 1991, Multiple Industries Limited has been leading in manufacturing and trading of domestic and industrial building
+          materials, domestic plasticware, automotive spare parts and transport services in Uganda.
+        </p>
+      </div>
+      <div class="mx-auto aspect-square w-full max-w-sm overflow-hidden rounded-[1.75rem] border-2 border-ink shadow-[0_6px_0_var(--color-ink)]">
+        <House view="0 150 800 800" class="h-full" id="ab" label="The illustrated house, from roof trusses to the truck in the yard" />
+      </div>
+    </div>
+    <div class="groundline bg-day" aria-hidden="true"></div>
+  </section>
+
+  <section class="wrap py-14 md:py-20" aria-labelledby="what-title">
+    <h2 id="what-title" class="text-3xl font-bold md:text-4xl">What we do</h2>
+    <ul class="mt-8 grid gap-4 md:grid-cols-2">
+      {divisions.map((d, i) => (
+        <li class="card p-6">
+          <span class="badge-n" aria-hidden="true">{i + 1}</span>
+          <h3 class="mt-3 text-xl font-bold">{d.t}</h3>
+          <p class="mt-2 text-muted">{d.d}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="bg-leaf text-white" aria-labelledby="q-title">
+    <div class="wrap grid gap-8 py-14 md:py-20 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+      <div>
+        <p class="eyebrow !text-sun">Quality policy</p>
+        <h2 id="q-title" class="mt-3 text-3xl font-bold md:text-4xl">ISO 9001:2015 certified. UNBS certified products.</h2>
+        <p class="mt-5 text-lg text-white/90">
+          We manufacture and supply quality UPVC, HDPE and PP-R pipes in all sizes, drinking straws, domestic plastics and quality
+          irrigation systems and building materials as a single stop for building and construction. We aim to position ourselves as
+          market leader in Uganda and the East African Community through a Quality Management System in accordance with
+          ISO 9001:2015.
+        </p>
+        <p class="mt-4 text-white/80">Certificates, CSR activities and achievements pages: to follow.</p>
+      </div>
+      <div class="justify-self-start rounded-2xl bg-white p-5 lg:justify-self-end">
+        <Image src={isoBadge} alt="UNBS Q-mark and ISO 9001:2015 certified company badges" class="h-28 w-auto md:h-36" />
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap grid gap-5 py-14 md:grid-cols-2 md:py-20" aria-label="Mission and vision">
+    <article class="card p-6 md:p-8">
+      <h2 class="eyebrow">Mission</h2>
+      <p class="mt-4 text-lg leading-relaxed">
+        Having a competent, experienced and motivated team, and continual interactions with our customers and other interested
+        parties, we will manufacture and sell top quality plastic products, and supply reliable building materials, selected
+        automotive products, irrigation systems to satisfy and exceed customer requirements and increase shareholder value while
+        maintaining a sustainable environment.
+      </p>
+    </article>
+    <article class="rounded-[var(--radius-card)] border-2 border-ink bg-sun p-6 md:p-8">
+      <h2 class="font-display text-[0.8125rem] font-semibold uppercase tracking-[0.12em]">Vision</h2>
+      <p class="font-display mt-4 text-2xl font-bold leading-snug">
+        To be the most preferred one stop source for quality building materials, general household items, selected automotive,
+        irrigation and water management systems.
+      </p>
+    </article>
+  </section>
+
+  <ContactCta />
+</Layout>

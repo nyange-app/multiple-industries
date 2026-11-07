@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HouseMap from '../../components/HouseMap.astro';
+import ContactCta from '../../components/ContactCta.astro';
+---
+<Layout
+  title="Products: six ranges, one house"
+  description="Browse Multiple Industries products by where they go in the house: water management, plumbing, bathroom and kitchen, building materials, domestic plasticware and automotive."
+  crumbs={[{ name: 'Products', path: '/products/' }]}
+>
+  <section class="bg-sky" aria-labelledby="p-title">
+    <div class="wrap pb-14 pt-8 md:pt-14">
+      <p class="eyebrow">Products</p>
+      <h1 id="p-title" class="mt-3 max-w-[20ch] text-[2.4rem] font-extrabold sm:text-5xl">Find it by where it goes.</h1>
+      <p class="mt-4 max-w-2xl text-lg text-muted">Pick a part of the house, from the tank on its stand to the truck in the yard, and see the range we make or supply for it.</p>
+      <div class="mt-8"><HouseMap headingLevel="h2" /></div>
+    </div>
+    <div class="groundline bg-day" aria-hidden="true"></div>
+  </section>
+  <div class="pt-14"><ContactCta /></div>
+</Layout>
