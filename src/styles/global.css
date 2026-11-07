@@ -1,12 +1,253 @@
-@import '@fontsource-variable/nunito';
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
 
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-/* TODO: brand tokens. */
+/*
+ * Direction 8 — "Spec Sheet"
+ * A trade-catalogue / engineering datasheet language: uncoated paper, ink
+ * hairlines, numbered sections, square corners and the two colours lifted
+ * straight from the Multiple Industries logo (plum + emblem yellow).
+ */
 @theme {
-  --color-brand: #eb1700;
-  --color-ink: #191919;
+  /* Surfaces */
+  --color-paper: #f4f1ea;
+  --color-paper-2: #ebe6da;
+  --color-sheet: #fffdf8;
+  --color-line: #cdc5b4;
 
-  --font-sans: 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
+  /* Ink */
+  --color-ink: #17151a;
+  --color-ink-2: #48434d; /* 8.6:1 on paper */
+  --color-ink-3: #5f5a63; /* 6.0:1 on paper — captions */
+
+  /* Brand (from logo) */
+  --color-plum: #8f177d; /* 7.2:1 on paper, 8.1:1 with white */
+  --color-plum-deep: #5a0f4f;
+  --color-plum-ink: #3a0a33;
+  --color-signal: #ffc30e; /* emblem yellow — only behind ink, or on plum/ink */
+  --color-signal-soft: #fff1c2;
+  --color-water: #0584bc; /* logo blue, decorative only */
+
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-none: 0;
+  --spacing-gutter: 1rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-stretch: 100%;
+  }
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-plum);
+    outline-offset: 3px;
+  }
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--color-signal);
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* Condensed industrial display type */
+  .display {
+    font-family: var(--font-sans);
+    font-stretch: 72%;
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+  .headline {
+    font-stretch: 82%;
+    font-weight: 750;
+    line-height: 1.02;
+    letter-spacing: -0.005em;
+  }
+  /* Mono spec label: "01 — WATER MANAGEMENT" */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+  .wrap {
+    margin-inline: auto;
+    max-width: 80rem;
+    padding-inline: var(--spacing-gutter);
+  }
+  @media (min-width: 640px) {
+    .wrap {
+      padding-inline: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .wrap {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Section header with a ruled line and a sheet number */
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    border-top: 2px solid var(--color-ink);
+    padding-top: 0.75rem;
+  }
+
+  /* Buttons — square, heavy, tactile offset */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.25rem;
+    border: 2px solid var(--color-ink);
+    font-weight: 700;
+    font-stretch: 90%;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease,
+      background-color 0.15s ease;
+  }
+  .btn-primary {
+    background: var(--color-signal);
+    color: var(--color-ink);
+    box-shadow: 4px 4px 0 var(--color-ink);
+  }
+  .btn-primary:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 6px 6px 0 var(--color-ink);
+  }
+  .btn-primary:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--color-ink);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-ink);
+  }
+  .btn-ghost:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .btn-light {
+    border-color: var(--color-paper);
+    color: var(--color-paper);
+  }
+  .btn-light:hover {
+    background: var(--color-paper);
+    color: var(--color-plum-ink);
+  }
+
+  .link {
+    color: var(--color-plum);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+  .link:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  /* Faint drafting grid used behind the hero and on dark bands */
+  .grid-paper {
+    background-image:
+      linear-gradient(to right, rgb(23 21 26 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(23 21 26 / 0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .grid-dark {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Hazard-tape rule (logo yellow + ink) */
+  .tape {
+    height: 10px;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--color-ink) 0 10px,
+      var(--color-signal) 10px 20px
+    );
+  }
+
+  /* Ruler tick strip used for the timeline */
+  .ticks {
+    background-image: linear-gradient(to right, var(--color-ink) 1px, transparent 1px);
+    background-size: 12px 8px;
+    background-repeat: repeat-x;
+    background-position: bottom left;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 0.75rem;
+    top: -4rem;
+    z-index: 100;
+    background: var(--color-signal);
+    color: var(--color-ink);
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    border: 2px solid var(--color-ink);
+  }
+  .skip-link:focus {
+    top: 0.75rem;
+  }
+
+  /* Mobile nav built on <details> — no JS */
+  .menu > summary {
+    list-style: none;
+  }
+  .menu > summary::-webkit-details-marker {
+    display: none;
+  }
+  .menu[open] .menu-open-hide {
+    display: none;
+  }
+  .menu:not([open]) .menu-closed-hide {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

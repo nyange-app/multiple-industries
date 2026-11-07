@@ -1,0 +1,106 @@
+---
+import type { IconKey } from '../data/categories';
+
+interface Props {
+  name: IconKey | 'arrow' | 'phone' | 'mail' | 'pin' | 'check';
+  class?: string;
+}
+const { name, class: cls = 'size-8' } = Astro.props;
+---
+
+<svg
+  class={cls}
+  viewBox="0 0 48 48"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2.25"
+  stroke-linecap="square"
+  stroke-linejoin="miter"
+  aria-hidden="true"
+  focusable="false"
+>
+  {
+    name === 'water' && (
+      <>
+        <path d="M24 5c-6 8-10 13.5-10 18.5a10 10 0 0 0 20 0C34 18.5 30 13 24 5Z" />
+        <path d="M19 24a5 5 0 0 0 5 5" />
+        <path d="M4 40h40M4 44h40" />
+      </>
+    )
+  }
+  {
+    name === 'plumbing' && (
+      <>
+        <path d="M6 12h18a10 10 0 0 1 10 10v20" />
+        <path d="M6 20h18a2 2 0 0 1 2 2v20" />
+        <path d="M6 9v14M30 42h8" />
+        <path d="M38 42v-6" />
+      </>
+    )
+  }
+  {
+    name === 'bath' && (
+      <>
+        <path d="M14 18V10a5 5 0 0 1 10 0" />
+        <path d="M20 10h8" />
+        <path d="M24 16v4" />
+        <path d="M4 26h40v4a10 10 0 0 1-10 10H14A10 10 0 0 1 4 30Z" />
+        <path d="M12 40l-2 4M36 40l2 4" />
+      </>
+    )
+  }
+  {
+    name === 'building' && (
+      <>
+        <path d="M4 22 24 6l20 16" />
+        <path d="M8 22h32L24 9Z" />
+        <path d="M16 22l8-9 8 9M24 13v9" />
+        <path d="M10 22v20h28V22" />
+        <path d="M20 42V30h8v12" />
+      </>
+    )
+  }
+  {
+    name === 'plastic' && (
+      <>
+        <path d="M10 16h28l-3.5 26h-21Z" />
+        <path d="M8 16h32" />
+        <path d="M14 16a10 10 0 0 1 20 0" />
+        <path d="M14 26h20" />
+      </>
+    )
+  }
+  {
+    name === 'auto' && (
+      <>
+        <circle cx="24" cy="24" r="19" />
+        <circle cx="24" cy="24" r="11" />
+        <circle cx="24" cy="24" r="3" />
+        <path d="M24 5v6M24 37v6M5 24h6M37 24h6" />
+      </>
+    )
+  }
+  {name === 'arrow' && <path d="M8 24h30M28 14l10 10-10 10" />}
+  {
+    name === 'phone' && (
+      <path d="M12 6h8l3 10-5 3a24 24 0 0 0 11 11l3-5 10 3v8a4 4 0 0 1-4 4C21 40 8 27 8 10a4 4 0 0 1 4-4Z" />
+    )
+  }
+  {
+    name === 'mail' && (
+      <>
+        <path d="M5 11h38v26H5Z" />
+        <path d="m5 11 19 15 19-15" />
+      </>
+    )
+  }
+  {
+    name === 'pin' && (
+      <>
+        <path d="M24 44S10 30 10 19a14 14 0 0 1 28 0c0 11-14 25-14 25Z" />
+        <circle cx="24" cy="19" r="5" />
+      </>
+    )
+  }
+  {name === 'check' && <path d="m9 25 10 10 20-22" />}
+</svg>
